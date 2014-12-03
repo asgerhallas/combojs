@@ -1,0 +1,38 @@
+{
+  "name": "combojs",
+  "version": "1.0.0",
+  "description": "A combobox for intelligent, responsive search and filtering.",
+  "main": "combojs.js",
+  "directories": {
+    "example": "examples",
+    "test": "tests"
+  },
+  "scripts": {
+    "stylus": "stylus -o examples\\css -m -w lib\\combo.styl",
+    "coffee": "coffee -o examples\\js -cmw lib\\combo.coffee"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/asgerhallas/combojs"
+  },
+  "keywords": [
+    "searchbox",
+    "combobox",
+    "reponsive",
+    "filter"
+  ],
+  "author": "Asger Hallas",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/asgerhallas/combojs/issues"
+  },
+  "homepage": "https://github.com/asgerhallas/combojs",
+  "dependencies": {
+    "jquery": "^2.1.1",
+    "underscore": "^1.7.0"
+  },
+  "devDependencies": {
+    "chai": "^1.10.0",
+    "should": "^4.3.0"
+  }
+}
