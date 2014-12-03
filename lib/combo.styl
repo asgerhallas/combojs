@@ -47,7 +47,7 @@
     right 0
 
 
-  button.combo-button
+  .combo-button
     margin-right 0
     position absolute
     top 0
@@ -80,7 +80,7 @@
     font inherit
     vertical-align baseline
 
-  ul.combo-list
+  .combo-list
     // max-height  0px
     overflow-x hidden
     overflow-y scroll
@@ -115,6 +115,7 @@
       border 0
       -webkit-user-select none
       cursor default
+      // height 11px // SHOULD NOT NEED TO DO THIS, WHYYYYY? todo
 
 
 // STATE DEPENDENT STYLES
@@ -126,7 +127,7 @@
 
   .combo-list li.active,
   .combo-list .empty-list.active
-    background-color #bfcdd7
+    background #bfcdd7
 
   .combo-list li.disabled,
   .combo-list .empty-list.disabled

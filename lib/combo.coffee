@@ -103,7 +103,8 @@ class @Combo
     # must set actual html element as context for selector (see .live() reference)
 
     # TODO: CHANGE, need to use namespace?
-    $('li', @list[0]).on 'click', @onListClick
+    # $('li', @list[0]).on 'click', @onListClick
+    @container.on 'click', '.combo-list li', @onListClick
 
     @list.bgiframe() if $.fn.bgiframe
 
@@ -170,10 +171,12 @@ class @Combo
     @input.val() is '' or @input.val() is null
 
   selectLi: (li) =>
+    console.log "selectLi"
     @selectItem @source[$(li).data('combo-id')]
     @refocus()
 
   selectItem: (item, options = {}) =>
+    console.log "selectItem"
     return if not item.enabled and not options.forced
     @input.val item.title
     @lastQuery = @input.val()
@@ -182,6 +185,7 @@ class @Combo
     _.delay (=> @input.trigger 'itemSelect', title: item.title), 10
 
   onListClick: (event) =>
+    console.log "onListMouseDown"
     @selectLi event.currentTarget
 
   onListMouseDown: (event) =>
@@ -196,6 +200,7 @@ class @Combo
       @refocus()
 
   onButtonClick: (event) =>
+    console.log "onButtonClick"
     return if @disabled
 
     # if it's open and is not empty, close it
@@ -207,6 +212,7 @@ class @Combo
     @focus()
 
   onKeyDown: (event) =>
+    console.log "onKeyDown"
     return if @disabled
 
     if @isExpanded
@@ -263,6 +269,7 @@ class @Combo
     @searchAndExpand()
 
   onMouseUp: =>
+    console.log "onMouseUp"
     return if @disabled
     @updateLastSelection()
 
@@ -300,6 +307,7 @@ class @Combo
   off: (args...) -> @input.off args...
 
   updateLastSelection: =>
+    console.log 'updateLastSelection'
     return if not @forceSelectionFromList
     currentSelection = @getSelectedItemAndIndex()
     @lastSelection = currentSelection if currentSelection?
@@ -323,6 +331,7 @@ class @Combo
     1
 
   activateSelectedItem: =>
+    console.log "activateSelectedItem"
     return unless index = @getSelectedIndex()
     for li in @list.children() when $(li).data('combo-id') == index
       @activate $(li)
