@@ -32,5 +32,4 @@ Src/Energy10.Web/Client/.compiledates
 Src/Energy10.Web/Client/*.dependencies.build
 
 **/node_modules
-examples/css/
-examples/js/
+lib/build/
