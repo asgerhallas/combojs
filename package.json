@@ -8,8 +8,8 @@
     "test": "tests"
   },
   "scripts": {
-    "stylus": "stylus -o examples\\css -m -w lib\\combo.styl",
-    "coffee": "coffee -o examples\\js -cmw lib\\combo.coffee"
+    "stylus": "stylus -m -w lib\\combo.styl -o lib\\build",
+    "coffee": "coffee -cmw lib\\combo.coffee -o lib\\build"
   },
   "repository": {
     "type": "git",
@@ -33,6 +33,7 @@
   },
   "devDependencies": {
     "chai": "^1.10.0",
-    "should": "^4.3.0"
+    "should": "^4.3.0",
+    "stylus": "^0.49.3"
   }
 }
