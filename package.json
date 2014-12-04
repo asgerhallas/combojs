@@ -9,7 +9,8 @@
   },
   "scripts": {
     "stylus": "stylus -m -w lib\\combo.styl -o lib\\build",
-    "coffee": "coffee -cmw lib\\combo.coffee -o lib\\build"
+    "coffee": "coffee -cmw lib\\combo.coffee -o lib\\build",
+    "coffee": "del \\Q .\\lib\build"
   },
   "repository": {
     "type": "git",
