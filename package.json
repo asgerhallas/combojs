@@ -8,11 +8,12 @@
     "test": "tests"
   },
   "scripts": {
-    "stylus": "stylus -m -w -o lib\\build lib\\combo.styl",
-    "coffee": "coffee -o lib\\build -cmw lib\\combo.coffee",
-    "clean": "del .\\lib\\build /Q",
-    "start": "start npm run stylus& start npm run coffee",
-    "test": "npm run nightwatch"
+    "stylus": "stylus -m -w -o lib/build lib/combo.styl",
+    "coffee": "coffee -o lib/build -cmw lib/combo.coffee",
+    "clean": "del .\\lib\\build /Q& del .\\tests\\results /Q",
+    "start": "npm run clean& start npm run stylus& start npm run coffee",
+    "test": "nightwatch --config ./tests/nightwatch.json -e chrome,firefox,ie",
+    "pretest": "npm run start"
   },
   "repository": {
     "type": "git",
