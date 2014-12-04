@@ -1,168 +1,79 @@
 .combo-container
-  // position relative
-  margin 0
-  padding 0
-  outline 0
-  // font-size 100%
-  font inherit
-  vertical-align baseline
-
-  // from input-container activatable
-  float left
   width 520px
   position relative
-  margin-top 0px
   border 1px solid #647484
   background #fff
   font-size 11px
-  // height 18px
-
   font-family "Arial", "Helvetica", sans-serif
 
   .combo-input-container
-    margin 0
-    padding 0
-    border 0
-    outline 0
-    font-size 100%
-    font inherit
-    vertical-align baseline
+    display inline
 
-  .combo-input
-    line-height 1
-    outline 0
-    border 1px solid #b5b5b5
-    width 492px
-    font-size 11px
-    font-family "Arial", "Helvetica", sans-serif
-    margin 0
-    padding-right 24px
-    padding-top 1px
-    padding-bottom 1px
-    height 16px
-    background transparent
-    border 0
-    background-image none !important
-    left 0
-    right 0
-
+    .combo-input
+      width 474px
+      padding 1px 24px 1px 0px
+      height 16px
+      border 0
+      outline 0
+      font-size 11px
+      margin-left 4px
 
   .combo-button
-    margin-right 0
-    position absolute
-    top 0
-    right 0
-    width 18px
     background-image url('images/trigger.png')
-    border 0
+    display inline
+    width 18px
     height 18px
-    padding 0
-    margin 0
+    border 0
+    padding-bottom 5px
 
-    font-family "Arial", "Helvetica", sans-serif
-    font-size 10px
 
   .combo-list-container
-    max-height 0px
-    z-index 91
+    overflow hidden
 
+    // floating list instead of inside box
     position absolute
     left 0
     right 0
     top 20px
-    overflow hidden
 
-    margin 0
-    padding 0
-    border 0
-    outline 0
-    font-size 100%
-    font inherit
-    vertical-align baseline
+    .combo-list,
+    .empty-list
+      overflow-x hidden
+      overflow-y scroll
+      border 1px solid #ccc
+      background #c1c7cc
+      margin 0 0 0 0
+      padding 0
 
-  .combo-list
-    // max-height  0px
-    overflow-x hidden
-    overflow-y scroll
-    border 1px solid #ccc
-    list-style-type none
-    background #c1c7cc
-    margin 0 0 0 0
-    padding 0
-    z-index 101
-    list-style none
-
-    outline 0
-    font-size 100%
-    font inherit
-    vertical-align baseline
-
-    li
-      // margin 0
-      // padding 0
-      margin 0
-      outline 0
-      font-size 100%
-      font inherit
-      vertical-align baseline
-
-      list-style-type none
-      list-style none
-
-      background #d6dfe5
-      margin-bottom 1px
-      padding 5px 5px
-      border 0
-      -webkit-user-select none
-      cursor default
-      // height 11px // SHOULD NOT NEED TO DO THIS, WHYYYYY? todo
+      li
+        background #d6dfe5
+        margin-bottom 1px
+        padding 5px 5px
+        cursor default
+        height 11px
 
 
-// STATE DEPENDENT STYLES
-  .expanded
-    z-index 9
+// STATE DEPENDENT STYLES (UNTESTED)
+.combo-button:active
+  background-position: 0 -20px
 
-  .combo-button:active
-    background-position: 0 -20px
+.combo-list li.active,
+.combo-list .empty-list.active
+  background #bfcdd7 !important
 
-  .combo-list li.active,
-  .combo-list .empty-list.active
-    background #bfcdd7
+.combo-list li.disabled,
+.combo-list .empty-list.disabled
+  color #afafaf
 
-  .combo-list li.disabled,
-  .combo-list .empty-list.disabled
-    color #afafaf
+.disabled .combo-button
+  background-position 0 0
+  -ms-filter "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)"
+  /* IE 8 */
+  filter opacity=50
+  /* IE 5-7 */
+  -khtml-opacity 0.5
+  /* khtml, old safari */
+  -moz-opacity 0.5
+   mozilla, netscape
+  opacity 0.5
 
-  .disabled .combo-button
-    background-position 0 0
-    -ms-filter "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)"
-    /* IE 8 */
-    filter opacity=50
-    /* IE 5-7 */
-    -khtml-opacity 0.5
-    /* khtml, old safari */
-    -moz-opacity 0.5
-    /* mozilla, netscape */
-    opacity 0.5
-
-  .combo-list li,
-  .combo-list .empty-list
-    background-color #d6dfe5
-    margin-bottom 1px
-    padding 5px 5px
-    border 0
-    -moz-user-select none
-    -khtml-user-select none
-    -webkit-user-select none
-    -moz-user-select none
-    -ms-user-select none
-    user-select none
-    cursor default
-
-  .combo-list li:last-child,
-  .combo-list .empty-list:last-child
-    margin-bottom 0px
-
-  .combo-list li b,
-  .combo-list .empty-list b
-    font-weight bold

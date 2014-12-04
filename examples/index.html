@@ -21,33 +21,52 @@
       uValue = " (U: " + model.e10_Case_Building_Zone_BuildingPart_UValue + ")"
       summary + " " + uValue
 
-    map2result = (model) ->
-      id: model.id
-      title: "title"
-      text: map2text(model)
-      # litra: 2
+    map2result = (enable) ->
+      (model) ->
+        even = if(typeof enable is "function") then enable(model) else enable
+        id: model.id
+        title: "title"
+        text: map2text(model)
+        true: even
 
-    isNotWhitespaceOrEmpty = (text) ->
-      /[^\s]/.test(text)
-
-    $ ->
-      chai.should()
-      should.exist(Combo)
-      should.exist(_data)
-      data = _data.map map2result
-      data.should.have.length 1275
+    render_test = (id, msg, data) ->
+      $('<div>')
+        .append("<h3>#{msg}</h3>")
+        .append("<div id='#{id}'></div>")
+        .append('<br />')
+        .appendTo('body')
 
       combo = new Combo()
       combo.load(data)
-      combo.appendTo("#e1")
+      combo.appendTo("##{id}")
       combo.renderFullList()
+
+    data_10000 = (
+      {
+        id: i;
+        text: "hello world, we are legion",
+        true: i%2
+      } for i in [0...10000])
+
+    $ ->
+      if data_10000.length isnt 10000
+        throw Error("wrong test data! " + data_10000.length)
+      if _data_1275.length isnt 1275
+        throw Error("wrong test data! " + _data_1275.length)
+
+      render_test('test-1', "Combojs with empty list", [])
+      render_test('test-2', "Combojs with disabled list", _data_1275.map map2result(false))
+      render_test('test-3', "Combojs with enabled list", _data_1275.map map2result(true))
+
+      filter = (() ->
+                even = true
+                () -> even = !even; return even)()
+      render_test('test-4', "Combojs with half enabled list", _data_1275.map map2result(filter))
+      render_test('test-5', "Combojs with 10000 elements", data_10000)
+
 
   </script>
   <link rel="stylesheet" href="css/combo.css" />
 </head>
-
-<body>
-  <div id="e1"></div>
-</body>
-
+<body />
 </html>
