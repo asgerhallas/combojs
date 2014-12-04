@@ -34,3 +34,4 @@ Src/Energy10.Web/Client/*.dependencies.build
 **/node_modules
 lib/build/
 tests/results
+tests/build

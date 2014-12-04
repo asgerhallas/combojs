@@ -9,10 +9,12 @@
   },
   "scripts": {
     "stylus": "stylus -m -w -o lib/build lib/combo.styl",
-    "coffee": "coffee -o lib/build -cmw lib/combo.coffee",
-    "clean": "del .\\lib\\build /Q& del .\\tests\\results /Q",
-    "start": "npm run clean& start npm run stylus& start npm run coffee",
-    "test": "nightwatch --config ./tests/nightwatch.json -e chrome,firefox,ie",
+    "coffee_test": "coffee -o lib/build -cmw lib/combo.coffee",
+    "coffee_lib": "coffee -o tests/build -cmw tests/",
+    "clean": "del ./lib/build /Q& del ./tests/results /Q& del ./tests/build /Q",
+    "start": "npm run clean& start npm run stylus& start npm run coffee_lib& start npm run coffee_test",
+    "nightwatch": "nightwatch --config ./tests/nightwatch.json -e chrome,firefox,ie",
+    "test": "npm run nightwatch",
     "pretest": "npm run start"
   },
   "repository": {
