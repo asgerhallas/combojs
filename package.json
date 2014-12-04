@@ -8,9 +8,11 @@
     "test": "tests"
   },
   "scripts": {
-    "stylus": "stylus -m -w lib\\combo.styl -o lib\\build",
-    "coffee": "coffee -cmw lib\\combo.coffee -o lib\\build",
-    "coffee": "del \\Q .\\lib\build"
+    "stylus": "stylus -m -w -o lib\\build lib\\combo.styl",
+    "coffee": "coffee -o lib\\build -cmw lib\\combo.coffee",
+    "clean": "del .\\lib\\build /Q",
+    "start": "start npm run stylus& start npm run coffee",
+    "test": "npm run nightwatch"
   },
   "repository": {
     "type": "git",
