@@ -1,5 +1,6 @@
 .combo-container
   width 520px
+  height 18px
   position relative
   border 1px solid #647484
   background #fff
@@ -20,15 +21,14 @@
 
   .combo-button
     background-image url('images/trigger.png')
-    display inline
     width 18px
     height 18px
     border 0
-    padding-bottom 5px
-
+    float right
 
   .combo-list-container
     overflow hidden
+    z-index 1
 
     // floating list instead of inside box
     position absolute
@@ -36,8 +36,7 @@
     right 0
     top 20px
 
-    .combo-list,
-    .empty-list
+    .combo-list
       overflow-x hidden
       overflow-y scroll
       border 1px solid #ccc
@@ -45,35 +44,25 @@
       margin 0 0 0 0
       padding 0
 
-      li
+      li, .empty-list
         background #d6dfe5
         margin-bottom 1px
         padding 5px 5px
         cursor default
-        height 11px
+
+        &.active
+          background #bfcdd7
 
 
-// STATE DEPENDENT STYLES (UNTESTED)
+// STATE DEPENDENT STYLES
 .combo-button:active
   background-position: 0 -20px
 
-.combo-list li.active,
-.combo-list .empty-list.active
-  background #bfcdd7 !important
+// .combo-list li.active,
+// .combo-list .empty-list.active
+//   background #bfcdd7 !important
 
 .combo-list li.disabled,
 .combo-list .empty-list.disabled
   color #afafaf
-
-.disabled .combo-button
-  background-position 0 0
-  -ms-filter "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)"
-  /* IE 8 */
-  filter opacity=50
-  /* IE 5-7 */
-  -khtml-opacity 0.5
-  /* khtml, old safari */
-  -moz-opacity 0.5
-   mozilla, netscape
-  opacity 0.5
 

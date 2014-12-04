@@ -3,12 +3,12 @@
 
 <head>
   <meta charset="utf-8">
-  <title>Searchbox Example, øæå</title>
+  <title>Searchbox inspection suite</title>
 
   <!-- SCRIPTS -->
   <script type="text/javascript" src="../node_modules/jquery/dist/jquery.js"></script>
   <script type="text/javascript" src="../node_modules/underscore/underscore.js"></script>
-  <script type="text/javascript" src="../node_modules/chai/chai.js"></script>
+  <script type="text/javascript" src="js/feature_description.js"></script>
   <script type="text/javascript" src="js/combo.js"></script>
 
   <!-- coffee -co examples combojs.coffee -->
@@ -30,7 +30,7 @@
         true: even
 
     render_test = (id, msg, data) ->
-      $('<div>')
+      $("<div id='wrapper-#{id}'>")
         .append("<h3>#{msg}</h3>")
         .append("<div id='#{id}'></div>")
         .append('<br />')
@@ -41,10 +41,13 @@
       combo.appendTo("##{id}")
       combo.renderFullList()
 
+    openListMaybe = (selector) ->
+      setTimeout (() -> $("#{selector} .combo-button").click()), 0
+
     data_10000 = (
       {
         id: i;
-        text: "hello world, we are legion",
+        text: "hello world, we are legion and my name is mister #{i} and this is my loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong string",
         true: i%2
       } for i in [0...10000])
 
@@ -63,10 +66,26 @@
                 () -> even = !even; return even)()
       render_test('test-4', "Combojs with half enabled list", _data_1275.map map2result(filter))
       render_test('test-5', "Combojs with 10000 elements", data_10000)
+      render_test('test-6', "Combojs with selected element", _data_1275.map map2result(true))
 
+      openListMaybe '#wrapper-test-6'
 
+      $('body').append("<div id='features'><pre>#{_feature_description}</pre></div>")
   </script>
   <link rel="stylesheet" href="css/combo.css" />
+  <style>
+    #wrapper-test-6 {
+      position: absolute;
+      left: 600px;
+      top: 0px;
+    }
+
+    #features {
+      position: absolute;
+      left: 1200px;
+      top: 0px;
+    }
+  </style>
 </head>
 <body />
 </html>
