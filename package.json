@@ -13,9 +13,10 @@
     "coffee_lib": "coffee -o tests/build -cmw tests/",
     "clean": "del ./lib/build /Q& del ./tests/results /Q& del ./tests/build /Q",
     "start": "npm run clean& start npm run stylus& start npm run coffee_lib& start npm run coffee_test",
-    "nightwatch": "nightwatch --config ./tests/nightwatch.json -e chrome,firefox,ie",
+    "nightwatch": "nightwatch --config ./tests/nightwatch.json",
+    "_pretest": "npm run start",
     "test": "npm run nightwatch",
-    "pretest": "npm run start"
+    "watch": "watch \"npm test\" ./tests/build/ --wait=10"
   },
   "repository": {
     "type": "git",
