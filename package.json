@@ -1,6 +1,6 @@
 {
   "name": "combojs",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "A combobox for intelligent, responsive search and filtering.",
   "main": "combojs.js",
   "directories": {
