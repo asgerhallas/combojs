@@ -29,90 +29,85 @@ ns_1275 = "#wrapper-test-2 "
 ns_10000 = "#wrapper-test-3 "
 
 module.exports =
-  "Check initial dom element visibility and data injection": (browser)->
-    ns = ns_empty
-    setup(browser)
-      .waitForElementVisible('body', 5000)
-      .assert.visible(ns+".combo-button")
-      .assert.visible(ns+".combo-container")
-      .assert.visible(ns+".combo-input-container")
-      .assert.visible(ns+".combo-input")
-      .assert.visible(ns+".combo-button")
-      .assert.hidden(ns+".combo-list-container")
-      .assert.hidden(ns+".combo-list")
-      .assert.numberOfChildren(ns+"li", 0, "should be an empty list")
 
-      ns = ns_1275
+  "Check initial dom element visibility": (browser)->
+    setup browser
+
+    for ns in [ns_empty, ns_1275, ns_10000]
       browser
-      .waitForElementVisible('body', 5000)
-      .assert.visible(ns+".combo-button")
-      .assert.visible(ns+".combo-container")
-      .assert.visible(ns+".combo-input-container")
-      .assert.visible(ns+".combo-input")
-      .assert.visible(ns+".combo-button")
-      .assert.hidden(ns+".combo-list-container")
-      .assert.hidden(ns+".combo-list")
-      .assert.numberOfChildren(ns+"li", 1275, "should contain 1275 items")
+        .waitForElementVisible('body', 5000)
+        .assert.visible(ns+".combo-button")
+        .assert.visible(ns+".combo-container")
+        .assert.visible(ns+".combo-input-container")
+        .assert.visible(ns+".combo-input")
+        .assert.visible(ns+".combo-button")
+        .assert.hidden(ns+".combo-list-container")
+        .assert.hidden(ns+".combo-list")
 
-      ns = ns_10000
-      browser
-      .waitForElementVisible('body', 5000)
-      .assert.visible(ns+".combo-button")
-      .assert.visible(ns+".combo-container")
-      .assert.visible(ns+".combo-input-container")
-      .assert.visible(ns+".combo-input")
-      .assert.visible(ns+".combo-button")
-      .assert.hidden(ns+".combo-list-container")
-      .assert.hidden(ns+".combo-list")
-      .assert.numberOfChildren(ns+"li", 10000, "should contain 10000 items")
+    browser
+      .end()
 
+  "Check injection of testdata": (browser) ->
+    setup browser
+      .assert.numberOfChildren(ns_empty+"li", 0, "should be an empty list")
+      .assert.numberOfChildren(ns_1275+"li", 1275, "should contain 1275 items")
+      .assert.numberOfChildren(ns_10000+"li", 10000, "should contain 10000 items")
       .end()
 
 
+  "On button click, list should become visible": (browser)->
+    setup browser
 
-  "Empty list text should become visible on button click - test 1": (browser)->
-    setup(browser)
-      .click("#wrapper-test-1 button.combo-button")
-      .assert.containsText("#wrapper-test-1 .empty-list", "(ingen valgmuligheder)")
-      .end()
+    ns = '#wrapper-test-1 '
+    browser
+      .click(ns+ button_selector)
+      .assert.containsText(ns+".empty-list", "(ingen valgmuligheder)")
+      .waitForElementVisible(ns+list_selector)
 
-  "Empty list text should become visible on typing - test 1": (browser)->
-    setup(browser)
-      .click("#wrapper-test-1 input.combo-input")
-      .setValue("#wrapper-test-1 input[type=text]", "What would happen if I type here?")
-      .assert.containsText("#wrapper-test-1 .empty-list", "(ingen valgmuligheder)")
-      .click("#wrapper-test-1 h3")
-      .waitForElementNotVisible("#wrapper-test-1  .empty-list", 100)
-      .end()
-
-  "Button  click should display list": (browser)->
     ns = '#wrapper-test-2 '
-
-    setup(browser)
+    browser
       .waitForElementNotVisible(ns+list_selector, "list should be hidden before click")
       .click(ns+button_selector)
       .waitForElementVisible(ns+list_selector, "list should display after click")
-      .assert.numberOfChildren(ns+"li", 1275, "should display all 1275 elements")
       .click(ns+button_selector)
-      .waitForElementNotVisible(ns+list_selector, "list should be hiden on second click")
+      .waitForElementNotVisible(ns+list_selector, "list should be hidden on second click")
       .end()
 
 
-  "Disabled items should not be selectable on button click - test 2": (browser)->
+  "On typing, list should become visible": (browser)->
+    setup browser
+
+    ns = '#wrapper-test-1 '
+    browser
+      .click(ns+input_selector)
+      .setValue(ns+input_selector, "What would happen if I type here?")
+      .assert.containsText(ns+'.empty-list', "(ingen valgmuligheder)")
+      .click(ns+"h3")
+      .waitForElementNotVisible(ns+".empty-list")
+
+    browser
+      .click(ns+input_selector)
+      .setValue(ns+input_selector, "What would happen if I type here?")
+      .waitForElementVisible(ns+list_selector, "list should display after click ")
+      .assert.numberOfChildren(ns+"li", 0, "options list should be empty if nothing matches")
+      .click(ns+"h3")
+      .waitForElementNotVisible(ns+list_selector)
+      .end()
+
+
+  "On item click, items should be selectable only if enabled": (browser)->
+    setup browser
+
     ns = '#wrapper-test-2 '
 
-    setup(browser)
+    browser
       .click(ns+button_selector)
       .assert.cssClassPresent(ns+first_list_item, "disabled", "should be disabled")
       .click(ns+first_list_item)
       .assert.containsText(ns+input_selector, "", "should not select clicked item if disabled")
-      .waitForElementVisible(ns+list_selector, "list should remain visible on disabled item click")
-      .end()
+      .assert.visible(ns+list_selector, "list should remain visible on disabled item click")
 
-  "Enabled items should be selectable on button click - test 2": (browser)->
-    ns = '#wrapper-test-2 '
-
-    setup(browser)
+    browser
       .click(ns+button_selector)
       .assert.cssClassPresent(ns+second_list_item, "enabled", "should be enabled")
       .click(ns+first_list_item)
@@ -120,45 +115,72 @@ module.exports =
       .waitForElementNotVisible(ns+list_selector, "list should not remain visible on enabled item click")
       .end()
 
-  "List should be displayed on key press and selected on enter - test 2": (browser)->
+
+  "On keypress, filtered list should be displayed": (browser)->
+    setup browser
+
     ns = '#wrapper-test-2 '
 
-    setup(browser)
+    browser
+      .click(ns + input_selector)
       .setValue(ns+input_selector, "0.62")
-      .waitForElementVisible(ns+list_selector, "list should be visible")
+      .waitForElementVisible(ns+list_selector, "list should become visible")
       .assert.numberOfChildren(ns+"li", 8)
+      .end()
 
+  "Arrow key navigation, filtered list should be displayed": (browser)->
+    setup browser
+
+    ns = '#wrapper-test-2 '
+
+    browser
+      .click(ns + input_selector)
+      .setValue(ns+input_selector, "massiv 12 50")
+      .setValue(ns+input_selector, browser.Keys.ARROW_DOWN)
+      .waitForElementVisible(ns+list_selector, "list should become visible")
+      .setValue(ns+input_selector, browser.Keys.ARROW_DOWN)
+      .setValue(ns+input_selector, browser.Keys.ARROW_DOWN)
+      .setValue(ns+input_selector, browser.Keys.ARROW_UP)
       .setValue(ns+input_selector, browser.Keys.ENTER)
       .assert.valueContains(ns+input_selector,
-        "Massiv ydervæg, 12 cm tegl, 50 mm indvendig isolering.  (U: 0.62)",
-        "item value should be displayed as selected")
-      .assert.hidden(ns+list_selector, "list should be hidden")
+        "Massiv ydervæg, 12 cm tegl, 150 mm indvendig isolering.  (U: 0.27)")
+      .end()
 
-      .click(ns+button_selector)
-      .assert.cssClassPresent(ns+"li:nth-child(6)", 'active')
-      .assert.cssClassPresent(ns+"li:nth-child(6)", 'selected')
+  "FilteredList, should display matched in bold": (browser) ->
+    setup browser
+
+    ns = '#wrapper-test-2 '
+
+    browser
+      .setValue(ns+input_selector, "massiv 12 50 0.14")
+      .waitForElementVisible(ns+input_selector, "list should become visible")
+      .assert.numberOfChildren(ns+"li", 2)
+      .assert.innerHTML(ns+first_list_item,
+        "<b>Massiv</b> ydervæg, <b>12</b> cm tegl, 2<b>50</b> mm udvendig isolering.  (U: <b>0.14</b>)")
+      .assert.innerHTML(ns+first_list_item,
+        "<b>Massiv</b> væg mod uopvarmet rum, <b>12</b> cm tegl, 2<b>50</b> mm udvendig isolering.  (U: <b>0.14</b>)")
+      .end()
+
+
+  "Selected item should be marked on list reopen": (browser) ->
+    browser
+      .click(ns + input_selector)
+      .setValue(ns+input_selector, browser.Keys.ARROW_DOWN)
+      .setValue(ns+input_selector, browser.Keys.ARROW_DOWN)
+      .setValue(ns+input_selector, browser.Keys.ENTER)
+      .assert.hidden(ns+list_selector, "list should be hidden")
+      .click(ns + button_selector)
+      .assert.visible(ns+list_selector, "list should be visible")
+      .assert.valueContains(ns+input_selector,
+        "Massiv ydervæg, Bindingsværk, 100 mm..  (U: 0.34)",
+        "item value should be displayed as selected")
+      .assert.cssClassPresent(ns+first_list_item, 'active')
+      .assert.cssClassPresent(ns+first_list_item, 'selected')
 
       .click(ns+"h3")
       .waitForElementNotVisible(ns+list_selector, "list should be hidden on click somewhere else")
 
       .end()
 
-  "Items should be filterable and first matches rendered in bold - test 2": (browser)->
-    ns = '#wrapper-test-2 '
 
-    browser.assert.equal(2,3)
-
-    setup(browser)
-      .click(ns + '.combo-input')
-      .setValue(ns+'.combo-input', "massiv 12 50 0.14")
-      .waitForElementVisible(ns+"input:first-child")
-      .assert.valueContains(ns+".combo-input", "massiv 12 50 0.14")
-      .assert.numberOfChildren(ns+"ul.combo-list", 2)
-      .assert.innerHTML(ns+"li:nth-child(1)",
-        "<b>Massiv</b> ydervæg, <b>12</b> cm tegl, 2<b>50</b> mm udvendig isolering.  (U: <b>0.14</b>)")
-      .assert.innerHTML(ns+"li:nth-child(2)",
-        "<b>Massiv</b> ydervæg, <b>12</b> cm tegl, 2<b>50</b> mm udvendig isolering.  (U: <b>0.14</b>)")
-      .end()
-
-
-ignore_all_but(0)
+# ignore_all_but(0,2)
