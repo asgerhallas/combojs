@@ -331,8 +331,8 @@ class @Combo
     1
 
   activateSelectedItem: =>
-    console.log "activateSelectedItem"
-    return unless index = @getSelectedIndex()
+    index = @getSelectedIndex()
+    return if not index?
     for li in @list.children() when $(li).data('combo-id') == index
       @activate $(li)
       $(li).addClass('selected')
