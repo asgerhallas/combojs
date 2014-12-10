@@ -132,18 +132,23 @@ module.exports =
     setup browser
 
     ns = '#wrapper-test-2 '
-
     browser
       .click(ns + input_selector)
-      .setValue(ns+input_selector, "massiv 12 50")
-      .setValue(ns+input_selector, browser.Keys.ARROW_DOWN)
+      .setValue(ns+input_selector, browser.Keys.DOWN_ARROW)
       .waitForElementVisible(ns+list_selector, "list should become visible")
-      .setValue(ns+input_selector, browser.Keys.ARROW_DOWN)
-      .setValue(ns+input_selector, browser.Keys.ARROW_DOWN)
-      .setValue(ns+input_selector, browser.Keys.ARROW_UP)
+      .pause(100)
+      .setValue(ns+input_selector, browser.Keys.DOWN_ARROW)
+      .pause(100)
+      .setValue(ns+input_selector, browser.Keys.DOWN_ARROW)
+      .pause(100)
+      .setValue(ns+input_selector, browser.Keys.UP_ARROW)
+      .pause(100)
       .setValue(ns+input_selector, browser.Keys.ENTER)
+      .pause(100)
       .assert.valueContains(ns+input_selector,
-        "Massiv ydervæg, 12 cm tegl, 150 mm indvendig isolering.  (U: 0.27)")
+        "Massiv ydervæg, Bindingsværk, 100 mm..  (U: 0.34)")
+      .assert.cssClassPresent(ns+second_list_item, 'active')
+      # .assert.cssClassPresent(ns+second_list_item, 'selected') // TODO: is this a bug?
       .end()
 
   "FilteredList, should display matched in bold": (browser) ->
@@ -163,10 +168,14 @@ module.exports =
 
 
   "Selected item should be marked on list reopen": (browser) ->
+    setup browser
+
+    ns = '#wrapper-test-2 '
+
     browser
       .click(ns + input_selector)
-      .setValue(ns+input_selector, browser.Keys.ARROW_DOWN)
-      .setValue(ns+input_selector, browser.Keys.ARROW_DOWN)
+      .setValue(ns+input_selector, browser.Keys.DOWN_ARROW)
+      .setValue(ns+input_selector, browser.Keys.DOWN_ARROW)
       .setValue(ns+input_selector, browser.Keys.ENTER)
       .assert.hidden(ns+list_selector, "list should be hidden")
       .click(ns + button_selector)
@@ -182,5 +191,4 @@ module.exports =
 
       .end()
 
-
-# ignore_all_but(0,2)
+# ignore_all_but(-3)

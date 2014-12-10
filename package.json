@@ -8,15 +8,16 @@
     "test": "tests"
   },
   "scripts": {
+    "clean": "del .\\lib\\build /Q& del .\\tests\\results /Q& del .\\tests\\build /Q",
     "stylus": "stylus -m -w -o lib/build lib/combo.styl",
     "coffee_test": "coffee -o lib/build -cmw lib/combo.coffee",
     "coffee_lib": "coffee -o tests/build -cmw tests/",
-    "clean": "del ./lib/build /Q& del ./tests/results /Q& del ./tests/build /Q",
-    "start": "npm run clean& start npm run stylus& start npm run coffee_lib& start npm run coffee_test",
     "nightwatch": "nightwatch --config ./tests/nightwatch.json",
     "_pretest": "npm run start",
     "test": "npm run nightwatch",
-    "watch": "watch \"npm test\" ./tests/build/ --wait=10"
+    "testwatch": "watch \"npm test\" ./tests/build/ --wait=10",
+    "start": "npm run clean& start npm run stylus& start npm run coffee_lib& start npm run coffee_test& start npm run testwatch",
+    "startce": "npm run clean -new_console& npm run stylus -new_console& npm run coffee_lib -new_console& npm run coffee_test -new_console& npm run testwatch -new_console"
   },
   "repository": {
     "type": "git",
