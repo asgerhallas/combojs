@@ -10,9 +10,10 @@
   "scripts": {
     "clean": "del .\\lib\\build /Q& del .\\tests\\results /Q& del .\\tests\\build /Q",
     "stylus": "stylus -m -w -o lib/build lib/combo.styl",
-    "coffee_test": "coffee -o lib/build -cmw lib/combo.coffee",
+    "coffee_test": "coffee -o lib/build -cmw lib/",
     "coffee_lib": "coffee -o tests/build -cmw tests/",
-    "nightwatch": "nightwatch --config ./tests/nightwatch.json",
+    "simple_nightwatch": "nightwatch --config ./tests/nightwatch.json",
+    "nightwatch": "nightwatch --config ./tests/nightwatch.json -e ie",
     "_pretest": "npm run start",
     "test": "npm run nightwatch",
     "testwatch": "watch \"npm test\" ./tests/build/ --wait=10",
