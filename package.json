@@ -8,17 +8,32 @@
     "test": "tests"
   },
   "scripts": {
-    "clean": "del .\\lib\\build /Q& del .\\tests\\results /Q& del .\\tests\\build /Q",
-    "stylus": "stylus -m -w -o lib/build lib/combo.styl",
-    "coffee_test": "coffee -o lib/build -cmw lib/",
-    "coffee_lib": "coffee -o tests/build -cmw tests/",
-    "simple_nightwatch": "nightwatch --config ./tests/nightwatch.json",
-    "nightwatch": "nightwatch --config ./tests/nightwatch.json -e ie",
-    "_pretest": "npm run start",
-    "test": "npm run nightwatch",
-    "testwatch": "watch \"npm test\" ./tests/build/ --wait=10",
-    "start": "npm run clean& start npm run stylus& start npm run coffee_lib& start npm run coffee_test& start npm run testwatch",
-    "startce": "npm run clean -new_console& npm run stylus -new_console& npm run coffee_lib -new_console& npm run coffee_test -new_console& npm run testwatch -new_console"
+    "\\": "CLEAN ALL TEMPORARY FOLDERS",
+    "clean_test": "title clean_test & del .\\tests\\results /Q /S& del .\\tests\\build /Q /S",
+    "clean_lib": "title clean_lib & del .\\lib\\build /Q /S",
+    "clean": "npm run clean_test& npm run clean_lib",
+
+    "\\": "COMPILE STYLUS AND COFFEE FILES",
+    "stylus_lib": "title stylus& stylus -m -w -o lib/build lib/combo.styl",
+    "coffee_test": "title coffee_test & coffee -o lib/build -cmw lib/",
+    "coffee_lib": "title coffee_lib & coffee -o tests/build -cmw tests/",
+
+    "\\": "COMPILE ALL AND START WATCH COMMANDS IN NEW WINDOWS",
+    "watch": "npm run clean_lib& start npm run stylus_lib& start npm run coffee_lib& start npm run coffee_test",
+
+    "\\": "NIGHTWATCH TARGETS",
+    "\\": "RUN NIGHTWATCH WITH HIDDEN CHROME BROWSER, FOR LOCAL TDD DEVELOPMENT ONLY",
+    "nightwatch_dev": "title nightwatch_dev & nightwatch --config ./tests/nightwatch.json",
+    "nightwatch_ie": "title nightwatch_ie & nightwatch --config ./tests/nightwatch.json -e ie",
+    "nightwatch_chrome": "title nightwatch_chrome & nightwatch --config ./tests/nightwatch.json -e chrome",
+    "nightwatch_firefox": "title nightwatch_firefox & nightwatch --config ./tests/nightwatch.json -e firefox",
+    "nightwatch": "title nightwatch & nightwatch --config ./tests/nightwatch.json -e chrome,ie,firefox",
+    "testwatch": "watch \"npm run nightwatch_dev\" ./tests/build/ --wait=10",
+
+    "\\": "DEFAULT TARGETS",
+    "pretest": "npm run clean_test & npm run watch",
+    "test": "timeout 1 & npm run nightwatch",
+    "start": "npm run watch & timeout 1 & start npm run testwatch"
   },
   "repository": {
     "type": "git",
