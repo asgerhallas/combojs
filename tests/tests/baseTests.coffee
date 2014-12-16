@@ -125,7 +125,7 @@ module.exports =
       .setValue(ns+combo_input, browser.Keys.ENTER)
       .waitForElementNotVisible(ns+combo_list, "list should become hidden")
       .assert.valueContains(ns+combo_input,
-        "Massiv ydervæg, Bindingsværk, 100 mm..  (U: 0.34)", "item should have been selected")
+        "my special number is 0.621", "item should have been selected")
       .assert.cssClassPresent(ns+second_item, "active")
       .end()
 
@@ -142,7 +142,7 @@ module.exports =
       .assert.visible(ns+combo_list, "list should remain visible on disabled item click")
       .assert.cssClassPresent(ns+second_item, "enabled", "should be enabled")
       .click(ns+second_item)
-      .assert.valueContains(ns+combo_input, "Massiv ydervæg, Bindingsværk, 100 mm..  (U: 0.34)", "should  select clicked item if enabled")
+      .assert.valueContains(ns+combo_input, "my special number is 0.621", "should select clicked item if enabled")
       .waitForElementNotVisible(ns+combo_list, "list should not remain visible on enabled item click")
       .end()
 
@@ -176,4 +176,4 @@ module.exports =
       .assert.cssClassPresent(ns+second_item, "active")
       .end()
 
-# require("../build/testutils.js").run_only(module, -3)
+require("../testUtils.js").run_only(module, -3,-5)

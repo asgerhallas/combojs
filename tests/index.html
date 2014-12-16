@@ -12,22 +12,15 @@
   <script type="text/javascript" src="feature_description.js"></script>
 
   <!-- coffee -co examples combojs.coffee -->
-  <script type="text/javascript" src="data_1275.json"></script>
   <script type="text/javascript" src="../lib/coffee-script.js"></script>
   <script type="text/coffeescript">
 
-    map2text = (model) ->
-      summary = model.statusSummary
-      uValue = " (U: " + model.e10_Case_Building_Zone_BuildingPart_UValue + ")"
-      summary + " " + uValue
-
-    map2result = (enable) ->
-      (model) ->
-        even = if(typeof enable is "function") then enable(model) else enable
-        id: model.id
-        title: "title"
-        text: map2text(model)
-        true: even
+    uuid = ->
+      'xxxxxxxx xxxx 4xxx yxxx xxxxxxxxxxxx'.replace(/[xy]/g, (c) ->
+        r = Math.random() * 16 | 0
+        v = if c is 'x' then r else (r & 0x3|0x8)
+        v.toString(16)
+    )
 
     render_test = (id, msg, data) ->
       $("<div id='wrapper-#{id}'>")
@@ -44,11 +37,39 @@
     openListMaybe = (selector) ->
       setTimeout (() -> $("#{selector} .combo-button").click()), 0
 
+    # TODO: dry
+    _data_1275 = (
+      {
+        id: i
+        text: if i < 8 then ("my special number is 0.62" + i) else uuid()
+        true: i%2
+      } for i in [0...1271])
+    _data_1275.push({
+      id: 1272
+      text: "Massiv væg mod uopvarmet rum, 12 cm tegl, 250 mm udvendig isolering.  (U: 0.14)"
+      true: true
+    })
+    _data_1275.push({
+      id: 127,
+      text: "Massiv ydervæg, 12 cm tegl, 250 mm udvendig isolering.  (U: 0.14)"
+      true: true
+    })
+    _data_1275.push({
+      id: 1271
+      text: "Massiv ydervæg, Bindingsværk, 100 mm..  (U: 0.34)"
+      true: true
+    })
+    _data_1275.push({
+      id: 1272
+      text: "Massiv ydervæg, Bindingsværk, 100 mm..  (U: 0.34)"
+      true: true
+    })
+
     data_10000 = (
       {
-        id: i;
-        text: "hello world, we are legion and my name is mister #{i} and this is my loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong string",
-        true: i%2
+        id: i
+        text: "hello world, we are legion and my name is mister #{i} and this is my loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong string"
+        true: true
       } for i in [0...10000])
 
     $ ->
@@ -58,11 +79,7 @@
         throw Error("wrong test data! " + _data_1275.length)
 
       render_test('test-1', "Combojs with empty list", [])
-
-      filter = (() ->
-                even = true
-                () -> even = !even; return even)()
-      render_test('test-2', "Combojs with half enabled list", _data_1275.map map2result(filter))
+      render_test('test-2', "Combojs with half enabled list", _data_1275)
       render_test('test-3', "Combojs with 10000 elements", data_10000)
 
       $('body').append("<div id='features'><pre>#{_feature_description}</pre></div>")
