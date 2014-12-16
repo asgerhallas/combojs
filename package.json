@@ -15,8 +15,8 @@
 
     "\\": "COMPILE STYLUS AND COFFEE FILES",
     "stylus_lib": "title stylus& stylus -m -w -o lib/build lib/combo.styl",
-    "coffee_test": "title coffee_test & coffee -o lib/build -cmw lib/",
-    "coffee_lib": "title coffee_lib & coffee -o tests/build -cmw tests/",
+    "coffee_lib": "title coffee_lib & coffee -o lib/build -cmw lib/",
+    "coffee_tests": "title coffee_tests & coffee -o tests/build -cmw tests/",
 
     "\\": "COMPILE ALL AND START WATCH COMMANDS IN NEW WINDOWS",
     "watch": "npm run clean_lib& start npm run stylus_lib& start npm run coffee_lib& start npm run coffee_test",

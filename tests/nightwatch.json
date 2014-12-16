@@ -1,7 +1,7 @@
 {
   "src_folders": ["./tests/build/tests/"],
   "output_folder": "./tests/results/reports",
-  "custom_commands_path": "",
+  "custom_commands_path": "./tests/build/commands",
   "custom_assertions_path": "./tests/build/assertions",
   "globals_path": "./tests/build/globals.js",
   "live_output": true,

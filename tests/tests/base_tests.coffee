@@ -1,38 +1,4 @@
-setup = (browser) ->
-  browser
-    .url("file:///C:/workspace/combojs/tests/index.html")
-    .waitForElementVisible("body")
-
-combo_button = "button.combo-button"
-combo_input = "input.combo-input"
-combo_list = "ul.combo-list"
-first_item = "li:nth-child(1)"
-second_item = "li:nth-child(2)"
-empty_list = ".empty-list"
-somewhere_else = "h3"
-
-ns_empty = "#wrapper-test-1 "
-ns_1275 = "#wrapper-test-2 "
-ns_10000 = "#wrapper-test-3 "
-
 module.exports =
-  "Check initial dom elements visibility": (browser)->
-    setup(browser)
-
-    for ns in [ns_empty, ns_1275, ns_10000]
-      browser
-        .assert.visible(ns + combo_button)
-        .assert.hidden(ns + combo_list)
-        .assert.visible(ns + combo_input)
-    browser.end()
-
-  "Testdata is injected": (browser) ->
-    setup(browser)
-      .assert.numberOfChildren(ns_empty + "li", 0, "should be an empty list")
-      .assert.numberOfChildren(ns_1275 + "li", 1275, "should contain 1275 items")
-      .assert.numberOfChildren(ns_10000 + "li", 10000, "should contain 10000 items")
-      .end()
-
   "On button click, visibility of empty list is toggled": (browser)->
     setup(browser)
 
@@ -102,7 +68,7 @@ module.exports =
       .assert.numberOfChildren(ns+"li", 8)
       .end()
 
-  "On arrow key navigation, only enabled items should be selectable": (browser)->
+  "On key navigation, only enabled items should be selectable": (browser)->
     setup(browser)
 
     ns = ns_1275
@@ -176,4 +142,4 @@ module.exports =
       .assert.cssClassPresent(ns+second_item, "active")
       .end()
 
-require("../testUtils.js").run_only(module, -3,-5)
+# require("../testUtils.js").run_only(module, -3,-5)

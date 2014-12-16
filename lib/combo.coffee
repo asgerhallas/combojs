@@ -1,7 +1,10 @@
 class @Combo
 
+  # minium search term length to initate filtering
   minLength: 1
+  # max heigh on scrollbar window
   maxHeight: 300
+  # number of list items in a page (PAGEUP / PAGEDOWN)
   pageSize: 10
   expandOnFocus: false
   selectOnTab: true
