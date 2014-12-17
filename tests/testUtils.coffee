@@ -15,15 +15,17 @@ module.exports =
           module.exports[key] = e[key]
         e
 
-    setup_macros : () ->
+    plug_macros : () ->
         global.combo_button = "button.combo-button"
         global.combo_input = "input.combo-input"
         global.combo_list = "ul.combo-list"
         global.first_item = "li:nth-child(1)"
         global.second_item = "li:nth-child(2)"
+        global.disabled_item = "li:nth-child(1)"
+        global.enabled_item = "li:nth-child(2)"
         global.empty_list = ".empty-list"
         global.somewhere_else = "h3"
 
-        global.ns_empty = "#wrapper-test-1 "
-        global.ns_1275 = "#wrapper-test-2 "
-        global.ns_10000 = "#wrapper-test-3 "
+        global.ns_empty = "#empty-list "
+        global.ns_1275 = "#medium-list "
+        global.ns_10000 = "#large-list "

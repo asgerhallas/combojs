@@ -1,4 +1,16 @@
-countChildren = (selector) -> $(selector).children().length
+getSelectedText = (selector) ->
+  input = $(selector)?.first()?[0]
+
+  if not input
+    return null
+
+  # IE
+  if document.selection
+    return document.selection.createRange().text
+
+  # Mozilla
+  input.value.substring(input.selectionStart, input.selectionEnd)
+
 
 exports.assertion = (selector, expected, msg) ->
   ###
@@ -6,7 +18,7 @@ exports.assertion = (selector, expected, msg) ->
   inside the XML reports
   @type {string}
   ###
-  @message = msg or "element should have exactly #{expected} children"
+  @message = msg or "selected text should have been '#{expected}'"
 
   ###
   A value to perform the assertion on. If a function is
@@ -31,6 +43,7 @@ exports.assertion = (selector, expected, msg) ->
   @type {function}
   ###
   @value = (result) ->
+    console.log result.value
     result.value
 
 
@@ -40,6 +53,6 @@ exports.assertion = (selector, expected, msg) ->
   @type {function}
   ###
   @command = (callback) ->
-    @client.api.execute countChildren, [], callback
+    @client.api.execute getSelectedText, [selector], callback
 
   @

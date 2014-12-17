@@ -23,15 +23,15 @@
     )
 
     render_test = (id, msg, data) ->
-      $("<div id='wrapper-#{id}'>")
+      $("<div id='#{id}'>")
         .append("<h3>#{msg}</h3>")
-        .append("<div id='#{id}'></div>")
+        .append("<div id='inner-#{id}'></div>")
         .append('<br />')
         .appendTo('body')
 
       combo = new Combo()
       combo.load(data)
-      combo.appendTo("##{id}")
+      combo.appendTo("#inner-#{id}")
       combo.renderFullList()
 
     openListMaybe = (selector) ->
@@ -78,9 +78,9 @@
       if _data_1275.length isnt 1275
         throw Error("wrong test data! " + _data_1275.length)
 
-      render_test('test-1', "Combojs with empty list", [])
-      render_test('test-2', "Combojs with half enabled list", _data_1275)
-      render_test('test-3', "Combojs with 10000 elements", data_10000)
+      render_test('empty-list', "Combojs with empty list", [])
+      render_test('medium-list', "Combojs with half enabled list", _data_1275)
+      render_test('large-list', "Combojs with 10000 elements", data_10000)
 
       $('body').append("<div id='features'><pre>#{_feature_description}</pre></div>")
   </script>

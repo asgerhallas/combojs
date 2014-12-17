@@ -1,0 +1,6 @@
+    # No clue as to which approach is prober, all works
+    # https://github.com/beatfactor/nightwatch/blob/029525407e14221c74e75dec54d5d14e12d3b488/lib/api/commands/pause.js
+    # https://github.com/beatfactor/nightwatch/blob/029525407e14221c74e75dec54d5d14e12d3b488/lib/api/commands/perform.js
+    # @process.nextTick(() => @emit('complete'));
+    # @client.api.pause(0, callback)
+    # setTimeout(callback, 0)
