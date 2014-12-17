@@ -4,7 +4,7 @@ ns = ns_1275
 
 module.exports =
 
-  "item selection by click selects item and hides list": (browser) ->
+  "item selection by click selects item, hides list and highlights text": (browser) ->
     browser
       .setupCombo()
       .openComboList(ns)
@@ -16,19 +16,21 @@ module.exports =
       .assert.selectedText(ns + combo_input, "my special number is 0.621")
       .end()
 
-  "item selection by enter hides list": (browser) ->
-    browser
-      .setupCombo()
-      .openComboList(ns)
-      .click(ns + combo_input)
-      .setValue(ns + combo_input, browser.Keys.DOWN_ARROW)
-      .setValue(ns + combo_input, browser.Keys.DOWN_ARROW)
-      .assert.cssClassPresent(ns + second_item, 'active')
-      .setValue(ns + combo_input, browser.Keys.ENTER)
-      .waitForElementNotVisible(ns + combo_list, "list should be hidden on item select")
-      .assert.value(ns + combo_input, "my special number is 0.621", "should contain selected text")
-      # .assert.selectedText(ns + combo_input, "my special number is 0.621")
-      .end()
+  "item selection by ENTER/TAB selects active item, hide list and highlights text": (browser) ->
+    browser.setupCombo()
+    for key in ["ENTER", "TAB"]
+      browser
+        .refresh()
+        .openComboList(ns)
+        .click(ns + combo_input)
+        .setValue(ns + combo_input, browser.Keys.DOWN_ARROW)
+        .setValue(ns + combo_input, browser.Keys.DOWN_ARROW)
+        .setValue(ns + combo_input, browser.Keys[key])
+        .waitForElementNotVisible(ns + combo_list, "list should be hidden on item select by #{key}")
+        .assert.cssClassPresent(ns + second_item, 'active')
+        .assert.value(ns + combo_input, "my special number is 0.621", "should contain selected text")
+        # .assert.selectedText(ns + combo_input, "my special number is 0.621")
+    browser.end()
 
   "disabled item cannot be selected": (browser) ->
     browser
@@ -38,6 +40,7 @@ module.exports =
       .setValue(ns + combo_input, browser.Keys.DOWN_ARROW)
       .assert.cssClassPresent(ns + disabled_item, 'active')
       .setValue(ns + combo_input, browser.Keys.ENTER)
+      .setValue(ns + combo_input, browser.Keys.TAB)
       .click(ns + disabled_item)
       .pause(100)
       .assert.visible(ns + combo_list, "combo list should remain visible on disabled item select")
@@ -53,4 +56,4 @@ module.exports =
       .assert.cssClassPresent(ns + second_item, "active")
       .end()
 
-require("../testUtils.js").run_only(module, -1)
+# require("../testUtils.js").run_only(module, -1)
