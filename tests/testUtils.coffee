@@ -16,16 +16,18 @@ module.exports =
         e
 
     plug_macros : () ->
-        global.combo_button = "button.combo-button"
-        global.combo_input = "input.combo-input"
-        global.combo_list = "ul.combo-list"
-        global.first_item = "li:nth-child(1)"
-        global.second_item = "li:nth-child(2)"
-        global.disabled_item = "li:nth-child(1)"
-        global.enabled_item = "li:nth-child(2)"
-        global.empty_list = ".empty-list"
-        global.somewhere_else = "h3"
+        global.combo_button = "button.combo-button "
+        global.combo_input = "input.combo-input "
+        global.combo_list = "ul.combo-list "
+        global.first_item = "li:nth-child(1) "
+        global.second_item = "li:nth-child(2) "
+        global.disabled_item = "li:nth-child(1) "
+        global.enabled_item = "li:nth-child(2) "
+        global.empty_list = ".empty-list "
+        global.somewhere_else = "h3 "
 
         global.ns_empty = "#empty-list "
         global.ns_1275 = "#medium-list "
         global.ns_10000 = "#large-list "
+
+        global.active_item = "li.active "

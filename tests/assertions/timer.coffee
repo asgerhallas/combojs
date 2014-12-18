@@ -1,26 +1,26 @@
-countChildren = (selector) -> $(selector).length
-
-exports.assertion = (selector, expected, msg) ->
+exports.assertion = (command, reporter) ->
   ###
   The message which will be used in the test output and
   inside the XML reports
   @type {string}
   ###
-  @message = msg or "element should have exactly #{expected} children"
+  @time = -1
+
+  @message = "time assertion failed"
 
   ###
   A value to perform the assertion on. If a function is
   defined, its result will be used.
   @type {function|*}
   ###
-  @expected = expected
+  @expected = 0
 
   ###
   The method which performs the actual assertion. It is
   called with the result of the value method as the argument.
   @type {function}
   ###
-  @pass = (value) -> value is expected
+  @pass = (value) -> 0 is 0
 
 
   ###
@@ -29,7 +29,8 @@ exports.assertion = (selector, expected, msg) ->
   callback as argument.
   @type {function}
   ###
-  @value = (result) -> result.value
+  @value = (result) -> 0
+
 
 
   ###
@@ -37,7 +38,10 @@ exports.assertion = (selector, expected, msg) ->
   passed to the value method via the callback argument.
   @type {function}
   ###
-  @command = (callback) ->
-    @client.api.execute countChildren, [selector], callback
-
+  @command = (callback) =>
+    @client.api.time(command, (time) =>
+      report = reporter(time)
+      @message = report
+      callback()
+    )
   @

@@ -15,8 +15,8 @@
   <script type="text/javascript" src="../lib/coffee-script.js"></script>
   <script type="text/coffeescript">
 
-    uuid = ->
-      'xxxxxxxx xxxx 4xxx yxxx xxxxxxxxxxxx'.replace(/[xy]/g, (c) ->
+    uuid = (i) ->
+      "xxxxxxxx xxxx #{if (i%2 is 0) then 'caramel!' else 'badger!'}xxx yxxx xxxxxxxxxxxx".replace(/[xy]/g, (c) ->
         r = Math.random() * 16 | 0
         v = if c is 'x' then r else (r & 0x3|0x8)
         v.toString(16)
@@ -38,37 +38,41 @@
       setTimeout (() -> $("#{selector} .combo-button").click()), 0
 
     # TODO: dry
-    _data_1275 = (
-      {
-        id: i
-        text: if i < 8 then ("my special number is 0.62" + i) else uuid()
-        true: i%2
-      } for i in [0...1271])
-    _data_1275.push({
-      id: 1272
-      text: "Massiv væg mod uopvarmet rum, 12 cm tegl, 250 mm udvendig isolering.  (U: 0.14)"
-      true: true
-    })
-    _data_1275.push({
-      id: 127,
-      text: "Massiv ydervæg, 12 cm tegl, 250 mm udvendig isolering.  (U: 0.14)"
-      true: true
-    })
-    _data_1275.push({
-      id: 1271
-      text: "Massiv ydervæg, Bindingsværk, 100 mm..  (U: 0.34)"
-      true: true
-    })
-    _data_1275.push({
-      id: 1272
-      text: "Massiv ydervæg, Bindingsværk, 100 mm..  (U: 0.34)"
-      true: true
-    })
+    i = 0
+    _data_1275 = []
+    _data_1275.push(id: i++, text: "my special number is 0.62" + j, true: yes) for j in [0..7]
+    _data_1275.push(id: i++, text: uuid(i), true: yes) for j in [8..1265]
+    _data_1275.push(id: i++, text: text, true: yes) for text in [
+        "Massiv væg mod uopvarmet rum, 12 cm tegl, 250 mm udvendig isolering.  (U: 0.14)",
+        "Massiv ydervæg, 12 cm tegl, 250 mm udvendig isolering.  (U: 0.14)",
+        "Massiv ydervæg, Bindingsværk, 100 mm.  (U: 0.34)",
+        "Massiv indervæg, Bindingsværk, 100 mm.  (U: 0.39)",
+        "Prefix",
+        "Prefix Suffix",
+        "I <underline><em>truly</em></underline> believe you are special! <strike>#1</strike>",
+        "I <em>truly</em> believe you are special! <strike>#2</strike>",
+        "I truly <em>believe</em> you are special! #3"
+      ]
 
     data_10000 = (
       {
         id: i
-        text: "hello world, we are legion and my name is mister #{i} and this is my loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong string"
+        text: """Hello world,
+                 we are legion and my name is mister #{i}
+                 and this is my very very very very very
+                 very very very very very very very very
+                 very very very very very very very very
+                 very very very very very very very very
+                 very very very very very very very very
+                 very very very very very very very very
+                 #{if i%2 is 0 then 'caramel!' else 'badger!'}
+                 very very very very very very very very
+                 very very very very very very very very
+                 very very very very very very very very
+                 very very very very very very very very
+                 very very very very very very very very
+                 very very very very very very very very
+                 long string"""
         true: true
       } for i in [0...10000])
 

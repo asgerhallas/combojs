@@ -1,6 +1,6 @@
 require('../testutils.js').plug_macros()
 
-ns_empty = ns_1275
+# ns_empty = ns_1275
 
 module.exports =
 
@@ -43,19 +43,30 @@ module.exports =
         .click(ns + combo_button)
         .waitForElementVisible(ns + combo_list, "#{ns}: list should be visible after click")
         .click(ns + combo_button)
-        .waitForElementNotVisible(ns + combo_list, "#{ns}: list should be hidden after second click")
+        .waitForElementNotVisible(ns + combo_list, browser.globals.waitForConditionTimeout, false, null, "#{ns}: list should be hidden after second click")
     browser.end()
 
   "Item click hides list": (browser)->
     browser.setupCombo()
-    for ns in [ns_empty, ns_1275]
-      browser
-        .refresh()
-        .click(ns + combo_button)
-        .waitForElementVisible(ns + combo_list)
-        .click(ns + second_item)
-        .waitForElementNotVisible(ns + combo_list, "#{ns}: list should be hidden after item click")
+
+    ns = ns_1275
+    browser
+      .refresh()
+      .click(ns + combo_button)
+      .waitForElementVisible(ns + combo_list)
+      .click(ns + second_item)
+      .waitForElementNotVisible(ns + combo_list, "#{ns}: list should be hidden after item click")
+
+    ns = ns_empty
+    browser
+      .refresh()
+      .click(ns + combo_button)
+      .waitForElementVisible(ns + combo_list)
+      .click(ns + empty_list)
+      .waitForElementNotVisible(ns + combo_list, browser.globals.waitForConditionTimeout, false, null, "#{ns}: list should be hidden after item click")
+
     browser.end()
+
 
   "Keys BACKSPACE does not reopen list": (browser) ->
     browser.setupCombo()
@@ -95,7 +106,4 @@ module.exports =
         .assert.hidden(ns + combo_list, "#{ns}: list should remain hidden on delete")
     browser.end()
 
-  "empty list should have same visibility behavior as nonempty list": (browser) ->
-    browser.assert.ok ns_empty isnt ns_1275 # see top of file
-
-require("../testUtils.js").run_only(module, -1)
+# require("../testUtils.js").run_only(module, -3,-2)

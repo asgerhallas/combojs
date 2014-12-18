@@ -4,7 +4,7 @@ exports.assertion = (selector, expected, msg) ->
   inside the XML reports
   @type {string}
   ###
-  @message = msg or "element content should match expected"
+  @message = msg or "element content matches #{expected}"
 
   ###
   A value to perform the assertion on. If a function is
@@ -18,7 +18,7 @@ exports.assertion = (selector, expected, msg) ->
   called with the result of the value method as the argument.
   @type {function}
   ###
-  @pass = (value) -> value
+  @pass = (value) -> value is expected
 
 
   ###
@@ -27,8 +27,7 @@ exports.assertion = (selector, expected, msg) ->
   callback as argument.
   @type {function}
   ###
-  @value = (result) ->
-    result.value
+  @value = (result) -> result.value
 
 
 
