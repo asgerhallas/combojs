@@ -3,7 +3,13 @@ require('../testutils.js').plug_macros()
 module.exports =
 
   "Check global macros are available": (browser) ->
-    browser.assert.ok(combo_button, null, "globals should be loaded")
+    browser
+      .assert.ok(combo_button, null, "globals should be loaded")
+
+    browser
+      .setupCombo()
+      .assert.cssClassPresent(ns_1275 + enabled_item, "enabled")
+      .assert.cssClassPresent(ns_1275 + disabled_item, "disabled")
 
   "Check initial dom element visibility": (browser) ->
     browser.setupCombo()
@@ -22,4 +28,4 @@ module.exports =
       .verify.numberOfChildren(ns_10000 + "li", 10000, "#{ns_10000} should contain 10000 items")
       .end()
 
-require("../testUtils.js").run_only(module, -1)
+# require("../testUtils.js").run_only(module, -1)

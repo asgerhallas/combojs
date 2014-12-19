@@ -31,3 +31,4 @@ module.exports =
         global.ns_10000 = "#large-list "
 
         global.active_item = "li.active "
+        global.selected_item = "li.selected "

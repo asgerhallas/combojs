@@ -22,6 +22,8 @@
         v.toString(16)
     )
 
+    window.events = {}
+    window.controllers = {}
     render_test = (id, msg, data) ->
       $("<div id='#{id}'>")
         .append("<h3>#{msg}</h3>")
@@ -30,18 +32,36 @@
         .appendTo('body')
 
       combo = new Combo()
+      list = events["##{id} "] = []
+      combo.input.on 'loaded', (e, data...) => list.push({ name: 'loaded', data: data })
+      combo.input.on 'enterpress', (e, data...) => list.push({ name: 'enterpress', data: data })
+      combo.input.on 'leave', (e, data...) => list.push({ name: 'leave', data: data })
+      combo.input.on 'focus', (e, data...) => list.push({ name: 'focus', data: data })
+      combo.input.on 'enter', (e, data...) => list.push({ name: 'enter', data: data })
+      combo.input.on 'itemSelect', (e, data...) => list.push({ name: 'itemSelect', data: data })
+
       combo.load(data)
       combo.appendTo("#inner-#{id}")
       combo.renderFullList()
+      controllers["##{id} "] = combo
 
     openListMaybe = (selector) ->
       setTimeout (() -> $("#{selector} .combo-button").click()), 0
 
-    # TODO: dry
     i = 0
-    _data_1275 = []
-    _data_1275.push(id: i++, text: "my special number is 0.62" + j, true: yes) for j in [0..7]
-    _data_1275.push(id: i++, text: uuid(i), true: yes) for j in [8..1265]
+    _data_1275 = [
+      { id: i++, text: "my special number is 0.620", true: false },
+      { id: i++, text: "my special number is 0.621", true: true },
+      { id: i++, text: "my special number is 0.622", true: false },
+      { id: i++, text: "my special number is 0.623", true: true },
+      { id: i++, text: "my special number is 0.624", true: false },
+      { id: i++, text: "my special number is 0.625", true: true },
+      { id: i++, text: "my special number is 0.626", true: false },
+      { id: i++, text: "my special number is 0.627", true: true }
+    ]
+
+    _data_1275.push(id: i++, text: uuid(i), true: no) for j in [8..1265]
+
     _data_1275.push(id: i++, text: text, true: yes) for text in [
         "Massiv væg mod uopvarmet rum, 12 cm tegl, 250 mm udvendig isolering.  (U: 0.14)",
         "Massiv ydervæg, 12 cm tegl, 250 mm udvendig isolering.  (U: 0.14)",
@@ -87,6 +107,9 @@
       render_test('large-list', "Combojs with 10000 elements", data_10000)
 
       $('body').append("<div id='features'><pre>#{_feature_description}</pre></div>")
+
+
+
   </script>
   <link rel="stylesheet" href="../lib/build/combo.css" />
   <style>
