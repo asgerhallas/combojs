@@ -19,7 +19,7 @@
     "coffee_tests": "title coffee_tests & coffee -o tests/build -cmw tests/",
 
     "\\": "COMPILE ALL AND START WATCH COMMANDS IN NEW WINDOWS",
-    "watch": "npm run clean_lib& start npm run stylus_lib& start npm run coffee_lib& start npm run coffee_test",
+    "watch": "npm run clean_lib& start npm run stylus_lib& start npm run coffee_lib& start npm run coffee_tests",
 
     "\\": "NIGHTWATCH TARGETS",
     "\\": "RUN NIGHTWATCH WITH HIDDEN CHROME BROWSER, FOR LOCAL TDD DEVELOPMENT ONLY",
