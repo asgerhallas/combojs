@@ -16,6 +16,7 @@ module.exports =
         e
 
     plug_macros : () ->
+        global.combo_container = "div.combo-list-container "
         global.combo_button = "button.combo-button "
         global.combo_input = "input.combo-input "
         global.combo_list = "ul.combo-list "

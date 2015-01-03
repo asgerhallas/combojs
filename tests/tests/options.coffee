@@ -1,86 +1,69 @@
 require('../testutils.js').plug_macros()
 _ = require('underscore')
 
+data = [
+  { id: 1, text: "foo", true: yes }
+  { id: 2, text: "bar", true: yes }
+  { id: 3, text: "bas", true: no }
+  { id: 4, text: "baz", true: yes }
+  { id: 5, text: "foobar", true: yes }
+]
+
+ns = "#temp_combo "
+
 module.exports =
-
-  "Can access combo controller": (browser) ->
+  "Option maxHeight": (browser) ->
+    
     browser
       .setupCombo()
-      .execute(
-        ( -> Object.keys(controllers)), [],
-        (result) ->
-          browser.assert.ok result.status is 0, "status ok"
-          expected = [ns_empty, ns_1275, ns_10000]
-          browser.assert.equal ns_empty, result.value[0]
-          browser.assert.equal ns_1275, result.value[1]
-          browser.assert.equal ns_10000, result.value[2]
-      )
-      .end()
-
-  "Option minLength": (browser) ->
-    ns = ns_1275
-
-    remoteLoad = (ns) -> controllers[ns].minLength = 5
-
-    browser
-      .setupCombo()
-      .setValue(ns+combo_input, "pre")
-      .assert.numberOfChildren(ns+combo_list+"li", 2)
+      .newComboElement(ns, data)
+      .openComboList(ns+" ")
+      .assert.cssProperty(ns + combo_container, 'maxHeight', "300px")
 
       .refresh()
-      .execute remoteLoad, [ns]
-      .setValue(ns+combo_input, 'pref')
-      .verify.numberOfChildren(ns+combo_list+"li", 0)
-      .setValue(ns+combo_list, 'i')
-      .verify.numberOfChildren(ns+combo_list+"li", 2)
+      .setupCombo()
+      .newComboElement(ns, data, {maxHeight: 200})
+      .openComboList(ns+" ")
+      .pause(100)
+      .verify.cssProperty(ns + combo_container, 'maxHeight', "200px")
       .end()
 
   "Option expandOnFocus": (browser) ->
-    ns = ns_1275
-
-    remoteLoad = (ns) -> controllers[ns].expandOnFocus = true
-
-    checkRemote = (result) ->
-      browser.assert.equal result.status, 0
-
     browser
       .setupCombo()
+      .newComboElement(ns, data)
       .assert.hidden(ns+combo_list)
       .click(ns+combo_input)
       .pause(1000)
       .assert.hidden(ns+combo_list)
 
-      .refresh()
-      .execute remoteLoad, [ns], checkRemote
+      .setupCombo()
+      .newComboElement(ns, data, {expandOnFocus: yes})
       .assert.hidden(ns+combo_list)
       .click(ns+combo_input)
       .waitForElementVisible(ns+combo_list)
       .end()
+
+  "Option minLength": (browser) ->
+    browser.verify.equal(yes, no, "NOT IMPLEMENTED?")
+    # browser
+    #   .setupCombo()
+    #   .newComboElement(ns, data)
+    #   .setValue(ns+combo_input, "b")
+    #   .assert.numberOfChildren(ns+combo_list+"li", 4)
+
+    #   .setupCombo()
+    #   .newComboElement(ns, data, {minLength: 2})
+    #   .openComboList(ns+" ")
+    #   .setValue(ns+combo_input, 'b')
+    #   .verify.numberOfChildren(ns+combo_list+"li", 0)
+    #   .setValue(ns+combo_list, 'a')
+    #   .verify.numberOfChildren(ns+combo_list+"li", 4)
+    #   .setValue(ns+combo_list, 'z')
+    #   .verify.numberOfChildren(ns+combo_list+"li", 1)
+    #   .end()
 
   "Option allowEmpty": (browser) ->
-    ns = ns_1275
+    browser.verify.equal(yes, no, "NOT IMPLEMENTED?")
 
-    # TODO: refactor to reinitialize combobox from skratch?
-    remoteLoad = (ns) ->
-      controllers[ns].allowEmpty = true
-      controllers[ns].load [{id: i++, text: "my special number is 0.620", true: false}]
-
-    checkRemote = (result) ->
-      browser.assert.equal result.status, 0
-
-    browser
-      .setupCombo()
-      .assert.hidden(ns+combo_list)
-      .click(ns+combo_input)
-      .pause(1000)
-      .assert.hidden(ns+combo_list)
-
-      .refresh()
-      .execute remoteLoad, [ns], checkRemote
-      .assert.hidden(ns+combo_list)
-      .click(ns+combo_input)
-      .waitForElementVisible(ns+combo_list)
-      .end()
-
-
-require("../testUtils.js").run_only(module, -1)
+# require("../testUtils.js").run_only(module, -2)

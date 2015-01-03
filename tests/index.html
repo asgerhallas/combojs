@@ -24,12 +24,16 @@
 
     window.events = {}
     window.controllers = {}
-    render_test = (id, msg, data) ->
+
+    render_container = (id, msg) ->
       $("<div id='#{id}'>")
         .append("<h3>#{msg}</h3>")
         .append("<div id='inner-#{id}'></div>")
         .append('<br />')
         .appendTo('body')
+
+    render_test = (id, msg, data) ->
+      render_container(id, msg)
 
       combo = new Combo()
       list = events["##{id} "] = []
