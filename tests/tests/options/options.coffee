@@ -1,5 +1,4 @@
-require('../testutils.js').plug_macros()
-_ = require('underscore')
+require('../../testutils.js').plug_macros()
 
 data = [
   { id: 1, text: "foo", true: yes }
@@ -44,8 +43,8 @@ module.exports =
       .waitForElementVisible(ns+combo_list)
       .end()
 
-  "Option minLength": (browser) ->
-    browser.verify.equal(yes, no, "NOT IMPLEMENTED?")
+  # "Option minLength": (browser) ->
+  #   browser.verify.equal(yes, no, "NOT IMPLEMENTED?")
     # browser
     #   .setupCombo()
     #   .newComboElement(ns, data)
@@ -62,8 +61,5 @@ module.exports =
     #   .setValue(ns+combo_list, 'z')
     #   .verify.numberOfChildren(ns+combo_list+"li", 1)
     #   .end()
-
-  "Option allowEmpty": (browser) ->
-    browser.verify.equal(yes, no, "NOT IMPLEMENTED?")
 
 # require("../testUtils.js").run_only(module, -2)
