@@ -8,3 +8,10 @@ IE:
 4. Click Ok, close Internet Explorer and restart Connect for Offline.
 > the browser window should not be minimized, and for the sake of screen capture
 positioned proberly wrt. the viewport.
+
+5. remember to run the console as admin
+
+6. ie -> security -> protected mode for all settings
+
+>> https://github.com/beatfactor/nightwatch/wiki/Internet-Explorer-Setup
+>> https://code.google.com/p/selenium/wiki/InternetExplorerDriver
