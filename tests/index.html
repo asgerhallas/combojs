@@ -1,120 +1,10 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
 <head>
   <meta charset="utf-8">
 
   <title>Searchbox inspection suite</title>
-
-  <!-- SCRIPTS -->
-  <script type="text/javascript" src="../node_modules/jquery/dist/jquery.js"></script>
-  <script type="text/javascript" src="../node_modules/underscore/underscore.js"></script>
-  <script type="text/javascript" src="../lib/build/combo.js"></script>
-  <script type="text/javascript" src="feature_description.js"></script>
-
-  <!-- coffee -co examples combojs.coffee -->
-  <script type="text/javascript" src="../lib/coffee-script.js"></script>
-  <script type="text/coffeescript">
-
-    uuid = (i) ->
-      "xxxxxxxx xxxx #{if (i%2 is 0) then 'caramel!' else 'badger!'}xxx yxxx xxxxxxxxxxxx".replace(/[xy]/g, (c) ->
-        r = Math.random() * 16 | 0
-        v = if c is 'x' then r else (r & 0x3|0x8)
-        v.toString(16)
-    )
-
-    window.events = {}
-    window.controllers = {}
-
-    render_container = (id, msg) ->
-      $("<div id='#{id}'>")
-        .append("<h3>#{msg}</h3>")
-        .append("<div id='inner-#{id}'></div>")
-        .append('<br />')
-        .appendTo('body')
-
-    render_test = (id, msg, data) ->
-      render_container(id, msg)
-
-      combo = new Combo()
-      list = events["##{id} "] = []
-      combo.input.on 'loaded', (e, data...) => list.push({ name: 'loaded', data: data })
-      combo.input.on 'enterpress', (e, data...) => list.push({ name: 'enterpress', data: data })
-      combo.input.on 'leave', (e, data...) => list.push({ name: 'leave', data: data })
-      combo.input.on 'focus', (e, data...) => list.push({ name: 'focus', data: data })
-      combo.input.on 'enter', (e, data...) => list.push({ name: 'enter', data: data })
-      combo.input.on 'itemSelect', (e, data...) => list.push({ name: 'itemSelect', data: data })
-
-      combo.load(data)
-      combo.appendTo("#inner-#{id}")
-      combo.renderFullList()
-      controllers["##{id} "] = combo
-
-    openListMaybe = (selector) ->
-      setTimeout (() -> $("#{selector} .combo-button").click()), 0
-
-    i = 0
-    _data_1275 = [
-      { id: i++, text: "my special number is 0.620", true: false },
-      { id: i++, text: "my special number is 0.621", true: true },
-      { id: i++, text: "my special number is 0.622", true: false },
-      { id: i++, text: "my special number is 0.623", true: true },
-      { id: i++, text: "my special number is 0.624", true: false },
-      { id: i++, text: "my special number is 0.625", true: true },
-      { id: i++, text: "my special number is 0.626", true: false },
-      { id: i++, text: "my special number is 0.627", true: true }
-    ]
-
-    _data_1275.push(id: i++, text: uuid(i), true: no) for j in [8..1265]
-
-    _data_1275.push(id: i++, text: text, true: yes) for text in [
-        "Massiv væg mod uopvarmet rum, 12 cm tegl, 250 mm udvendig isolering.  (U: 0.14)",
-        "Massiv ydervæg, 12 cm tegl, 250 mm udvendig isolering.  (U: 0.14)",
-        "Massiv ydervæg, Bindingsværk, 100 mm.  (U: 0.34)",
-        "Massiv indervæg, Bindingsværk, 100 mm.  (U: 0.39)",
-        "Prefix",
-        "Prefix Suffix",
-        "I <underline><em>truly</em></underline> believe you are special! <strike>#1</strike>",
-        "I <em>truly</em> believe you are special! <strike>#2</strike>",
-        "I truly <em>believe</em> you are special! #3"
-      ]
-
-    data_10000 = (
-      {
-        id: i
-        text: """Hello world,
-                 we are legion and my name is mister #{i}
-                 and this is my very very very very very
-                 very very very very very very very very
-                 very very very very very very very very
-                 very very very very very very very very
-                 very very very very very very very very
-                 very very very very very very very very
-                 #{if i%2 is 0 then 'caramel!' else 'badger!'}
-                 very very very very very very very very
-                 very very very very very very very very
-                 very very very very very very very very
-                 very very very very very very very very
-                 very very very very very very very very
-                 very very very very very very very very
-                 long string"""
-        true: true
-      } for i in [0...10000])
-
-    $ ->
-      if data_10000.length isnt 10000
-        throw Error("wrong test data! " + data_10000.length)
-      if _data_1275.length isnt 1275
-        throw Error("wrong test data! " + _data_1275.length)
-
-      render_test('empty-list', "Combojs with empty list", [])
-      render_test('medium-list', "Combojs with half enabled list", _data_1275)
-      render_test('large-list', "Combojs with 10000 elements", data_10000)
-
-      $('body').append("<div id='features'><pre>#{_feature_description}</pre></div>")
-
-
-
-  </script>
+  
   <link rel="stylesheet" href="../lib/build/combo.css" />
   <style>
     #features {
@@ -123,6 +13,33 @@
       top: 0px;
     }
   </style>
+
+  <!-- SCRIPTS -->
+  <script type="text/javascript" src="../node_modules/jquery/dist/jquery.js"></script>
+  <script type="text/javascript" src="../node_modules/underscore/underscore.js"></script>
+  <script type="text/javascript" src="../lib/build/combo.js"></script>
+  <script type="text/javascript" src="feature_description.js"></script>
+
+  <!-- coffee -co examples combojs.coffee -->
+  <script type="text/javascript" src="./build/harness.js"></script>
+
+  <script type="text/javascript" src="../lib/coffee-script.js"></script>
+  <script type="text/coffeescript">
+    window.events = {}
+
+    $ ->
+      if data_10000.length isnt 10000 then throw Error("wrong test data! " + data_10000.length)
+      if data_1275.length isnt 1275 then throw Error("wrong test data! " + data_1275.length)
+
+      render_combo_setup('empty-list', "Combojs with empty list", [])
+      render_combo_setup('medium-list', "Combojs with half enabled list", data_1275)
+      render_combo_setup('large-list', "Combojs with 10000 elements", data_10000)
+
+      $('body').append("<div id='features'><pre>#{_feature_description}</pre></div>")
+
+  </script>
 </head>
-<body></body>
+<body>
+  
+</body>
 </html>
