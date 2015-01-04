@@ -1,4 +1,4 @@
 module.exports.command = () ->
   @
-    .url("file:///C:/workspace/combojs/tests/index.html")
+    .url(@globals.url)
     .waitForElementVisible("body")

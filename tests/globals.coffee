@@ -1,2 +1,3 @@
 module.exports =
-  waitForConditionTimeout: 2000
+  waitForConditionTimeout: 20000
+  url: "file:///C:/workspace/combojs/tests/index.html"
