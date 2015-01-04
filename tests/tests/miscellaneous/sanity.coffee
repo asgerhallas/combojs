@@ -1,4 +1,4 @@
-require('../testutils.js').plug_macros()
+require('../../testutils.js').plug_macros()
 
 module.exports =
 
