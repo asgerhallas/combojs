@@ -1,4 +1,6 @@
 module.exports =
+    # subroutines used only in commands, assertions and test definitions
+
     run_only : (module, start, end) ->
         e = module.exports
         ks = Object.keys e
@@ -14,6 +16,18 @@ module.exports =
           key = ks[i]
           module.exports[key] = e[key]
         e
+
+    newComboElement: (id, data, options) -> 
+        $("<div id='#{id}'>")
+            .append("<h3>Temp container: #{id}</h3>")
+            .append("<div id='inner-#{id}'></div>")
+            .append('<br />')
+            .appendTo('body')
+
+        combo = new Combo(options)
+        combo.load(data)
+        combo.appendTo("#inner-#{id}")
+        combo.renderFullList()
 
     plug_macros : () ->
         global.combo_container = "div.combo-list-container "
@@ -33,3 +47,5 @@ module.exports =
 
         global.active_item = "li.active "
         global.selected_item = "li.selected "
+
+        global._ = require('underscore')
