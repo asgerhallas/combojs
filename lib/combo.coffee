@@ -1,7 +1,8 @@
 class @Combo
 
   # minium search term length to initate filtering
-  minLength: 1
+  # minLength: 1
+
   # max heigh on scrollbar window
   maxHeight: 300
   # number of list items in a page (PAGEUP / PAGEDOWN)
@@ -240,10 +241,12 @@ class @Combo
           # Opera still allows the keypress to occur which causes forms to submit
           @input.one 'keypress', (keypress) => keypress.preventDefault()
           @selectLi @activeLi if @activeLi
-          event.preventDefault();
+          event.preventDefault()
           event.stopPropagation()
         when @key.TAB
           @selectLi @activeLi if @activeLi and @selectOnTab
+          event.preventDefault()
+          event.stopPropagation()
         when @key.ESCAPE
           @internalCollapse()
     else
