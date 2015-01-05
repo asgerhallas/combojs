@@ -1,7 +1,7 @@
 require('../../testutils.js').plug_macros()
 
 module.exports =
-    # empty list behaves differently
+    # empty list button click does not close list
 
     "Button click toggles list for empty list": (browser)->
         test(browser, ns_empty)
