@@ -14,7 +14,7 @@
         .append('<br />')
         .appendTo('body')
 
-    addEventListener = (combo, eventId, list) -> 
+    addEventListener = (combo, eventId, list) ->
       combo.input.on eventId, (e, data...) => list.push({ name: eventId, data: data })
 
     window.render_combo_setup = (id, msg, data) ->
@@ -47,7 +47,7 @@
       { id: i++, text: "my special number is 0.626", true: no },
       { id: i++, text: "my special number is 0.627", true: yes }
     ]
-    window.data_1275.push(id: i++, text: uuid(i), true: j%2 isnt 0) for j in [8..1265]
+    window.data_1275.push(id: i++, text: i+":"+uuid(i), true: j%2 isnt 0) for j in [8..1265]
     window.data_1275.push(id: i++, text: text, true: yes) for text in [
         "Massiv væg mod uopvarmet rum, 12 cm tegl, 250 mm udvendig isolering.  (U: 0.14)",
         "Massiv ydervæg, 12 cm tegl, 250 mm udvendig isolering.  (U: 0.14)",
