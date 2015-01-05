@@ -7,6 +7,7 @@ class @Combo
   maxHeight: 300
   # number of list items in a page (PAGEUP / PAGEDOWN)
   pageSize: 10
+
   expandOnFocus: false
   selectOnTab: true
   tabIndex: null
@@ -245,8 +246,11 @@ class @Combo
           event.stopPropagation()
         when @key.TAB
           @selectLi @activeLi if @activeLi and @selectOnTab
-          event.preventDefault()
-          event.stopPropagation()
+          if @source.length
+            # allow tab on empty list
+            event.preventDefault()
+            event.stopPropagation()
+
         when @key.ESCAPE
           @internalCollapse()
     else
