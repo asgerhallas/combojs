@@ -4,7 +4,7 @@
   "custom_commands_path": "./tests/build/commands",
   "custom_assertions_path": "./tests/build/assertions",
   "globals_path": "./tests/build/globals.js",
-  "live_output": true,
+  "live_output": false,
   "parallel_process_delay": 10,
   "disable_colors": false,
 
@@ -16,7 +16,7 @@
     "port": 4444,
     "cli_args": {
       "webdriver.chrome.driver": "./tests/drivers/chromedriver.exe",
-      "webdriver.ie.driver": "./tests/drivers/IEDriverServer64.exe",
+      "webdriver.ie.driver": "./tests/drivers/IEDriverServer32.exe",
       "webdriver.firefox.profile": ""
     }
   },
@@ -29,6 +29,7 @@
       "selenium_host": "127.0.0.1",
       "selenium_port": 4444,
       "silent": true,
+      "output": true,
       "disable_colors": false,
       "screenshots": {
         "enabled": true,

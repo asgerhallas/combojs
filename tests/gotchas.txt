@@ -1,10 +1,10 @@
 NIGHTWATCH GOTCHAS:
-IE: 
+IE:
 > should setup the following options:
-1. Open Internet Explorer , go to Tools >> Internet Options 
-2. Click on Advanced Tab and scroll down to find the Security section. 
+1. Open Internet Explorer , go to Tools >> Internet Options
+2. Click on Advanced Tab and scroll down to find the Security section.
 3. Enable the checkbox under the Security section labeled:
-“Allow active content to run in files on My Computer” and 
+“Allow active content to run in files on My Computer” and
 4. Click Ok, close Internet Explorer and restart Connect for Offline.
 > the browser window should not be minimized, and for the sake of screen capture
 positioned proberly wrt. the viewport.
@@ -15,3 +15,5 @@ positioned proberly wrt. the viewport.
 
 >> https://github.com/beatfactor/nightwatch/wiki/Internet-Explorer-Setup
 >> https://code.google.com/p/selenium/wiki/InternetExplorerDriver
+
+>> use ie 32 bit driver, otherwise keys will be slow
