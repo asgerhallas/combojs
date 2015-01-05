@@ -12,7 +12,7 @@ ns = "#temp_combo "
 
 module.exports =
   "Option maxHeight": (browser) ->
-    
+
     browser
       .setupCombo()
       .newComboElement(ns, data)
@@ -61,5 +61,3 @@ module.exports =
     #   .setValue(ns+combo_list, 'z')
     #   .verify.numberOfChildren(ns+combo_list+"li", 1)
     #   .end()
-
-# require("../testUtils.js").run_only(module, -2)

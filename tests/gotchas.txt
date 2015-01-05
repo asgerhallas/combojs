@@ -17,3 +17,5 @@ positioned proberly wrt. the viewport.
 >> https://code.google.com/p/selenium/wiki/InternetExplorerDriver
 
 >> use ie 32 bit driver, otherwise keys will be slow
+
+>> run tests in sequential mode, otherwise some browsers may behave strange, e.g. firefox focus
