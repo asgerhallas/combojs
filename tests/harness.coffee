@@ -13,25 +13,22 @@
         .append("<div id='inner-#{id}'></div>")
         .append('<br />')
         .appendTo('body')
+        .find("#inner-#{id}")
 
-    addEventListener = (combo, eventId, list) ->
-      combo.input.on eventId, (e, data...) => list.push({ name: eventId, data: data })
+    logEventListener = (list) ->
+      (e, data...) => list.push({ name: e.type, data: data })
 
     window.render_combo_setup = (id, msg, data) ->
-      render_container(id, msg)
-
-      combo = new Combo()
       list = events["##{id} "] = []
-      addEventListener(combo, 'loaded', list)
-      addEventListener(combo, 'enterpress', list)
-      addEventListener(combo, 'leave', list)
-      addEventListener(combo, 'focus', list)
-      addEventListener(combo, 'enter', list)
-      addEventListener(combo, 'itemSelect', list)
+      render_container(id, msg)
+        .combo(source: data)
+        .on('loaded', logEventListener(list))
+        .on('enterpress', logEventListener(list))
+        .on('leave', logEventListener(list))
+        .on('focus', logEventListener(list))
+        .on('enter', logEventListener(list))
+        .on('itemSelect', logEventListener(list))
 
-      combo.load(data)
-      combo.appendTo("#inner-#{id}")
-      combo.renderFullList()
     # ===============================================================
 
 
