@@ -1,23 +1,51 @@
 class @Combo
+  # public ---------
 
   # minium search term length to initate filtering
   # minLength: 1
 
-  # max heigh on scrollbar window
+  # max height in px on scrollbar window
   maxHeight: 300
+
   # number of list items in a page (PAGEUP / PAGEDOWN)
   pageSize: 10
 
+  # whether the list should expand on input focus
   expandOnFocus: false
+
+  # whether the active item should be selected on key TAB
   selectOnTab: true
+
+  # sets the attribute tabindex
   tabIndex: null
+
+  # if input is nonempty and no exact matches exists,
+  # the input will be replaced by either the empty string or
+  # the currently selected item
+  #
+  # input must be empty or selected item
   forceSelectionFromList: false
+
+  # input may never be empty
+  # unless list is empty?
   allowEmpty: true
+
+  # enable whether list can be closed
   keepListOpen: false
+
+  # empty list text displayed as faux item
   emptyListText: '(ingen valgmuligheder)'
+
+  # on list open by button click, does not reapply filters i.e. show entire list instead
   forceAllOnButtonClick: true
+
+  # apply to filters, none, inText, firstInText, firstInWord, wholeWord
   matchBy: 'inText'
-  onlyShowEnabled: true
+
+  # only shows enabled items in list
+  onlyShowEnabled: false
+
+  # enable spellcheck attribute
   spellcheck: false
 
   # value that - if set - will be used as submit value for the selected item
@@ -41,6 +69,7 @@ class @Combo
   # e.g. given { alias: 'lag', field: 'layers' }, combo will be able to search the fields layers specifically using 'lag:' and a value
   specifications: []
 
+  # ---------
   source: []
 
   disabled: true
@@ -440,8 +469,6 @@ class @Combo
     # for performance use native html manipulation
     # be aware never to attach events or data to list elements!
 
-    # TODO: QUICKFIX
-    @onlyShowEnabled = false
     htmls = for item, index in items when not @onlyShowEnabled or item.enabled
       @renderItem item, index, filters
 

@@ -12,7 +12,7 @@ module.exports =
       .assert.containsText(ns+empty_list, "(ingen valgmuligheder)")
       .end()
 
-  "Option keepListOpen: hello world!": (browser) ->
+  "Option keepListOpen: 'hello world!'": (browser) ->
     browser
       .setupCombo()
       .newComboElement(ns, data, {emptyListText: "hello world!"})

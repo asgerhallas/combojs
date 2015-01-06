@@ -17,18 +17,6 @@ module.exports =
           module.exports[key] = e[key]
         e
 
-    newComboElement: (id, data, options) -> 
-        $("<div id='#{id}'>")
-            .append("<h3>Temp container: #{id}</h3>")
-            .append("<div id='inner-#{id}'></div>")
-            .append('<br />')
-            .appendTo('body')
-
-        combo = new Combo(options)
-        combo.load(data)
-        combo.appendTo("#inner-#{id}")
-        combo.renderFullList()
-
     plug_macros : () ->
         global.combo_container = "div.combo-list-container "
         global.combo_button = "button.combo-button "
@@ -36,6 +24,7 @@ module.exports =
         global.combo_list = "ul.combo-list "
         global.first_item = "li:nth-child(1) "
         global.second_item = "li:nth-child(2) "
+        global.third_item = "li:nth-child(3) "
         global.disabled_item = "li:nth-child(1) "
         global.enabled_item = "li:nth-child(2) "
         global.empty_list = ".empty-list "
