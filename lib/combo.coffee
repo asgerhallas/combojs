@@ -173,7 +173,7 @@
       @ensureSelection()
       @lastQuery = @input.val()
 
-      @container.trigger 'loaded'
+      @input.trigger 'loaded'
 
     setValue: (value) =>
       for item in @source when item.value is value
@@ -218,7 +218,7 @@
       @lastQuery = @input.val()
       @updateLastSelection()
       @internalCollapse()
-      _.delay (=> @container.trigger 'itemSelect', title: item.title), 10
+      _.delay (=> @input.trigger 'itemSelect', title: item.title), 10
 
     onListClick: (event) =>
       console.log "onListMouseDown"
