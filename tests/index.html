@@ -1,45 +1,49 @@
 <!doctype html>
 <html>
 <head>
-  <meta charset="utf-8">
+<meta charset="utf-8">
 
-  <title>Searchbox inspection suite</title>
-  
-  <link rel="stylesheet" href="../lib/build/combo.css" />
-  <style>
-    #features {
-      position: absolute;
-      left: 1200px;
-      top: 0px;
+<title>Searchbox inspection suite</title>
+
+<link rel="stylesheet" href="../lib/build/combo.css" />
+<style>
+  #features {
+    position: absolute;
+    left: 1200px;
+    top: 0px;
+  }
+</style>
+
+<!-- SCRIPTS -->
+<script type="text/javascript" src="../node_modules/jquery/dist/jquery.js"></script>
+<script type="text/javascript" src="../node_modules/underscore/underscore.js"></script>
+<script type="text/javascript" src="../lib/build/combo.js"></script>
+<script type="text/javascript" src="feature_description.js"></script>
+
+<script type="text/javascript" src="./build/harness.js"></script>
+
+<script type="text/javascript">
+/*global window, $, data_10000, data_1275, feature_description, render_combo_setup*/
+$(function () {
+    'use strict';
+
+    window.events = {};
+
+    if (data_10000.length !== 10000) {
+        throw new Error("wrong test data! " + data_10000.length);
     }
-  </style>
+    if (data_1275.length !== 1275) {
+        throw new Error("wrong test data! " + data_1275.length);
+    }
+    render_combo_setup('empty-list', "Combojs with empty list", []);
+    render_combo_setup('medium-list', "Combojs with half enabled list", data_1275);
+    render_combo_setup('large-list', "Combojs with 10000 elements", data_10000);
 
-  <!-- SCRIPTS -->
-  <script type="text/javascript" src="../node_modules/jquery/dist/jquery.js"></script>
-  <script type="text/javascript" src="../node_modules/underscore/underscore.js"></script>
-  <script type="text/javascript" src="../lib/build/combo.js"></script>
-  <script type="text/javascript" src="feature_description.js"></script>
-
-  <!-- coffee -co examples combojs.coffee -->
-  <script type="text/javascript" src="./build/harness.js"></script>
-
-  <script type="text/javascript" src="../lib/coffee-script.js"></script>
-  <script type="text/coffeescript">
-    window.events = {}
-
-    $ ->
-      if data_10000.length isnt 10000 then throw Error("wrong test data! " + data_10000.length)
-      if data_1275.length isnt 1275 then throw Error("wrong test data! " + data_1275.length)
-
-      render_combo_setup('empty-list', "Combojs with empty list", [])
-      render_combo_setup('medium-list', "Combojs with half enabled list", data_1275)
-      render_combo_setup('large-list', "Combojs with 10000 elements", data_10000)
-
-      $('body').append("<div id='features'><pre>#{_feature_description}</pre></div>")
-
-  </script>
+    return $('body').append("<div id='features'><pre>" + feature_description + "</pre></div>");
+});
+</script>
 </head>
 <body>
-  
+
 </body>
 </html>

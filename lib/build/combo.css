@@ -1,0 +1,66 @@
+.combo-container {
+  width: 520px;
+  height: 18px;
+  position: relative;
+  border: 1px solid #647484;
+  background: #fff;
+  font-size: 11px;
+  font-family: "Arial", "Helvetica", sans-serif;
+}
+.combo-container .combo-input-container {
+  display: inline;
+}
+.combo-container .combo-input-container .combo-input {
+  width: 474px;
+  padding: 1px 24px 1px 0px;
+  height: 16px;
+  border: 0;
+  outline: 0;
+  font-size: 11px;
+  margin-left: 4px;
+}
+.combo-container .combo-button {
+  background-image: url("../images/trigger.png");
+  width: 18px;
+  height: 18px;
+  border: 0;
+  float: right;
+}
+.combo-container .combo-list-container {
+  overflow: hidden;
+  z-index: 1;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 20px;
+}
+.combo-container .combo-list-container .combo-list {
+  overflow-x: hidden;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  background: #c1c7cc;
+  margin: 0 0 0 0;
+  padding: 0;
+}
+.combo-container .combo-list-container .combo-list li,
+.combo-container .combo-list-container .combo-list .empty-list {
+  background: #d6dfe5;
+  padding: 5px 5px;
+  cursor: default;
+}
+.combo-container .combo-list-container .combo-list li {
+  line-height: 1.1;
+  margin-top: 1px;
+  margin-bottom: 1px;
+}
+.combo-container .combo-list-container .combo-list li.active {
+  background: #bfcdd7;
+}
+.combo-button:active {
+  background-position: 0 -20px;
+}
+.combo-list li.disabled,
+.combo-list .empty-list.disabled {
+  color: #afafaf;
+}
+/*# sourceMappingURL=combo.css.map */

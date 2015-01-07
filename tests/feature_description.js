@@ -1,4 +1,4 @@
-var _feature_description = "\
+var feature_description = "\
 FEATURES\n\
 + test harness for manual inspection should be included\n\
 \n\
