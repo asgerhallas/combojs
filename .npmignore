@@ -1,2 +1,4 @@
 **/node_modules
-tests/
+tests/build
+tests/drivers/
+tests/results/
