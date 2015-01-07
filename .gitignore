@@ -1,4 +1,5 @@
 **/node_modules
-tests/build/
-tests/drivers/
+tests/build/**
+tests/results/**
+tests/drivers/**
 !README.txt
