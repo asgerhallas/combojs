@@ -3,42 +3,35 @@
   "version": "v0.1.1",
   "description": "A combobox for intelligent, responsive search and filtering.",
   "author": "ahl",
-  "contributors" : [{
+  "contributors": [
+    {
       "name": "ahl",
       "email": "ahl@version3.dk"
     },
     {
-    "name": "mwf",
-    "email": "tugend@gmail.com"
-  }],
+      "name": "mwf",
+      "email": "tugend@gmail.com"
+    }
+  ],
   "license": "MIT",
-
   "main": "lib/combo.js",
   "directories": {
     "lib": "lib/build",
     "tests": "tests/build",
     "tests_results": "tests/results"
   },
-
   "scripts": {
-    "\\": "CLEAN ALL TEMPORARY FOLDERS",
+    "\\": "DEFAULT TARGETS",
     "clean_test": "title clean_test & del .\\tests\\results /Q /S& del .\\tests\\build /Q /S",
     "clean_lib": "title clean_lib & del .\\lib\\build /Q /S",
     "clean": "npm run clean_test& npm run clean_lib",
-
-    "\\": "COMPILE ALL AND START WATCH COMMANDS IN NEW WINDOWS",
     "watch": "npm run clean_lib& start npm run stylus_lib& start npm run coffee_lib& start npm run coffee_tests",
-
-    "\\": "NIGHTWATCH TARGETS",
-    "\\": "RUN NIGHTWATCH WITH HIDDEN CHROME BROWSER, FOR LOCAL TDD DEVELOPMENT ONLY",
     "nightwatch_dev": "title nightwatch_dev & nightwatch --config ./tests/nightwatch.json",
     "nightwatch_ie": "title nightwatch_ie & nightwatch --config ./tests/nightwatch.json -e ie",
     "nightwatch_chrome": "title nightwatch_chrome & nightwatch --config ./tests/nightwatch.json -e chrome",
     "nightwatch_firefox": "title nightwatch_firefox & nightwatch --config ./tests/nightwatch.json -e firefox",
     "nightwatch": "title nightwatch & nightwatch --config ./tests/nightwatch.json -e chrome& nightwatch --config ./tests/nightwatch.json -e ie& nightwatch --config ./tests/nightwatch.json -e firefox",
     "testwatch": "watch \"npm run nightwatch_dev\" ./tests/build/ --wait=10",
-
-    "\\": "DEFAULT TARGETS",
     "pretest": "npm run clean_test & npm run watch",
     "test": "timeout 1 & npm run nightwatch",
     "start": "npm run watch & timeout 1 & start npm run testwatch"
@@ -58,12 +51,12 @@
   },
   "homepage": "https://github.com/asgerhallas/combojs",
   "dependencies": {
-    "jquery": "^2.1.1",
+    "jquery": "^2.1.3",
     "underscore": "^1.7.0"
   },
   "devDependencies": {
-    "chai": "^1.10.0",
-    "should": "^4.3.0",
-    "stylus": "^0.49.3"
+    "coffee-script": "^1.8.0",
+    "stylus": "^0.49.3",
+    "watch": "^0.13.0"
   }
 }
