@@ -1,22 +1,26 @@
 {
   "name": "combojs",
-  "version": "0.0.1",
+  "version": "0.1",
   "description": "A combobox for intelligent, responsive search and filtering.",
-  "main": "combojs.js",
+  "author": "Asger Hallas",
+  "contributors" : [{
+    "name": "Mads Frandsen",
+    "email": "tugend@gmail.com"
+  }],
+  "license": "MIT",
+
+  "main": "lib",
   "directories": {
-    "example": "examples",
-    "test": "tests"
+    "lib": "lib/build",
+    "tests": "tests/build",
+    "tests_results": "tests/results"
   },
+
   "scripts": {
     "\\": "CLEAN ALL TEMPORARY FOLDERS",
     "clean_test": "title clean_test & del .\\tests\\results /Q /S& del .\\tests\\build /Q /S",
     "clean_lib": "title clean_lib & del .\\lib\\build /Q /S",
     "clean": "npm run clean_test& npm run clean_lib",
-
-    "\\": "COMPILE STYLUS AND COFFEE FILES",
-    "stylus_lib": "title stylus& stylus -m -w -o lib/build lib/combo.styl",
-    "coffee_lib": "title coffee_lib & coffee -o lib/build -cw lib/",
-    "coffee_tests": "title coffee_tests & coffee -o tests/build -cw tests/",
 
     "\\": "COMPILE ALL AND START WATCH COMMANDS IN NEW WINDOWS",
     "watch": "npm run clean_lib& start npm run stylus_lib& start npm run coffee_lib& start npm run coffee_tests",
@@ -45,8 +49,6 @@
     "reponsive",
     "filter"
   ],
-  "author": "Asger Hallas",
-  "license": "MIT",
   "bugs": {
     "url": "https://github.com/asgerhallas/combojs/issues"
   },
