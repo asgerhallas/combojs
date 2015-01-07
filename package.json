@@ -1,6 +1,6 @@
 {
   "name": "combojs",
-  "version": "v0.1.5",
+  "version": "v0.1.7",
   "description": "A combobox for intelligent, responsive search and filtering.",
   "author": "ahl",
   "contributors": [
@@ -22,7 +22,7 @@
   },
   "scripts": {
     "\\": "CLEAN ALL TEMPORARY FOLDERS",
-    "\\": "DEFAULT TARGETS",
+    "\\": "DEFAULT TARGET",
     "clean_test": "title clean_test & del .\\tests\\results /Q /S& del .\\tests\\build /Q /S",
     "clean_lib": "title clean_lib & del .\\lib\\build /Q /S",
     "clean": "npm run clean_test& npm run clean_lib",
