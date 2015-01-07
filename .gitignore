@@ -1,5 +1,3 @@
 **/node_modules
-tests/build/**
-tests/results/**
-tests/drivers/**
-!README.txt
+**/results
+**/build
