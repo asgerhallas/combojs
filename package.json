@@ -1,6 +1,6 @@
 {
   "name": "combojs",
-  "version": "v0.1.9",
+  "version": "v0.1.12",
   "description": "A combobox for intelligent, responsive search and filtering.",
   "author": "ahl",
   "contributors": [
@@ -30,6 +30,11 @@
     "clean_test": "title clean_test & del .\\tests\\results /Q /S& del .\\tests\\build /Q /S",
     "clean_lib": "title clean_lib & del .\\lib\\build /Q /S",
     "clean": "npm run clean_test& npm run clean_lib",
+
+    "\\": "COMPILE STYLUS AND COFFEE FILES",
+    "stylus_lib": "title stylus& stylus -w -o lib/build lib/combo.styl",
+    "coffee_lib": "title coffee_lib & coffee -o lib/build -cw lib/",
+    "coffee_tests": "title coffee_tests & coffee -o tests/build -cw tests/",
 
     "\\": "COMPILE ALL AND START WATCH COMMANDS IN NEW WINDOWS",
     "watch": "npm run clean_lib& start npm run stylus_lib& start npm run coffee_lib& start npm run coffee_tests",
