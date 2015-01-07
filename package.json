@@ -1,15 +1,19 @@
 {
   "name": "combojs",
-  "version": "0.1",
+  "version": "v0.1.0",
   "description": "A combobox for intelligent, responsive search and filtering.",
   "author": "Asger Hallas",
   "contributors" : [{
+      "name": "Asger Hallas",
+      "email": "ahl@version3.dk"
+    },
+    {
     "name": "Mads Frandsen",
     "email": "tugend@gmail.com"
   }],
   "license": "MIT",
 
-  "main": "lib",
+  "main": "lib/combo.js",
   "directories": {
     "lib": "lib/build",
     "tests": "tests/build",
