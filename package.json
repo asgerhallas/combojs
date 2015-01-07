@@ -1,14 +1,14 @@
 {
   "name": "combojs",
-  "version": "v0.1.0",
+  "version": "v0.1.1",
   "description": "A combobox for intelligent, responsive search and filtering.",
-  "author": "Asger Hallas",
+  "author": "ahl",
   "contributors" : [{
-      "name": "Asger Hallas",
+      "name": "ahl",
       "email": "ahl@version3.dk"
     },
     {
-    "name": "Mads Frandsen",
+    "name": "mwf",
     "email": "tugend@gmail.com"
   }],
   "license": "MIT",
