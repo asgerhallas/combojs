@@ -4,8 +4,6 @@ ns = ns_1275
 
 module.exports =
 
-  tags: ["foo"],
-
   "Item selection by TAB should not break focus": (browser) ->
 
     browser

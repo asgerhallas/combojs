@@ -146,8 +146,8 @@
 
       @
 
-    appendTo: (selector) ->
-      @container.appendTo $(selector)
+    # appendTo: (selector) ->
+    #   @container.appendTo $(selector)
 
     load: (source) ->
       @source = for item in source
@@ -630,17 +630,28 @@
 #====================================================
 
   # Define the plugin
+  # https://gist.github.com/rjz/3610858
+
+  setters = ["load", "renderFullList"]
   $.fn.extend combo: (option, args...) ->
 
+    value = @
     @each ->
-      el = $(@)
-      plugin = el.data('plugin')
+      $this = $(@)
+      controller = $this.data('controller')
 
-      if !plugin
-        el.data('plugin', (data = new Combo(@, option)))
-      if typeof option == 'string'
-        # element.combo(functionName, args)
-        plugin[option].apply(plugin, args)
+      if !controller
+        $this.data('controller', (data = new Combo(@, option)))
 
+      else if typeof option == 'string'
+        isGetter = !(option in setters)
+
+        if isGetter and $(@).length isnt 1
+          throw new Error("Method #{option} not defined for multiple elements")
+
+        _value = controller[option].apply(controller, args)
+        if isGetter then value = _value
+
+    value
 #====================================================
 )(window.jQuery, window)

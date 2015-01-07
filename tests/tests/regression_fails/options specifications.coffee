@@ -14,8 +14,6 @@ comboId = "last"
 
 module.exports =
 
-  tags: ['bar'],
-
   # "Option specifications: default:=disabled": (browser) ->
   #   browser
   #     .setupCombo()

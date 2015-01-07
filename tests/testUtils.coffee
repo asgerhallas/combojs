@@ -17,6 +17,19 @@ module.exports =
           module.exports[key] = e[key]
         e
 
+    checkResult : (result) ->
+        if result.status isnt 0
+            console.log (result.value.localizedMessage || result.value.message || result.value || result)
+        return result.status is 0
+
+
+    uuid : () ->
+      "xxxxxxxx xxxx xxx yxxx xxxxxxxxxxxx"
+        .replace(/[xy]/g, (c) ->
+          r = Math.random() * 16 | 0
+          v = if c is 'x' then r else (r & 0x3|0x8)
+          v.toString(16))
+
     plug_macros : () ->
         global.combo_container = "div.combo-list-container "
         global.combo_button = "button.combo-button "

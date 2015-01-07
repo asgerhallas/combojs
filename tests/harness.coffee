@@ -20,15 +20,18 @@
 
     window.render_combo_setup = (id, msg, data) ->
       list = events["##{id} "] = []
-      render_container(id, msg)
-        .combo(source: data)
+      el = render_container(id, msg)
+        .combo()
         .on('loaded', logEventListener(list))
-        .on('enterpress', logEventListener(list))
+        .on('itemSelect', logEventListener(list))
+        .combo('load', data)
+        .combo('renderFullList')
+        .find('input')
+
+      el.on('enterpress', logEventListener(list))
         .on('leave', logEventListener(list))
         .on('focus', logEventListener(list))
         .on('enter', logEventListener(list))
-        .on('itemSelect', logEventListener(list))
-
     # ===============================================================
 
 

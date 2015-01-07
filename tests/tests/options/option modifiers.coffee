@@ -37,13 +37,13 @@ module.exports =
       .click(ns+combo_input)
 
       .setValue(ns+combo_input, "!")
-      .assert.innerHTML(ns+first_item, "[1] 1")
-      .assert.innerHTML(ns+second_item, "[3] 3")
-      .assert.innerHTML(ns+third_item, "[5] 5")
+      .assert.innerHTML(ns+first_item, "1")
+      .assert.innerHTML(ns+second_item, "3")
+      .assert.innerHTML(ns+third_item, "5")
       .assert.numberOfChildren(ns+combo_list+"li", 50)
 
       .setValue(ns+combo_input, "5")
-      .assert.innerHTML(ns+first_item, "[5] <b>5</b>")
+      .assert.innerHTML(ns+first_item, "<b>5</b>")
       # (5,15,25..95) + (51,53,57,59) = 10+4
       .assert.numberOfChildren(ns+combo_list+"li", 14)
 
@@ -51,13 +51,13 @@ module.exports =
       .setValue(ns+combo_input, browser.Keys.BACK_SPACE)
 
       .setValue(ns+combo_input, "%")
-      .assert.innerHTML(ns+first_item, "[1] 1")
-      .assert.innerHTML(ns+second_item, "[2] 2")
-      .assert.innerHTML(ns+third_item, "[4] 4")
+      .assert.innerHTML(ns+first_item, "1")
+      .assert.innerHTML(ns+second_item, "2")
+      .assert.innerHTML(ns+third_item, "4")
       .assert.numberOfChildren(ns+combo_list+"li", 67)
 
       .setValue(ns+combo_input, "4")
-      .assert.innerHTML(ns+first_item, "[4] <b>4</b>")
+      .assert.innerHTML(ns+first_item, "<b>4</b>")
       .assert.numberOfChildren(ns+combo_list+"li", 13)
 
       .end()

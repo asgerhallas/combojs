@@ -1,31 +1,31 @@
-require('../testutils').plug_macros()
+utils = require('../testutils')
+utils.plug_macros()
 
-module.exports.command = (ns, data, options, comboId="last") ->
+module.exports.command = (ns, data, options) ->
   prefix = ns.slice(0,1)
   suffix = ns.slice(1).trim()
 
-  @assert.equal(prefix, "#", "namespace should start with #")
-  @.execute(newComboElement, [suffix, data, options, comboId], done)
+  @assert.equal(prefix, "#", "namespace starts with #")
+  @.execute(newComboElement, [suffix, data, options], done)
    .waitForElementVisible(ns + combo_input, "Element<#{ns + combo_input}> is visible")
+   .waitForElementPresent(ns + combo_list, "Element<#{ns + combo_list}> is present")
 
 #====================================================
 # SUBROUTINES
 #====================================================
-newComboElement = (id, data, options, comboId) ->
-    $("<div id='#{id}'>")
-        .append("<h3>Temp container: #{id}</h3>")
-        .append("<div id='inner-#{id}'></div>")
+newComboElement = (ns, data=[], options={}) ->
+  el = $("<div id='#{ns}'>")
+        .append("<h3>Temp container: #{ns}</h3>")
+        .append("<div class='combo_wrapper'></div>")
         .append('<br />')
         .appendTo('body')
+        .find(".combo_wrapper")
 
-    combo = new Combo(options)
-    combo.load(data)
-    combo.appendTo("#inner-#{id}")
-    combo.renderFullList()
-    window.temp = window.temp || {}
-    window.temp[comboId] = combo
+  el.combo(options)
+    .combo('load', data)
+    .combo('renderFullList')
 
 done = (result) ->
   console.log result.value.localizedMessage unless result.status is 0
-  @assert.ok result.status is 0, "status ok?"
+  @assert.ok utils.checkResult(result)
 #====================================================

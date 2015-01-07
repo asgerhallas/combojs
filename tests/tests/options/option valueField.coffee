@@ -1,21 +1,25 @@
-require('../../testutils.js').plug_macros()
+utils = require('../../testutils.js')
+utils.plug_macros()
+
+
 data = ({ id: i, altId: i*11, text: "#{i}", true: i%3==0 } for i in [1..100])
 
 ns = "#temp_combo "
-comboId = "last"
 module.exports =
+
+  tags: ['valueField']
 
   "Option valueField: default=id": (browser) ->
     browser
       .setupCombo()
-      .newComboElement(ns, data, null, comboId)
+      .newComboElement(ns, data)
       .openComboList(ns)
       .click(ns+third_item)
       .execute(
-        (comboId) -> window.temp[comboId].getSelectedValue(),
-        [comboId],
+        (ns) -> $(ns + ".combo_wrapper").combo('getSelectedValue'),
+        [ns],
         (result) ->
-          @assert.equal(result.status, 0, "status ok")
+          @assert.ok(utils.checkResult(result), "status ok")
           @assert.equal(result.value, 3, "value was ok")
       )
       .end()
@@ -25,14 +29,14 @@ module.exports =
 
     browser
       .setupCombo()
-      .newComboElement(ns, data, {valueField: key}, comboId)
+      .newComboElement(ns, data, {valueField: key})
       .openComboList(ns)
       .click(ns+third_item)
       .execute(
-        (comboId) -> window.temp[comboId].getSelectedValue(),
-        [comboId],
+        (ns) -> $(ns + ".combo_wrapper").combo('getSelectedValue'),
+        [ns],
         (result) ->
-          @assert.equal(result.status, 0, "status ok")
+          @assert.ok(utils.checkResult(result), "status ok")
           @assert.equal(result.value, 33, "value was ok")
       )
       .end()
