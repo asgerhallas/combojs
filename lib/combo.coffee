@@ -130,15 +130,15 @@
           click: @onButtonClick
           mousedown: @suppressNextBlur
 
-      @listContainer = $(
-        '<div class="combo-list-container" />')
-        .css(maxHeight: 0)
-        .insertAfter(@button)
+      # @listContainer = $(
+      #   '<div class="combo-list-container" />')
+      #   .css(maxHeight: 0)
+      #   .insertAfter(@button)
 
-      @list = $('<ul class="combo-list"/>')
+      @listContainer = @list = $('<ul class="combo-list"/>')
         .css(maxHeight: 0)
         .bind(mousedown: @onListMouseDown)
-        .appendTo(@listContainer)
+        .insertAfter(@button)
 
       @list.bgiframe() if $.fn.bgiframe
       @load(options.source) if options.source
@@ -463,7 +463,7 @@
       if htmls.length
         @list[0].innerHTML = htmls.join('')
       else
-        @list[0].innerHTML = "<div class='empty-list'>#{@emptyListText}</div>"
+        @list[0].innerHTML = "<li class='disabled'>#{@emptyListText}</li>"
 
     renderItem: (item, index, filters) =>
       for filter in filters

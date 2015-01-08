@@ -10,61 +10,50 @@
   input.combo-input
     display inline
     width 474px
-    padding 1px 24px 1px 0px
+    padding 0px 24px 0px 0px
     height 16px
     border 0
     outline 0
     font-size 11px
     margin-left 4px
 
-  .combo-button
+  button.combo-button
     background-image url('../images/trigger.png')
     width 18px
     height 18px
     border 0
     float right
 
-  .combo-list-container
-    overflow hidden
+  ul.combo-list
     z-index 1
-
     // floating list instead of inside box
     position absolute
-    left 0
-    right 0
-    top 20px
+    left -1px
+    right -1px
+    top 19px
+    overflow-x hidden
+    overflow-y auto
+    margin 0 0 0 0
+    padding 0
+    margin-top: px
 
-    .combo-list
-      overflow-x hidden
-      overflow-y auto
-      border 1px solid #ccc
-      background #c1c7cc
-      margin 0 0 0 0
-      padding 0
+    li
+      border-left 1px solid #ccc
+      border-right 1px solid #ccc
+      border-bottom 1.5px solid #ccc
+      background #d6dfe5
+      padding 5px 5px
+      cursor default
+      line-height: 1.1
 
-      li, .empty-list
-        background #d6dfe5
-        padding 5px 5px
-        cursor default
-
-      li
-        line-height: 1.1
-        margin-top 1px
-        margin-bottom 1px
-
-        &.active
-          background #bfcdd7
+      &.active
+        background #bfcdd7
 
 
 // STATE DEPENDENT STYLES
-.combo-button:active
+button.combo-button:active
   background-position: 0 -20px
 
-// .combo-list li.active,
-// .combo-list .empty-list.active
-//   background #bfcdd7 !important
-
-.combo-list li.disabled,
-.combo-list .empty-list.disabled
+ul.combo-list li.disabled
   color #afafaf
 
