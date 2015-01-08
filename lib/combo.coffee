@@ -102,7 +102,7 @@
           autocomplete='off'
           disabled='disabled'
           spellcheck='#{@spellcheck}'
-          #{if @tabIndex? then 'tabindex=\'@tabIndex\''}/>")
+          #{if @tabIndex? then 'tabindex=\'@tabIndex\'' else ''}/>")
         .bind
           keydown: @onKeyDown
           keyup: @onKeyUp
