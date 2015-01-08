@@ -7,10 +7,8 @@
   font-size: 11px;
   font-family: "Arial", "Helvetica", sans-serif;
 }
-.combo-container .combo-input-container {
+.combo-container input.combo-input {
   display: inline;
-}
-.combo-container .combo-input-container .combo-input {
   width: 474px;
   padding: 1px 24px 1px 0px;
   height: 16px;
@@ -63,4 +61,3 @@
 .combo-list .empty-list.disabled {
   color: #afafaf;
 }
-/*# sourceMappingURL=combo.css.map */

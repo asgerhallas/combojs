@@ -111,13 +111,13 @@
           focus: _.throttle @onFocus, 0
           blur: @onBlur
 
-      @inputContainer = $(
-        '<div class="combo-input-container" />')
-        .append(@input)
+      # @inputContainer = $(
+      #   '<div class="combo-input-container" />')
+      #   .append(@input)
 
       @el = $(wrapper)
             .addClass("combo-container")
-            .append(@inputContainer)
+            .append(@input)
             # must set actual html element as context for selector (see .live() reference)
             .on 'click', '.combo-list li', @onListClick
 
@@ -125,7 +125,7 @@
         '<button class="combo-button"
           tabindex="-1"
           disabled="disabled" />')
-        .insertAfter(@inputContainer)
+        .insertAfter(@input)
         .bind
           click: @onButtonClick
           mousedown: @suppressNextBlur
