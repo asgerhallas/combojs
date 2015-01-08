@@ -1,7 +1,5 @@
 (($, window) ->
-  class @Combo
-    # public ---------
-
+  class Combo
     # minium search term length to initate filtering
     # minLength: 1
 
@@ -98,15 +96,13 @@
     constructor: (wrapper, options = {}) ->
       @[key] = value for own key, value of options
 
-      @container = $('<div class="combo-container" />')
-      $(wrapper).append(@container)
-
-      @inputContainer = $('<div class="combo-input-container" />')
-        .appendTo(@container)
-
-      @input = $('<input type="text" class="combo-input" autocomplete="off" disabled="disabled"/>')
-        .attr('spellcheck', @spellcheck)
-        .appendTo(@inputContainer)
+      @input = $(
+        "<input type='text'
+          class='combo-input'
+          autocomplete='off'
+          disabled='disabled'
+          spellcheck='#{@spellcheck}'
+          #{if @tabIndex? then 'tabindex=\'@tabIndex\''}/>")
         .bind
           keydown: @onKeyDown
           keyup: @onKeyUp
@@ -115,39 +111,39 @@
           focus: _.throttle @onFocus, 0
           blur: @onBlur
 
-      if @tabIndex?
-        @input.attr tabindex: @tabIndex
+      @inputContainer = $(
+        '<div class="combo-input-container" />')
+        .append(@input)
 
-      @button = $('<button class="combo-button" tabindex="-1" disabled="disabled" />')
+      @el = $(wrapper)
+            .addClass("combo-container")
+            .append(@inputContainer)
+            # must set actual html element as context for selector (see .live() reference)
+            .on 'click', '.combo-list li', @onListClick
+
+      @button = $(
+        '<button class="combo-button"
+          tabindex="-1"
+          disabled="disabled" />')
         .insertAfter(@inputContainer)
         .bind
           click: @onButtonClick
           mousedown: @suppressNextBlur
 
-      @listContainer = $('<div class="combo-list-container" />')
-        .css
-          maxHeight: 0
+      @listContainer = $(
+        '<div class="combo-list-container" />')
+        .css(maxHeight: 0)
         .insertAfter(@button)
 
       @list = $('<ul class="combo-list"/>')
-        .css
-          maxHeight: 0
-        .bind
-          mousedown: @onListMouseDown
+        .css(maxHeight: 0)
+        .bind(mousedown: @onListMouseDown)
         .appendTo(@listContainer)
 
-      # must set actual html element as context for selector (see .live() reference)
-      @container.on 'click', '.combo-list li', @onListClick
-
       @list.bgiframe() if $.fn.bgiframe
-
-      if options.source
-        @load(options.source)
+      @load(options.source) if options.source
 
       @
-
-    # appendTo: (selector) ->
-    #   @container.appendTo $(selector)
 
     load: (source) ->
       @source = for item in source
@@ -207,12 +203,10 @@
       @input.val() is '' or @input.val() is null
 
     selectLi: (li) =>
-      console.log "selectLi"
       @selectItem @source[$(li).data('combo-id')]
       @refocus()
 
     selectItem: (item, options = {}) =>
-      console.log "selectItem"
       return if not item.enabled and not options.forced
       @input.val item.title
       @lastQuery = @input.val()
@@ -221,7 +215,6 @@
       _.delay (=> @input.trigger 'itemSelect', title: item.title), 10
 
     onListClick: (event) =>
-      console.log "onListMouseDown"
       @selectLi event.currentTarget
 
     onListMouseDown: (event) =>
@@ -236,7 +229,6 @@
         @refocus()
 
     onButtonClick: (event) =>
-      console.log "onButtonClick"
       return if @disabled
 
       # if it's open and is not empty, close it
@@ -248,7 +240,6 @@
       @focus()
 
     onKeyDown: (event) =>
-      console.log "onKeyDown"
       return if @disabled
 
       if @isExpanded
@@ -310,7 +301,6 @@
       @searchAndExpand()
 
     onMouseUp: =>
-      console.log "onMouseUp"
       return if @disabled
       @updateLastSelection()
 
@@ -344,11 +334,7 @@
           @input.val ''
           @lastSelection = null
 
-    # on: (args...) -> @input.on args...
-    # off: (args...) -> @input.off args...
-
     updateLastSelection: =>
-      console.log 'updateLastSelection'
       return if not @forceSelectionFromList
       currentSelection = @getSelectedItemAndIndex()
       @lastSelection = currentSelection if currentSelection?
@@ -458,7 +444,7 @@
 
     positionList: ->
       @listContainer.css
-        zIndex: @container.css('zIndex') + 1
+        zIndex: @el.css('zIndex') + 1
 
     renderFilteredList: =>
       filters = if @input.val() is '' then [] else @buildFilters @input.val()
@@ -579,7 +565,7 @@
     expand: (options = {}) =>
       return if @disabled
       return if @isExpanded
-      @container.addClass 'expanded'
+      @el.addClass 'expanded'
       @isExpanded = true
       @listContainer.animate {maxHeight: @maxHeight}, duration: 60
       @list.animate {maxHeight: @maxHeight}, duration: 60, callback: options.callback
@@ -593,7 +579,7 @@
         @collapse()
 
     collapse: (options = {}) =>
-      @container.removeClass 'expanded'
+      @el.removeClass 'expanded'
       @isExpanded = false
       @listContainer.animate {maxHeight: 0}, duration: 60
       @list.animate {maxHeight: 0}, duration: 60, callback: options.callback
@@ -608,11 +594,11 @@
       @input.attr disabled: false
       @button.attr disabled: false
 
-    detach: ->
-      @container.detach()
+    # detach: ->
+    #   @el.detach()
 
-    destroy: ->
-      @container.remove()
+    # destroy: ->
+    #   @el.remove()
 
     evaluate: (fieldGetter, item) ->
       if not fieldGetter?
@@ -635,23 +621,22 @@
   setters = ["load", "renderFullList"]
   $.fn.extend combo: (option, args...) ->
 
-    value = @
+    values =  []
     @each ->
       $this = $(@)
-      controller = $this.data('controller')
+      plugin = $this.data('combo')
 
-      if !controller
-        $this.data('controller', (data = new Combo(@, option)))
+      if !plugin
+        $this.data('combo', (data = new Combo(@, option)))
 
       else if typeof option == 'string'
-        isGetter = !(option in setters)
+        if not option of plugin then throw new Error("Unknown combo method #{option}")
+        _value = plugin[option].apply(plugin, args)
+        if !(option in setters) then values.push(_value)
 
-        if isGetter and $(@).length isnt 1
-          throw new Error("Method #{option} not defined for multiple elements")
-
-        _value = controller[option].apply(controller, args)
-        if isGetter then value = _value
-
-    value
+    switch values.length
+      when 0 then return @
+      when 1 then return values[0]
+      else return values
 #====================================================
 )(window.jQuery, window)
