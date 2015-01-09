@@ -94,15 +94,11 @@
       NUMPAD_ENTER: 108
 
     constructor: (wrapper, options = {}) ->
-      @[key] = value for own key, value of options
+      @[key] = value for own key, value of options when value?
 
       @input = $(
-        "<input type='text'
-          class='combo-input'
-          autocomplete='off'
-          disabled='disabled'
-          spellcheck='#{@spellcheck}'
-          #{if @tabIndex? then 'tabindex=\'@tabIndex\'' else ''}/>")
+        "<input type='text' class='combo-input' autocomplete='off' disabled='disabled'
+          spellcheck='#{@spellcheck}' #{if @tabIndex? then 'tabindex=\'@tabIndex\'' else ''}/>")
         .bind
           keydown: @onKeyDown
           keyup: @onKeyUp
@@ -111,10 +107,6 @@
           focus: _.throttle @onFocus, 0
           blur: @onBlur
 
-      # @inputContainer = $(
-      #   '<div class="combo-input-container" />')
-      #   .append(@input)
-
       @el = $(wrapper)
             .addClass("combo-container")
             .append(@input)
@@ -122,20 +114,14 @@
             .on 'click', '.combo-list li', @onListClick
 
       @button = $(
-        '<button class="combo-button"
-          tabindex="-1"
-          disabled="disabled" />')
+        '<button class="combo-button" tabindex="-1" disabled="disabled" />')
         .insertAfter(@input)
         .bind
           click: @onButtonClick
           mousedown: @suppressNextBlur
 
-      # @listContainer = $(
-      #   '<div class="combo-list-container" />')
-      #   .css(maxHeight: 0)
-      #   .insertAfter(@button)
-
-      @listContainer = @list = $('<ul class="combo-list"/>')
+      @list = $(
+        '<ul class="combo-list"/>')
         .css(maxHeight: 0)
         .bind(mousedown: @onListMouseDown)
         .insertAfter(@button)
@@ -443,7 +429,7 @@
       filters
 
     positionList: ->
-      @listContainer.css
+      @list.css
         zIndex: @el.css('zIndex') + 1
 
     renderFilteredList: =>
@@ -567,7 +553,7 @@
       return if @isExpanded
       @el.addClass 'expanded'
       @isExpanded = true
-      @listContainer.animate {maxHeight: @maxHeight}, duration: 60
+      @list.animate {maxHeight: @maxHeight}, duration: 60
       @list.animate {maxHeight: @maxHeight}, duration: 60, callback: options.callback
       @positionList()
       @scrollIntoView()
@@ -581,7 +567,7 @@
     collapse: (options = {}) =>
       @el.removeClass 'expanded'
       @isExpanded = false
-      @listContainer.animate {maxHeight: 0}, duration: 60
+      @list.animate {maxHeight: 0}, duration: 60
       @list.animate {maxHeight: 0}, duration: 60, callback: options.callback
 
     disable: =>
