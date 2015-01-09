@@ -102,15 +102,15 @@
         # must set actual html element as context for selector (see .live() reference)
         .on 'click', '.combo-list li', @onListClick
 
-      width = @width || @el.width()
-      @el.width(width) if @width
+      # width = @width || @el.width()
+      # @el.width(width) if @width
 
       @input = $(
         "<input type='text' class='combo-input' autocomplete='off' disabled='disabled'
           spellcheck='#{@spellcheck}'
           #{if @tabIndex? then 'tabindex=\'@tabIndex\'' else ''}
-          style='width: #{width-46}px'
           />")
+          # style='width: #{width-46}px'
         .bind
           keydown: @onKeyDown
           keyup: @onKeyUp
