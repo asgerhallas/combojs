@@ -10,7 +10,7 @@
     window.render_container = (id, msg) ->
       $("<div id='#{id}'>")
         .append("<h3>#{msg}</h3>")
-        .append("<div id='inner-#{id}'></div>")
+        .append("<div id='inner-#{id}' />")
         .append('<br />')
         .appendTo('body')
         .find("#inner-#{id}")

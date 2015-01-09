@@ -1,5 +1,4 @@
 .combo-container {
-  width: 520px;
   height: 18px;
   position: relative;
   border: 1px solid #647484;
@@ -9,8 +8,6 @@
 }
 .combo-container input.combo-input {
   display: inline;
-  width: 474px;
-  padding: 0px 24px 0px 0px;
   height: 16px;
   border: 0;
   outline: 0;
@@ -24,6 +21,12 @@
   border: 0;
   float: right;
 }
+.combo-container button.combo-button:focus {
+  outline: 0;
+}
+.combo-container button.combo-button:active {
+  background-position: 0 -20px;
+}
 .combo-container ul.combo-list {
   z-index: 1;
   position: absolute;
@@ -34,20 +37,23 @@
   overflow-y: auto;
   margin: 0 0 0 0;
   padding: 0;
+  border: 1px solid #ccc;
+  background: #c1c7cc;
 }
 .combo-container ul.combo-list li {
-  border-left: 1px solid #ccc;
-  border-right: 1px solid #ccc;
-  border-bottom: 1.5px solid #ccc;
   background: #d6dfe5;
   padding: 5px 5px;
   cursor: default;
   line-height: 1.1;
+  margin-bottom: 1px;
 }
 .combo-container ul.combo-list li.active {
   background: #bfcdd7;
 }
-button.combo-button:active {
+.combo-container ul.combo-list li:last-child {
+  margin-bottom: 0px;
+}
+button.combo-buttonactive {
   background-position: 0 -20px;
 }
 ul.combo-list li.disabled {

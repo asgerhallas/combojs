@@ -96,9 +96,21 @@
     constructor: (wrapper, options = {}) ->
       @[key] = value for own key, value of options when value?
 
+      @el =
+        $(wrapper)
+        .addClass("combo-container")
+        # must set actual html element as context for selector (see .live() reference)
+        .on 'click', '.combo-list li', @onListClick
+
+      width = @width || @el.width()
+      @el.width(width) if @width
+
       @input = $(
         "<input type='text' class='combo-input' autocomplete='off' disabled='disabled'
-          spellcheck='#{@spellcheck}' #{if @tabIndex? then 'tabindex=\'@tabIndex\'' else ''}/>")
+          spellcheck='#{@spellcheck}'
+          #{if @tabIndex? then 'tabindex=\'@tabIndex\'' else ''}
+          style='width: #{width-46}px'
+          />")
         .bind
           keydown: @onKeyDown
           keyup: @onKeyUp
@@ -106,28 +118,25 @@
           # circumvent http://bugs.jquery.com/ticket/6705
           focus: _.throttle @onFocus, 0
           blur: @onBlur
+        .appendTo(@el)
 
-      @el = $(wrapper)
-            .addClass("combo-container")
-            .append(@input)
-            # must set actual html element as context for selector (see .live() reference)
-            .on 'click', '.combo-list li', @onListClick
 
       @button = $(
         '<button class="combo-button" tabindex="-1" disabled="disabled" />')
-        .insertAfter(@input)
         .bind
           click: @onButtonClick
           mousedown: @suppressNextBlur
+        .appendTo(@el)
 
       @list = $(
         '<ul class="combo-list"/>')
-        .css(maxHeight: 0)
+        .css(maxHeight: @maxHeight)
         .bind(mousedown: @onListMouseDown)
-        .insertAfter(@button)
+        .appendTo(@el)
+        .hide()
 
       @list.bgiframe() if $.fn.bgiframe
-      @load(options.source) if options.source
+      @load(@source) if @source?
 
       @
 
@@ -553,8 +562,7 @@
       return if @isExpanded
       @el.addClass 'expanded'
       @isExpanded = true
-      @list.animate {maxHeight: @maxHeight}, duration: 60
-      @list.animate {maxHeight: @maxHeight}, duration: 60, callback: options.callback
+      @list.show().slideDown(60, options.callback)
       @positionList()
       @scrollIntoView()
 
@@ -567,8 +575,9 @@
     collapse: (options = {}) =>
       @el.removeClass 'expanded'
       @isExpanded = false
-      @list.animate {maxHeight: 0}, duration: 60
-      @list.animate {maxHeight: 0}, duration: 60, callback: options.callback
+      @list.slideUp(60, options.callback)
+      # @list.animate {maxHeight: 0}, duration: 60
+      # @list.animate {maxHeight: 0}, duration: 60, callback: options.callback
 
     disable: =>
       @disabled = true
@@ -607,7 +616,7 @@
   setters = ["load", "renderFullList"]
   $.fn.extend combo: (option, args...) ->
 
-    values =  []
+    value = @
     @each ->
       $this = $(@)
       plugin = $this.data('combo')
@@ -618,11 +627,8 @@
       else if typeof option == 'string'
         if not option of plugin then throw new Error("Unknown combo method #{option}")
         _value = plugin[option].apply(plugin, args)
-        if !(option in setters) then values.push(_value)
+        value = _value if !(option in setters)
 
-    switch values.length
-      when 0 then return @
-      when 1 then return values[0]
-      else return values
+    value
 #====================================================
 )(window.jQuery, window)
