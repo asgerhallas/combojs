@@ -1,6 +1,6 @@
 {
   "name": "combojs",
-  "version": "v0.1.23",
+  "version": "v0.1.24",
   "description": "A combobox for intelligent, responsive search and filtering.",
   "author": "Asger Hallas",
   "contributors": [
@@ -37,7 +37,7 @@
     "watch": "npm run clean_lib& start npm run stylus_lib& start npm run coffee_lib& start npm run coffee_tests",
     "//E": "NIGHTWATCH TARGETS",
     "//F": "RUN NIGHTWATCH WITH HIDDEN CHROME BROWSER, FOR LOCAL TDD DEVELOPMENT ONLY",
-    "nightwatch_dev": "title nightwatch_dev & nightwatch --config ./tests/nightwatch.json",
+    "nightwatch_dev": "title nightwatch_dev & nightwatch --config ./tests/nightwatch.json -s regression_fails",
     "nightwatch_ie": "title nightwatch_ie & nightwatch --config ./tests/nightwatch.json -e ie",
     "nightwatch_chrome": "title nightwatch_chrome & nightwatch --config ./tests/nightwatch.json -e chrome",
     "nightwatch_firefox": "title nightwatch_firefox & nightwatch --config ./tests/nightwatch.json -e firefox",
