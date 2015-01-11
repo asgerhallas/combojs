@@ -9,7 +9,7 @@ module.exports =
 
     "Open combo-list by button click": (browser) ->
         browser
-            .moveToElement('css selector', ns + combo_input, 510, 5)
+            .moveToElement('css selector', ns + combo_input, 535, 5)
             .mouseButtonDown()
             .mouseButtonUp()
             .waitForElementVisible(ns + combo_list, 2000, false, null, "combo list should open on button click")
@@ -22,27 +22,27 @@ module.exports =
     "Move five pages down by clicking on scrollbar": (browser) ->
         browser
             # buttons are ~18 x 18px, scrollwindow is 520 x 300px
-            .moveToElement('css selector', ns + ".combo-list", 510, 200)
+            .moveToElement('css selector', ns + combo_list, 535, 200)
             .pause(100)
             .mouseButtonDown()
             .mouseButtonUp()
 
-            .moveToElement('css selector', ns + ".combo-list", 510, 200)
+            .moveToElement('css selector', ns + combo_list, 535, 200)
             .pause(100)
             .mouseButtonDown()
             .mouseButtonUp()
 
-            .moveToElement('css selector', ns + ".combo-list", 510, 200)
+            .moveToElement('css selector', ns + combo_list, 535, 200)
             .pause(100)
             .mouseButtonDown()
             .mouseButtonUp()
 
-            .moveToElement('css selector', ns + ".combo-list", 510, 200)
+            .moveToElement('css selector', ns + combo_list, 535, 200)
             .pause(100)
             .mouseButtonDown()
             .mouseButtonUp()
 
-            .moveToElement('css selector', ns + ".combo-list", 510, 200)
+            .moveToElement('css selector', ns + combo_list, 535, 200)
             .pause(100)
             .mouseButtonDown()
             .mouseButtonUp()
@@ -52,7 +52,7 @@ module.exports =
 
     "Move two pages up by clicking on scrollbar": (browser) ->
         browser
-            .moveToElement('css selector', ns + ".combo-list", 510, 20)
+            .moveToElement('css selector', ns + combo_list, 535, 20)
             .pause(1000)
             .mouseButtonDown()
             .mouseButtonUp()
@@ -65,7 +65,7 @@ module.exports =
 
     "Move two pages down by clicking on button": (browser) ->
         browser
-            .moveToElement('css selector', ns + ".combo-list", 510, 298)
+            .moveToElement('css selector', ns + combo_list, 535, 298)
             .pause(1000)
             .mouseButtonDown()
             .mouseButtonUp()
@@ -78,7 +78,7 @@ module.exports =
 
     "Move two pages up by clicking on button": (browser) ->
         browser
-            .moveToElement('css selector', ns + ".combo-list", 510, 2)
+            .moveToElement('css selector', ns + combo_list, 535, 2)
             .pause(1000)
 
             .mouseButtonDown()

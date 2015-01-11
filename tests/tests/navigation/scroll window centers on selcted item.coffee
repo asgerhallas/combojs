@@ -4,6 +4,8 @@ ns = ns_1275
 
 module.exports =
 
+  tags: ['foo'],
+
   "Scroll window centers on selected item": (browser) ->
     browser
       .setupCombo()
@@ -18,8 +20,7 @@ module.exports =
       .assert.cssClassPresent(ns + "li.active", 'enabled')
       .click(ns + "li.active")
       .pause(100)
-      .verify.cssProperty(ns + combo_list, 'max-height', "0px", "list should have 'closed'")
-      .pause(100)
+      .verify.hidden(ns + combo_list, "list should have 'closed'")
       .openComboList(ns)
       .verify.scrollVerticalNotVisible(ns + combo_list, first_item)
       .assert.scrollVerticalVisible(ns + combo_list, active_item)

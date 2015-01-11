@@ -108,7 +108,7 @@
       @input = $(
         "<input type='text' class='combo-input' autocomplete='off' disabled='disabled'
           spellcheck='#{@spellcheck}'
-          #{if @tabIndex? then 'tabindex=\'@tabIndex\'' else ''}
+          #{if @tabIndex? then "tabindex='#{@tabIndex}'" else ""}
           />")
           # style='width: #{width-46}px'
         .bind

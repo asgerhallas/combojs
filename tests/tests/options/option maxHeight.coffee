@@ -11,7 +11,7 @@ module.exports =
       .newComboElement(ns, data)
       .openComboList(ns+" ")
       .pause(100)
-      .assert.cssProperty(ns + combo_container, 'maxHeight', "300px")
+      .assert.cssProperty(ns + combo_list, 'maxHeight', "300px")
       .end()
 
   "Option maxHeight: 200": (browser) ->
@@ -20,5 +20,5 @@ module.exports =
       .newComboElement(ns, data, {maxHeight: 200})
       .openComboList(ns+" ")
       .pause(100)
-      .assert.cssProperty(ns + combo_container, 'maxHeight', "200px")
+      .assert.cssProperty(ns + combo_list, 'maxHeight', "200px")
       .end()

@@ -31,7 +31,7 @@ module.exports =
           v.toString(16))
 
     plug_macros : () ->
-        global.combo_container = "div.combo-list-container "
+        global.combo_container = "div.combo-container "
         global.combo_button = "button.combo-button "
         global.combo_input = "input.combo-input "
         global.combo_list = "ul.combo-list "
@@ -40,7 +40,7 @@ module.exports =
         global.third_item = "li:nth-child(3) "
         global.disabled_item = "li:nth-child(1) "
         global.enabled_item = "li:nth-child(2) "
-        global.empty_list = ".empty-list "
+        global.empty_list = "ul.combo-list " # todo: redundant
         global.somewhere_else = "h3 "
 
         global.ns_empty = "#empty-list "

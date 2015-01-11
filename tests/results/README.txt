@@ -1,1 +1,0 @@
-folder used for nightwatch output
