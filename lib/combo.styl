@@ -1,26 +1,31 @@
 .combo-container
+  padding-right 28px
   height 18px
   position relative
   border 1px solid #647484
-  background #fff
+  // background #fff
   font-size 11px
   font-family "Arial", "Helvetica", sans-serif
-  padding 1px 4px 1px 4px
 
   input.combo-input
-    height 16px
+    padding 0px 24px 0px 4px
+    height 18px
     border 0
     outline 0
     font-size 11px
-    width 100%
+    width 100% !important
 
   button.combo-button
     background-image url('../images/trigger.png')
     width 18px
     height 18px
     right 0px
+    top 0px
     border 0
     position absolute
+
+    &:disabled
+      opacity 0.5
 
     &:focus
       outline 0
