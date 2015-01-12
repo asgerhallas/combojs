@@ -9,10 +9,10 @@ module.exports =
     browser
       .setupCombo()
       .newComboElement(ns, data)
+      .assert.numberOfChildren(ns + combo_list+"li", 100)
       .assert.cssClassPresent(ns + first_item, 'disabled')
       .assert.cssClassPresent(ns + second_item, 'disabled')
       .assert.cssClassPresent(ns + third_item, 'enabled')
-      .assert.numberOfChildren(ns + combo_list+"li", 100)
       .end()
 
   "Option enabledField: 'potato'": (browser) ->

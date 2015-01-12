@@ -16,7 +16,9 @@
         .find("#inner-#{id}")
 
     logEventListener = (list) ->
-      (e, data...) => list.push({ name: e.type, data: data })
+      (e, data...) =>
+        console.log "recieved event", e.type
+        list.push({ name: e.type, data: data })
 
     window.render_combo_setup = (id, msg, data) ->
       list = events["##{id} "] = []

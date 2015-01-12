@@ -47,6 +47,7 @@ module.exports =
             .mouseButtonDown()
             .mouseButtonUp()
 
+            .pause()
             .assert.elementHasFocus(ns + combo_input, 'input field should retain focus')
             .pause(2000)
 

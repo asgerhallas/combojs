@@ -4,8 +4,6 @@ ns = ns_1275
 
 module.exports =
 
-  tags: ['foo'],
-
   "Scroll window centers on selected item": (browser) ->
     browser
       .setupCombo()

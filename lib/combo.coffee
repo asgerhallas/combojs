@@ -136,7 +136,7 @@
         .hide()
 
       @list.bgiframe() if $.fn.bgiframe
-      @load(@source) if @source?
+      @load(@source) if @source? and @source.length
 
       @
 
@@ -588,12 +588,6 @@
       @disabled = false
       @input.attr disabled: false
       @button.attr disabled: false
-
-    # detach: ->
-    #   @el.detach()
-
-    # destroy: ->
-    #   @el.remove()
 
     evaluate: (fieldGetter, item) ->
       if not fieldGetter?

@@ -7,8 +7,9 @@ data = ({
   true: true
 } for i in [1..100])
 
-modifiers = [{modifier: '!', field: 'a'},
-              {modifier: '%', field: 'b'}]
+modifiers = [
+  {modifier: '§', field: 'a'},
+  {modifier: '%', field: 'b'}]
 
 ns = "#temp_combo "
 comboId = "last"
@@ -21,7 +22,7 @@ module.exports =
       .newComboElement(ns, data)
       .click(ns+combo_input)
 
-      .setValue(ns+combo_input, "!")
+      .setValue(ns+combo_input, "§")
       .assert.numberOfChildren(ns+combo_list+"li", 0)
 
       .setValue(ns+combo_input, browser.Keys.BACK_SPACE)
@@ -36,7 +37,7 @@ module.exports =
       .newComboElement(ns, data, { modifiers: modifiers })
       .click(ns+combo_input)
 
-      .setValue(ns+combo_input, "!")
+      .setValue(ns+combo_input, "§")
       .assert.innerHTML(ns+first_item, "1")
       .assert.innerHTML(ns+second_item, "3")
       .assert.innerHTML(ns+third_item, "5")

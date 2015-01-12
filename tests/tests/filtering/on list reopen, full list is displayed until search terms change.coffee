@@ -14,6 +14,6 @@ module.exports =
       .pause(10)
       .openComboList(ns)
       .click(ns + combo_input)
-      .setValue(ns+combo_input, " ")
+      .keys(" ")
       .assert.numberOfChildren(ns+combo_list+"li", 2)
       .end()

@@ -25,7 +25,6 @@ module.exports =
     browser
       .setupCombo()
       .assert.numberOfChildren(ns_empty + "li", 1, "#{ns_empty} should be the empty list")
-      .assert.innerHTML(ns_empty + first_item, "(ingen valgmuligheder)")
       .assert.numberOfChildren(ns_1275 + "li", 1275, "#{ns_1275} should contain 1275 items")
       .assert.numberOfChildren(ns_10000 + "li", 10000, "#{ns_10000} should contain 10000 items")
       .end()
