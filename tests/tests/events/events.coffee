@@ -3,6 +3,9 @@ require('../../testutils.js').plug_macros()
 ns = ns_1275
 module.exports =
 
+  # select item does not fire events in consistent order
+  # enter,focus,itemSelect for IE
+
   "Setup": (browser) ->
     browser
       .setupCombo()
@@ -71,15 +74,24 @@ checkEventsWrapper = (browser, expected) ->
       result.status, 0,
       'status ok')
 
-    for event in result.value
-      console.log JSON.stringify(event)
-
     browser.assert.equal(
       expected.length, result.value.length
       "number of events #{expected.length} ok")
 
-    _.map(
-      result.value, (e, index) ->
-        browser.assert.equal e.name, expected[index],
-        "event #{e.name} is #{index}th")
+    # because of browser differences,
+    # we do not check the event ordering
+    expectedEvents = {}
+    for type in expected
+      expectedEvents[type] = expectedEvents[type] || 0
+      expectedEvents[type]++
+
+    for e, index in result.value
+      browser.assert.ok (e.name of expectedEvents)
+      browser.assert.ok (expectedEvents[e.name]--) >= 0
+
+    # _.map(
+    #   result.value, (e, index) ->
+    #     browser.assert.equal e.name, expected[index],
+    #     "event #{e.name} is #{index}th")
+
 # ====================================================

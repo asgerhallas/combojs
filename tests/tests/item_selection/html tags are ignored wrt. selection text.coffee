@@ -8,6 +8,7 @@ module.exports =
     browser
       .setupCombo()
       .click(ns + combo_input)
+      .pause(100)
       .setValue(ns+combo_input, "truly")
       .assert.innerHTML(ns + combo_list + "li:nth-child(2)", "I <em><b>truly</b></em> believe you are special! <strike>#2</strike>")
       .click(ns + combo_list + "li:nth-child(2)")
