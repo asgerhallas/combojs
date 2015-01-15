@@ -262,8 +262,9 @@
             event.preventDefault()
             event.stopPropagation()
           when @key.TAB
-            @selectLi @activeLi if @activeLi and @selectOnTab
-            if @source.length
+            if @activeLi and @selectOnTab
+              @selectLi @activeLi
+            if @source.length and @selectOnTab
               # allow tab on empty list
               event.preventDefault()
               event.stopPropagation()
