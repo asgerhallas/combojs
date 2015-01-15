@@ -165,6 +165,7 @@
       @lastQuery = @input.val()
 
       @input.trigger 'loaded'
+      @
 
     setValue: (value) =>
       for item in @source when item.value is value

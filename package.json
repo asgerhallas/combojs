@@ -14,7 +14,7 @@
     }
   ],
   "license": "MIT",
-  "main": "lib/combo.js",
+  "main": "lib/build/combo.js",
   "directories": {
     "lib": "lib/build",
     "tests": "tests/build",
