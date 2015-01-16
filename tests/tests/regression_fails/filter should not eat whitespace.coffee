@@ -9,7 +9,7 @@ ns = "#temp_combo "
 comboId = "last"
 
 module.exports =
-  # ERROR, the devider space disapears
+  # ERROR, the seperating space between matches may dissapear
 
   tags:['uud'],
 

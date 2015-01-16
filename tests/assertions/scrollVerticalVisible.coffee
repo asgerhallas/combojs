@@ -18,4 +18,3 @@ exports.assertion = (containerSel, elmSel, msg) ->
 
   @
 
-  

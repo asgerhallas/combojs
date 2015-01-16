@@ -1,21 +1,26 @@
-NIGHTWATCH GOTCHAS:
-IE:
-> should setup the following options:
+NIGHTWATCH: IE SETUP
 1. Open Internet Explorer , go to Tools >> Internet Options
 2. Click on Advanced Tab and scroll down to find the Security section.
 3. Enable the checkbox under the Security section labeled:
-“Allow active content to run in files on My Computer” and
+   “Allow active content to run in files on My Computer” and
 4. Click Ok, close Internet Explorer and restart Connect for Offline.
-> the browser window should not be minimized, and for the sake of screen capture
 positioned proberly wrt. the viewport.
-
-5. remember to run the console as admin
-
+5. remember to run the console as admin?
 6. ie -> security -> protected mode for all settings
+7. use ie 32 bit driver, otherwise keys will be slow
 
 >> https://github.com/beatfactor/nightwatch/wiki/Internet-Explorer-Setup
 >> https://code.google.com/p/selenium/wiki/InternetExplorerDriver
 
->> use ie 32 bit driver, otherwise keys will be slow
+NIGHTWATCH: CUSTOM COMMANDS WITHOUT USE OF BUILTIN - MUST EMIT A 'complete' EVENT
+No clue as to which approach is prober, all works
+https://github.com/beatfactor/nightwatch/blob/029525407e14221c74e75dec54d5d14e12d3b488/lib/api/commands/pause.js
+https://github.com/beatfactor/nightwatch/blob/029525407e14221c74e75dec54d5d14e12d3b488/lib/api/commands/perform.js
+@process.nextTick(() => @emit('complete'));
+@client.api.pause(0, callback)
+setTimeout(callback, 0)
 
->> run tests in sequential mode, otherwise some browsers may behave strange, e.g. firefox focus
+NIGHTWATCH: WRITING AND RUNNING TESTS
+> The browser window should not be minimized for the sake of both screen capture and some commands
+> Running tests in parallel (-e chrome,ie) may result in composite commands such as tab+enter to misbehave
+  all tests should instead be run seperatedly on each browser

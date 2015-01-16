@@ -102,15 +102,11 @@
         # must set actual html element as context for selector (see .live() reference)
         .on 'click', '.combo-list li', @onListClick
 
-      # width = @width || @el.width()
-      # @el.width(width) if @width
-
       @input = $(
         "<input type='text' class='combo-input' autocomplete='off' disabled='disabled'
           spellcheck='#{@spellcheck}'
           #{if @tabIndex? then "tabindex='#{@tabIndex}'" else ""}
           />")
-          # style='width: #{width-46}px'
         .bind
           keydown: @onKeyDown
           keyup: @onKeyUp
@@ -119,7 +115,6 @@
           focus: _.throttle @onFocus, 0
           blur: @onBlur
         .appendTo(@el)
-
 
       @button = $(
         '<button class="combo-button" tabindex="-1" disabled="disabled" />')
@@ -578,8 +573,6 @@
       @el.removeClass 'expanded'
       @isExpanded = false
       @list.slideUp(60, options.callback)
-      # @list.animate {maxHeight: 0}, duration: 60
-      # @list.animate {maxHeight: 0}, duration: 60, callback: options.callback
 
     disable: =>
       @disabled = true
@@ -627,4 +620,4 @@
 
     value
 #====================================================
-)(window.jQuery, window)
+)(window.jQuery || window.$, window)

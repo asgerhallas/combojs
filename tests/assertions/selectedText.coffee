@@ -1,5 +1,5 @@
 exports.assertion = (selector, expected, msg) ->
-  
+
   @message = msg or "Selected text of element<#{selector}> is '#{expected}'"
 
   @expected = expected

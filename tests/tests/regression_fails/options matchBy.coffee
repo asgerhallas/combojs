@@ -9,6 +9,7 @@ ns = "#temp_combo "
 comboId = "last"
 
 module.exports =
+  # see filter should not eat whitespace.coffee
 
   "Option matchBy: none": (browser) ->
     browser

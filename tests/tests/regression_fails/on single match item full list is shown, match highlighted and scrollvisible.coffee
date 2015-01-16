@@ -3,7 +3,7 @@ require('../../testutils.js').plug_macros()
 ns = ns_1275
 
 module.exports =
-	# currently an error compared to documentation?my special number is 0.621
+	# currently an error compared to documentation? My special number is 0.621
 	# should highlight and show full list if only one item matches
 
 	"On single match item full list is shown, match highlighted and scrollvisible": (browser) ->

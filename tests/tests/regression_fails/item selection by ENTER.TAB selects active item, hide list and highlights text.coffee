@@ -2,7 +2,7 @@ require('../../testutils.js').plug_macros()
 ns = ns_1275
 
 module.exports =
-    # enter/tab selection does not lead to highlighing
+    # enter/tab selection does not result in highlighing
 
     "Item selection by ENTER selects active item, hide list and highlights text": (browser) ->
         key = "ENTER"
