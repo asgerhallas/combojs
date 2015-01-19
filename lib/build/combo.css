@@ -7,12 +7,13 @@
   font-family: "Arial", "Helvetica", sans-serif;
 }
 .combo-container input.combo-input {
-  padding: 0px 24px 0px 4px;
-  height: 18px;
+  padding: 0px 6px 0px 4px;
   border: 0;
   outline: 0;
   font-size: 11px;
-  width: 100% !important;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
 }
 .combo-container button.combo-button {
   background-image: url("../images/trigger.png");
@@ -22,6 +23,7 @@
   top: 0px;
   border: 0;
   position: absolute;
+  height: 100%;
 }
 .combo-container button.combo-button:disabled {
   opacity: 0.5;
@@ -34,6 +36,7 @@
 }
 .combo-container ul.combo-list {
   z-index: 1;
+  max-height: 300px;
   position: absolute;
   left: -1px;
   right: -1px;

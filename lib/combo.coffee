@@ -68,6 +68,8 @@
     # e.g. given { alias: 'lag', field: 'layers' }, combo will be able to search the fields layers specifically using 'lag:' and a value
     specifications: []
 
+    placeholder: ""
+
     # ---------
     source: []
 
@@ -104,7 +106,7 @@
 
       @input = $(
         "<input type='text' class='combo-input' autocomplete='off' disabled='disabled'
-          spellcheck='#{@spellcheck}'
+          spellcheck='#{@spellcheck}' placeholder='#{@placeholder}'
           #{if @tabIndex? then "tabindex='#{@tabIndex}'" else ""}
           />")
         .bind
@@ -194,7 +196,7 @@
       @input.val() is '' or @input.val() is null
 
     selectLi: (li) =>
-      @selectItem @source[$(li).data('combo-id')]
+      @selectItem @source[$(li).data('combo-id')] unless $(li).data('combo-id')
       @refocus()
 
     selectItem: (item, options = {}) =>
@@ -434,9 +436,11 @@
 
       filters
 
-    positionList: ->
-      @list.css
-        zIndex: @el.css('zIndex') + 1
+    # positionList: ->
+    # RETURNS STRING, MAY RETURN AUTO
+    #   @list.css
+    #     zIndex: @el.css('zIndex') + 1
+    #   console.error "positionList is broken!",  @el.css('zIndex')
 
     renderFilteredList: =>
       filters = if @input.val() is '' then [] else @buildFilters @input.val()
@@ -448,9 +452,11 @@
     renderList: (items, filters) =>
       # for performance use native html manipulation
       # be aware never to attach events or data to list elements!
-
-      htmls = for item, index in items when not @onlyShowEnabled or item.enabled
-        @renderItem item, index, filters
+      htmls = []
+      for item, index in items
+        continue if @onlyShowEnabled and not item.enabled
+        continue if not _.all filters, (filter) -> filter.predicate item[filter.property]
+        htmls.push @renderItem item, index, filters
 
       if htmls.length
         @list[0].innerHTML = htmls.join('')
@@ -458,9 +464,6 @@
         @list[0].innerHTML = "<li class='disabled'>#{@emptyListText}</li>"
 
     renderItem: (item, index, filters) =>
-      for filter in filters
-        return unless filter.predicate item[filter.property]
-
       if @litraField? and (litra = item.litra)?
         text = "[#{litra}] #{@highlightValue(item, 'display', filters)}"
       else
@@ -559,8 +562,8 @@
       return if @isExpanded
       @el.addClass 'expanded'
       @isExpanded = true
-      @list.show().slideDown(60, options.callback)
-      @positionList()
+      @list.slideDown(60, options.callback)
+      # @positionList()
       @scrollIntoView()
 
     internalCollapse: =>
@@ -620,4 +623,4 @@
 
     value
 #====================================================
-)(window.jQuery || window.$, window)
+)(window.jQuery ||w, window)

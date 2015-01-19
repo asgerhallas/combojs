@@ -23,7 +23,7 @@
     window.render_combo_setup = (id, msg, data) ->
       list = events["##{id} "] = []
       el = render_container(id, msg)
-        .combo()
+        .combo({placeholder: "##{id}"})
         .on('loaded', logEventListener(list))
         .on('itemSelect', logEventListener(list))
         .combo('load', data)
