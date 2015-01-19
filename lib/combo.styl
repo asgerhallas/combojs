@@ -13,12 +13,10 @@
     font-size 11px
     width 100%
     height 100%
-    z-index 1
 
   button.combo-button
     background-image url('../images/trigger.png')
     width 18px
-    height 18px
     right 0px
     top 0px
     border 0
@@ -35,11 +33,11 @@
       background-position: 0 -20px
 
   ul.combo-list
-    z-index 1
+    z-index 1 // to avoid visual collision with other combo-input (see position: absolute)
     max-height 300px
     position absolute
-    left -1px
-    right -1px
+    left -1px // compensate for combo-container border-left
+    width 100%
     top 19px
     overflow-x hidden
     overflow-y auto
