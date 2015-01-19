@@ -196,7 +196,7 @@
       @input.val() is '' or @input.val() is null
 
     selectLi: (li) =>
-      @selectItem @source[$(li).data('combo-id')] unless $(li).data('combo-id')
+      @selectItem @source[$(li).data('combo-id')] if $(li).data('combo-id')
       @refocus()
 
     selectItem: (item, options = {}) =>
