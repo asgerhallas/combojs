@@ -37,7 +37,7 @@
   max-height: 300px;
   position: absolute;
   left: -1px;
-  width: 100%;
+  right: -1px;
   top: 19px;
   overflow-x: hidden;
   overflow-y: auto;
