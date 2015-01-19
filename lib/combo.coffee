@@ -196,7 +196,10 @@
       @input.val() is '' or @input.val() is null
 
     selectLi: (li) =>
-      @selectItem @source[$(li).data('combo-id')] if $(li).data('combo-id')
+      comboId = $(li).data('combo-id')
+      return if comboId is 'emptylist-item'
+
+      @selectItem @source[$(li).data('combo-id')]
       @refocus()
 
     selectItem: (item, options = {}) =>
@@ -436,12 +439,6 @@
 
       filters
 
-    # positionList: ->
-    # RETURNS STRING, MAY RETURN AUTO
-    #   @list.css
-    #     zIndex: @el.css('zIndex') + 1
-    #   console.error "positionList is broken!",  @el.css('zIndex')
-
     renderFilteredList: =>
       filters = if @input.val() is '' then [] else @buildFilters @input.val()
       @renderList @source, filters
@@ -459,9 +456,9 @@
         htmls.push @renderItem item, index, filters
 
       if htmls.length
-        @list[0].innerHTML = htmls.join('')
+        @list.html htmls.join('')
       else
-        @list[0].innerHTML = "<li class='disabled'>#{@emptyListText}</li>"
+        @list.html "<li class='disabled' data-combo-id='emptylist-item'>#{@emptyListText}</li>"
 
     renderItem: (item, index, filters) =>
       if @litraField? and (litra = item.litra)?
