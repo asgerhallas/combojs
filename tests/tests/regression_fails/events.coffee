@@ -79,19 +79,19 @@ checkEventsWrapper = (browser, expected) ->
       "number of events #{expected.length} ok")
 
     # because of browser differences,
-    # we do not check the event ordering
-    expectedEvents = {}
-    for type in expected
-      expectedEvents[type] = expectedEvents[type] || 0
-      expectedEvents[type]++
+    # we can currently not check the event ordering
+    # expectedEvents = {}
+    # for type in expected
+    #   expectedEvents[type] = expectedEvents[type] || 0
+    #   expectedEvents[type]++
 
-    for e, index in result.value
-      browser.assert.ok (e.name of expectedEvents)
-      browser.assert.ok (expectedEvents[e.name]--) >= 0
+    # for e, index in result.value
+    #   browser.assert.ok (e.name of expectedEvents)
+    #   browser.assert.ok (expectedEvents[e.name]--) >= 0
 
-    # _.map(
-    #   result.value, (e, index) ->
-    #     browser.assert.equal e.name, expected[index],
-    #     "event #{e.name} is #{index}th")
+    _.map(
+      result.value, (e, index) ->
+        browser.assert.equal e.name, expected[index],
+        "event #{e.name} is #{index}th")
 
 # ====================================================
