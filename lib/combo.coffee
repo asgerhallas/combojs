@@ -100,9 +100,8 @@
 
       @el =
         $(wrapper)
-        .addClass("combo-container")
-        # must set actual html element as context for selector (see .live() reference)
-        .on 'click', '.combo-list li', @onListClick
+          .addClass("combo-container")
+          .on 'click', '.combo-list li', @onListClick
 
       @input = $(
         "<input type='text' class='combo-input' autocomplete='off' disabled='disabled'
@@ -132,7 +131,6 @@
         .appendTo(@el)
         .hide()
 
-      @list.bgiframe() if $.fn.bgiframe
       @load(@source) if @source? and @source.length
 
       @
@@ -449,6 +447,7 @@
     renderList: (items, filters) =>
       # for performance use native html manipulation
       # be aware never to attach events or data to list elements!
+
       htmls = []
       for item, index in items
         continue if @onlyShowEnabled and not item.enabled
@@ -560,7 +559,6 @@
       @el.addClass 'expanded'
       @isExpanded = true
       @list.slideDown(60, options.callback)
-      # @positionList()
       @scrollIntoView()
 
     internalCollapse: =>
@@ -584,7 +582,7 @@
       @input.attr disabled: false
       @button.attr disabled: false
 
-    evaluate: (fieldGetter, item) ->
+    evaluate = (fieldGetter, item) ->
       if not fieldGetter?
         null
       else if _.isFunction(fieldGetter)

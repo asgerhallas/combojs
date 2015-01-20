@@ -15,6 +15,6 @@ module.exports =
             .waitForElementVisible(ns+combo_list, done)
         ,
         (time) =>
-          "> time to click and render list was ~#{time} ms"
+          "> time to click and render list was ~#{time} ms" #2102ms on AHL machine
       )
       .end()

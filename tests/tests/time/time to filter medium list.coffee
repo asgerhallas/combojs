@@ -16,7 +16,7 @@ module.exports =
             .waitForElementVisible(ns+combo_list, done)
         ,
         (time) =>
-          "> time to type and filter list was ~#{time} ms"
+          "> time to type and filter list was ~#{time} ms" # 354ms on AHL machine
       )
       .assert.numberOfChildren(ns + combo_list + "li", 629)
       .end()
