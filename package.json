@@ -20,10 +20,6 @@
     "tests": "tests/build",
     "tests_results": "tests/results"
   },
-  "config": {
-    "nflags": "hello world"
-  },
-  "nflags": "he",
   "scripts": {
     "clean:tests": "del .\\tests\\results /Q /S&& del .\\tests\\build /Q /S",
     "clean:lib": "del .\\lib\\build /Q /S",
