@@ -25,29 +25,29 @@
     "clean:lib": "del .\\lib\\build /Q /S",
     "clean": "npm run clean:tests&& npm run clean:lib",
     
-    "compile:stylus:lib": "stylus -o lib/build lib/combo.styl",
+	"compile:stylus:lib": "stylus -o lib/build lib/combo.styl",
     "compile:coffee:lib": "coffee -o lib/build -c lib/",
     "compile:coffee:tests": "coffee -o tests/build -c tests/",
     "compile:lib": "npm run compile:stylus:lib& npm run compile:coffee:lib",
     "compile:tests": "npm run compile:coffee:tests",
     "compile": "npm run compile:lib& npm run compile:tests",
-   
-    "watch:stylus:lib": "title w:stylus:lib& stylus -o lib/build lib/combo.styl -w",
+    
+	"watch:stylus:lib": "title w:stylus:lib& stylus -o lib/build lib/combo.styl -w",
     "watch:coffee:lib": "title w:coffee:lib& coffee -o lib/build -wc lib/",
     "watch:coffee:tests": "title: w:coffee:tests& coffee -o tests/build -wc tests/",
     "watch:lib": "start npm run watch:stylus:lib& start npm run watch:coffee:lib",
     "watch:tests": "start npm run watch:coffee:tests",
     "watch": "npm run watch:lib& npm run watch:tests",
-   
-    "test:sanity": "title nightwatch& node nightwatch_wrapper --config ./tests/nightwatch.json -o ./tests/results/reports/sanity/ -g sanity",
-    "test:dev": "title nightwatch& node nightwatch_wrapper --config ./tests/nightwatch.json -o ./tests/results/reports/dev/",
-    "test:chrome": "title nightwatch& node nightwatch_wrapper --config ./tests/nightwatch.json -o ./tests/results/reports/chrome/ -e chrome",
-    "test:ie": "title nightwatch& node nightwatch_wrapper --config ./tests/nightwatch.json -o ./tests/results/reports/ie/ -e ie",
-    "test:firefox": "title nightwatch& node nightwatch_wrapper --config  ./tests/nightwatch.json -o ./tests/results/reports/firefox/ -e firefox",
-   
-    "report:sanity": "nightwatch-html-reporter -d tests/results/reports/sanity -o /report_sanity.html",
+    
+	"test:sanity": "title nightwatch& nightwatch --config ./tests/nightwatch.json -s regression_fails -o ./tests/results/reports/sanity/ -g sanity",
+    "test:dev": "title nightwatch& nightwatch --config ./tests/nightwatch.json -s regression_fails -o ./tests/results/reports/dev/",
+    "test:chrome": "title nightwatch& nightwatch --config ./tests/nightwatch.json -s regression_fails -o ./tests/results/reports/chrome/ -e chrome",
+    "test:ie": "title nightwatch& nightwatch --config ./tests/nightwatch.json -s regression_fails -o ./tests/results/reports/ie/ -e ie",
+    "test:firefox": "title nightwatch& nightwatch --config  ./tests/nightwatch.json -s regression_fails -o ./tests/results/reports/firefox/ -e firefox",
+    
+	"report:sanity": "nightwatch-html-reporter -d tests/results/reports/sanity -o /report_sanity.html",
     "report:dev": "nightwatch-html-reporter -d tests/results/reports/dev -o /report_dev.html",
-    "report:chrome": "nightwatch-html-reporter -t cover -d tests/results/reports/chrome -o /report_chrome.html",
+    "report:chrome": "nightwatch-html-reporter -d tests/results/reports/chrome -o /report_chrome.html",
     "report:ie": "nightwatch-html-reporter -d tests/results/reports/ie -o /report_ie.html",
     "report:firefox": "nightwatch-html-reporter -d tests/results/reports/firefox -o /report_firefox.html",
     "report": "npm run report:chrome&& npm run report:ie&& npm run report:firefox",
@@ -78,7 +78,6 @@
     "coffee-script": "^1.8.0",
     "nightwatch": "^0.5.36",
     "nightwatch-html-reporter": "^0.2.11",
-    "shelljs": "^0.3.0",
     "stylus": "^0.49.3",
     "watch": "^0.13.0"
   }
