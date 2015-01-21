@@ -23,15 +23,6 @@
     position absolute
     height 100%
 
-    &:disabled
-      opacity 0.5
-
-    &:focus
-      outline 0
-
-    &:active
-      background-position: 0 -20px
-
   ul.combo-list
     z-index 2 // to avoid visual collision with other combo-input (see position: absolute)
     max-height 300px
@@ -62,8 +53,16 @@
 
 
 // STATE DEPENDENT STYLES
-button.combo-buttonactive
-  background-position 0 -20px
+button.combo-button
+
+  &:active:not([disabled])
+    background-position 0 -20px
+
+  &:disabled
+    opacity 0.5
+
+  &:focus
+    outline 0
 
 ul.combo-list li.disabled
   color #afafaf

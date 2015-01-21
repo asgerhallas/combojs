@@ -1,6 +1,6 @@
 {
   "name": "combojs",
-  "version": "v0.1.38",
+  "version": "v0.1.39",
   "description": "A combobox for intelligent, responsive search and filtering.",
   "author": "Asger Hallas",
   "contributors": [
@@ -28,12 +28,12 @@
     "clean:lib": "del .\\lib\\build /Q /S",
     "clean": "npm run clean:tests& npm run clean:lib",
 
-    "compile:stylus:lib": "title compile:stylus:lib& stylus -o lib/build lib/combo.styl",
-    "compile:coffee:lib": "title compile:coffee:lib& coffee -o lib/build -c lib/",
-    "compile:coffee:tests": "coffee -o tests/build -c tests/",
+    "compile:stylus:lib": "title compile:stylus:lib& stylus -o lib/build lib/combo.styl -w",
+    "compile:coffee:lib": "title compile:coffee:lib& coffee -o lib/build -cw lib/",
+    "compile:coffee:tests": "coffee -o tests/build -cw tests/",
     "compile:lib": "start npm run compile:stylus:lib& start npm run compile:coffee:lib",
     "compile:tests": "start npm run compile:coffee:tests",
-    "compile": "timeout 5& npm run compile:lib&npm run compile:tests",
+    "compile": "timeout 1& npm run compile:lib&npm run compile:tests",
 
     "fails:watch:lib": "start npm run compile:stylus:lib& start npm run compile:coffee:lib",
     "fails:watch:tests": "start npm run compile:coffee:tests",
