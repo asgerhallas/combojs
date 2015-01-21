@@ -138,20 +138,20 @@
     load: (source) ->
       @source = for item in source
         fixedItem =
-          litra: @evaluate @litraField, item
-          value: @evaluate @valueField, item
-          display: @evaluate @displayField, item
+          litra: evaluate @litraField, item
+          value: evaluate @valueField, item
+          display: evaluate @displayField, item
           title: @stripMarkup(
-            if title = @evaluate @titleField, item then title
-            else @evaluate @displayField, item
+            if title = evaluate @titleField, item then title
+            else evaluate @displayField, item
           )
-          enabled: @evaluate @enabledField, item
+          enabled: evaluate @enabledField, item
 
         for modifier in @modifiers
-          fixedItem[modifier.field] = @evaluate modifier.field, item
+          fixedItem[modifier.field] = evaluate modifier.field, item
 
         for specification in @specifications
-          fixedItem[specification.field] = @evaluate specification.field, item
+          fixedItem[specification.field] = evaluate specification.field, item
 
         fixedItem
 
