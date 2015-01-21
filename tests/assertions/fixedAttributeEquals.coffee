@@ -10,7 +10,6 @@ exports.assertion = (selector, attrId, expected, msg) ->
     value is expected
 
   @value = (result) ->
-    console.log result.value
     result.value
 
   @command = (callback) ->

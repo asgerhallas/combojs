@@ -20,28 +20,52 @@
     "tests": "tests/build",
     "tests_results": "tests/results"
   },
+  "config": {
+    "nflags": " --config ./tests/nightwatch.json "
+  },
   "scripts": {
-    "//A": "DEFAULT TARGETS",
-    "pretest": "npm run clean_test & npm run watch",
-    "test": "timeout 1 & npm run nightwatch",
+    "clean:tests": "del .\\tests\\results /Q /S& del .\\tests\\build /Q /S",
+    "clean:lib": "del .\\lib\\build /Q /S",
+    "clean": "npm run clean:tests& npm run clean:lib",
+
+    "compile:stylus:lib": "title compile:stylus:lib& stylus -o lib/build lib/combo.styl",
+    "compile:coffee:lib": "title compile:coffee:lib& coffee -o lib/build -c lib/",
+    "compile:coffee:tests": "coffee -o tests/build -c tests/",
+    "compile:lib": "start npm run compile:stylus:lib& start npm run compile:coffee:lib",
+    "compile:tests": "start npm run compile:coffee:tests",
+    "compile": "timeout 5& npm run compile:lib&npm run compile:tests",
+
+    "fails:watch:lib": "start npm run compile:stylus:lib& start npm run compile:coffee:lib",
+    "fails:watch:tests": "start npm run compile:coffee:tests",
+    "fails:watch": "npm run watch:lib&npm run watch:tests",
+    "fails": "echo $npm_config_nflags",
+
+    "test:chrome": "title nightwatch& nightwatch --config ./tests/nightwatch.json -s regression_fails -o ./tests/results/reports/chrome/ -e chrome -g sanity",
+    "test:ie": "title nightwatch& nightwatch --config ./tests/nightwatch.json -s regression_fails -o ./tests/results/reports/ie/ -e ie -g sanity",
+    "test:firefox": "title nightwatch& nightwatch --config  ./tests/nightwatch.json -s regression_fails -o ./tests/results/reports/firefox/ -e firefox -g sanity",
+
+    "report:chrome": "nightwatch-html-reporter -d tests/results/reports/chrome -o /report_chrome.html",
+    "report:ie": "nightwatch-html-reporter -d tests/results/reports/ie -o /report_ie.html",
+    "report:firefox": "nightwatch-html-reporter -d tests/results/reports/firefox -o /report_firefox.html",
+    "report": "npm run report:chrome& npm run report:ie& npm run report:firefox",
+
+    "pretest": "npm run clean & npm run compile& timeout 1",
+    "test": "npm run test:chrome& npm run test:ie& npm run test:firefox& npm run report",
+
+
+    "___test": "timeout 1 & npm run nightwatch",
     "start": "npm run watch & timeout 1 & start npm run testwatch",
-    "//B": "CLEAN",
-    "clean_test": "title clean_test & del .\\tests\\results /Q /S& del .\\tests\\build /Q /S",
-    "clean_lib": "title clean_lib & del .\\lib\\build /Q /S",
-    "clean": "npm run clean_test& npm run clean_lib",
-    "//C": "COMPILE STYLUS AND COFFEE FILES",
-    "stylus_lib": "title stylus& stylus -w -o lib/build lib/combo.styl",
-    "coffee_lib": "title coffee_lib & coffee -o lib/build -cw lib/",
-    "coffee_tests": "title coffee_tests & coffee -o tests/build -cw tests/",
-    "//D": "COMPILE ALL AND START WATCH COMMANDS IN NEW WINDOWS",
-    "watch": "npm run clean_lib& start npm run stylus_lib& start npm run coffee_lib& start npm run coffee_tests",
-    "//E": "NIGHTWATCH TARGETS",
-    "//F": "RUN NIGHTWATCH WITH HIDDEN CHROME BROWSER, FOR LOCAL TDD DEVELOPMENT ONLY",
+    "__watch": "npm run clean_lib& start npm run stylus_lib& start npm run coffee_lib& start npm run coffee_tests",
     "nightwatch_dev": "title nightwatch_dev & nightwatch --config ./tests/nightwatch.json -s regression_fails",
-    "nightwatch_ie": "title nightwatch_ie & nightwatch --config ./tests/nightwatch.json -e ie",
-    "nightwatch_chrome": "title nightwatch_chrome & nightwatch --config ./tests/nightwatch.json -e chrome",
-    "nightwatch_firefox": "title nightwatch_firefox & nightwatch --config ./tests/nightwatch.json -e firefox",
-    "nightwatch": "title nightwatch & nightwatch --config ./tests/nightwatch.json -e chrome& nightwatch --config ./tests/nightwatch.json -e ie& nightwatch --config ./tests/nightwatch.json -e firefox",
+    "nightwatch_firefox": "title nightwatch_firefox & nightwatch --config ./tests/nightwatch.json -e firefox -o ./tests/results/reports/firefox/ -g sanity",
+    "report_firefox": "nightwatch-html-reporter -d tests/results/reports/firefox -o report_firefox.html -b",
+    "nightwatch_ie": "title nightwatch_ie & nightwatch --config ./tests/nightwatch.json -e ie -o ./tests/results/reports/ie/ -g sanity",
+    "report_ie": "nightwatch-html-reporter -d tests/results/reports/ie -o tests/results/reports/report_ie.html",
+    "nightwatch_chrome": "title nightwatch_chrome & nightwatch --config ./tests/nightwatch.json -e chrome -o ./tests/results/reports/chrome/ -g sanity",
+    "___report_chrome": "nightwatch-html-reporter -d tests/results/reports/chrome -o tests/results/reports/report_chrome.html",
+    "__report": "npm run report_firefox& npm run report_chrome& npm run report_ie",
+    "__nightwatch": "title nightwatch &npm run nightwatch_chrome &npm run nightwatch_ie &npm run nightwatch_firefox",
+    "_test": "npm run nightwatch& npm run report",
     "testwatch": "watch \"npm run nightwatch_dev\" ./tests/build/ --wait=10"
   },
   "repository": {
