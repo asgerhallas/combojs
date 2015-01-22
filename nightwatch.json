@@ -4,7 +4,7 @@
   "custom_commands_path": "./tests/build/commands",
   "custom_assertions_path": "./tests/build/assertions",
   "globals_path": "./tests/build/globals.js",
-  "live_output": false,
+  "live_output": true,
   "parallel_process_delay": 0,
   "disable_colors": false,
 
