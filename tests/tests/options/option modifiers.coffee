@@ -23,11 +23,11 @@ module.exports =
       .click(ns+combo_input)
 
       .setValue(ns+combo_input, "§")
-      .assert.numberOfChildren(ns+combo_list+"li", 0)
+      .assert.isEmptyList(ns)
 
       .setValue(ns+combo_input, browser.Keys.BACK_SPACE)
       .setValue(ns+combo_input, "%")
-      .assert.numberOfChildren(ns+combo_list+"li", 0)
+      .assert.isEmptyList(ns)
 
       .end()
 
