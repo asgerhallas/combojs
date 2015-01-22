@@ -10,11 +10,12 @@ module.exports =
       .click(ns + combo_input)
 
       .setValue(ns+combo_input, "underline")
-      .assert.numberOfChildren(ns+"li", 0, "html tags are ignored in search 1")
+      .assert.isEmptyList(ns)
+      # .assert.numberOfChildren(ns+"li", 1, "html tags are ignored in search, a")
 
       .setupCombo()
       .setValue(ns+combo_input, "<underline>")
-      .assert.numberOfChildren(ns+"li", 0, "html tags are ignored in search 2")
+      .assert.numberOfChildren(ns+"li", 1, "html tags are ignored in search, b")
 
       .setupCombo()
       .setValue(ns+combo_input, "truly")

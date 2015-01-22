@@ -78,7 +78,6 @@
     "coffee-script": "^1.8.0",
     "nightwatch": "^0.5.36",
     "nightwatch-html-reporter": "^0.2.11",
-    "shelljs": "^0.3.0",
     "stylus": "^0.49.3",
     "watch": "^0.13.0"
   }
