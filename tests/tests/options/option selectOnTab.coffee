@@ -3,8 +3,8 @@ data = ({ id: i, text: "#{i}", true: yes } for i in [1..100])
 
 ns = "#temp_combo "
 module.exports =
-  # selectOnTab selects item -> toggles class active,
-  # hides list and highlights input text
+  selectOnTab selects item -> toggles class active,
+  hides list and highlights input text
 
   "Option selectOnTab: default=enabled": (browser) ->
     browser
@@ -31,9 +31,8 @@ module.exports =
       .openComboList(ns)
       .setValue(ns + combo_input, browser.Keys.DOWN_ARROW)
       .setValue(ns + combo_input, browser.Keys.TAB)
-      .pause(1000)
 
-      .assert.visible(ns+combo_list)
+      .assert.hidden(ns+combo_list)
       .verify.cssClassPresent(ns + first_item, 'active')
       .verify.value(ns + combo_input, "")
       .verify.selectedText(ns + combo_input, "")

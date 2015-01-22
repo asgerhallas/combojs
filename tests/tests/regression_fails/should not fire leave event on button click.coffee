@@ -2,13 +2,13 @@ require('../../testutils.js').plug_macros()
 
 module.exports =
 
-  "Time list render large list": (browser) ->
+  "Should not fire leave event on button click (ie)": (browser) ->
     ns = ns_10000
 
     # sometimes ie will loose focus when list takes a long time
-    # see inverse test 'should not fire leave event on button click', failing in regression_fails
+    # when fixed, move to time list render large list
     browserName = browser.options.desiredCapabilities.browserName
-    if 'ie' is browserName then return
+    if 'ie' isnt browserName then return
 
     browser
       .setupCombo()
@@ -18,7 +18,6 @@ module.exports =
           browser
             .click(ns + combo_button)
             .waitForElementVisible(ns+combo_list, done)
-        ,
         (time) =>
           "> time to click and render list was ~#{time} ms" #2102ms on AHL machine
       )
