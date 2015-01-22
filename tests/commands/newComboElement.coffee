@@ -25,7 +25,7 @@ newComboElement = (ns, data, options) ->
 
   $("<div class='combo_wrapper'></div>")
     .combo(options)
-    .combo('load', data)
+    .combo('link', data)
     .combo('renderFullList')
     .appendTo(container)
 
