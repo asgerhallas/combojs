@@ -1,5 +1,5 @@
 exports.assertion = (selector, expected, msg) ->
-  @message = msg or "InnerHtml of element <#{selector}> is #{expected}"
+  @message = msg or "InnerHtml of element <#{selector}>"
 
   @expected = expected
 

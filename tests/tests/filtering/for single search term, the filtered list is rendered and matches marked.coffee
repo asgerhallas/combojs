@@ -5,19 +5,19 @@ ns = ns_1275
 module.exports =
   "setup": (browser) ->
     browser
-    	.setupCombo()
-    
-	"input search term": (browser) ->
-		browser
-      		.click(ns + combo_input)
-      		.setValue(ns+combo_input, "0.62")
+      .setupCombo()
 
-	"check result": (browser) ->
-		browser.assert.numberOfChildren(ns+"li", 8)
+  "input search term": (browser) ->
+    browser
+      .click(ns + combo_input)
+      .setValue(ns+combo_input, "0.62")
 
-		for i in [0..7]
-			browser.assert.innerHTML(
-				ns + combo_list + "li:nth-child(#{i+1})", 
-				"my special number is <b>0.62#{i}<b/>")
+  "check result": (browser) ->
+    browser.assert.numberOfChildren(ns+"li", 8)
 
-		browser.end()
+    for i in [0..7]
+      browser.assert.innerHTML(
+        ns + combo_list + "li:nth-child(#{i+1})",
+        "my special number is <b>0.62</b>#{i}")
+
+    browser.end()

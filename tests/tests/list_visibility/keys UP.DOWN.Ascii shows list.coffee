@@ -11,6 +11,6 @@ module.exports =
           .pause(100)
           .assert.hidden(ns + combo_list)
           .click(ns + combo_input)
-          .setValue(ns + combo_input, browser.Keys[key])
+          .setValue(ns + combo_input, browser.Keys[key] ? key)
           .waitForElementVisible(ns + combo_list, "#{ns}: list should be visible after #{key} is pressed")
     browser.end()
