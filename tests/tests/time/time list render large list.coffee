@@ -1,6 +1,13 @@
 require('../../testutils.js').plug_macros()
 
 module.exports =
+  # MWF MACHINE
+  #
+  # Firefox: 3908 -> 4131
+  # Chrome : 2496 -> 2597
+  # Ie     :   -1 ->   -1
+  #
+
 
   "Time list render large list": (browser) ->
     ns = ns_10000
@@ -20,6 +27,6 @@ module.exports =
             .waitForElementVisible(ns+combo_list, done)
         ,
         (time) =>
-          "> time to click and render list was ~#{time} ms" #2102ms on AHL machine
+          "> time to click and render list was ~#{time} ms" #2102ms on AHL machine,
       )
       .end()
