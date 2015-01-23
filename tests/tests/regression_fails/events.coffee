@@ -41,7 +41,7 @@ module.exports =
 
   "Check events": (browser) ->
     browser
-      .execute getEvents, [ns],
+      .execute(getEvents, [ns],
         checkEventsWrapper(
           browser,
           ['loaded',
@@ -60,7 +60,7 @@ module.exports =
            'focus',
            'itemSelect',
            'enterpress'])
-      .end()
+      ).end()
 
 
 #====================================================
