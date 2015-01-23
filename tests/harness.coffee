@@ -26,7 +26,7 @@
         .combo({placeholder: "##{id}"})
         .on('loaded', logEventListener(list))
         .on('itemSelect', logEventListener(list))
-        .combo('link', data)
+        .combo('load', data)
         .combo('renderFullList')
         .find('input')
 
