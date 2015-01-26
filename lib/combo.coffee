@@ -192,7 +192,6 @@
         @refocus()
 
     selectItem: (item, options = {}) =>
-      console.log "selectItem", @input?.val(), @itemTitle(item), @lastQuery, item
       return if not @itemEnabled(item) and
                 not options.forced
 
