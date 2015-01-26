@@ -548,7 +548,7 @@
       return if @isExpanded
       @el.addClass 'expanded'
       @isExpanded = true
-      @list.slideDown(60, options.callback)
+      @list.show(options.callback)
       @scrollIntoView()
 
     internalCollapse: =>
@@ -560,7 +560,7 @@
     collapse: (options = {}) =>
       @el.removeClass 'expanded'
       @isExpanded = false
-      @list.slideUp(60, options.callback)
+      @list.hide(options.callback)
 
     disable: =>
       @disabled = true
