@@ -132,16 +132,16 @@
         .hide()
 
       @link(@source) if @source? and @source.length
+      @enable()
 
       @
 
     link: (source) ->
       @source = source
-      @enable()
       @ensureSelection()
       @lastQuery = @input.val()
 
-      @input.trigger 'loaded'
+      @input.trigger 'linked'
       @
 
     itemValue: (item) => evaluate @valueField, item
@@ -185,13 +185,21 @@
 
     selectLi: (li) =>
       comboId = $(li).data('combo-id')
-      return if comboId is 'emptylist-item'
-
-      @selectItem @source[$(li).data('combo-id')]
-      @refocus()
+      if comboId is 'emptylist-item'
+        @internalCollapse()
+      else
+        @selectItem @source[$(li).data('combo-id')]
+        @refocus()
 
     selectItem: (item, options = {}) =>
-      return if not @itemEnabled(item) and not options.forced
+      console.log "selectItem", @input?.val(), @itemTitle(item), @lastQuery, item
+      return if not @itemEnabled(item) and
+                not options.forced
+
+      if @itemTitle(item) == @lastQuery # avoid redundant updates
+        @internalCollapse()
+        return
+
       @input.val @itemTitle(item)
       @lastQuery = @input.val()
       @updateLastSelection()
@@ -251,13 +259,10 @@
             event.preventDefault()
             event.stopPropagation()
           when @key.TAB
-            if @activeLi and @selectOnTab
-              @selectLi @activeLi
-            if @source.length and @selectOnTab
-              # allow tab on empty list
+            if @selectOnTab
+              @selectLi @activeLi if @activeLi
               event.preventDefault()
               event.stopPropagation()
-
           when @key.ESCAPE
             @internalCollapse()
       else
