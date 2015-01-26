@@ -41,10 +41,10 @@
     "watch": "npm run watch:lib& npm run watch:tests",
 
     "test:sanity": "title nightwatch& nightwatch -o tests/results/reports/sanity/ -g sanity",
-    "test:dev": "title nightwatch& nightwatch -o tests/results/reports/dev/",
-    "test:chrome": "title nightwatch& nightwatch -o tests/results/reports/chrome/ -e chrome",
-    "test:ie": "title nightwatch& nightwatch -o tests/results/reports/ie/ -e ie",
-    "test:firefox": "title nightwatch& nightwatch -o tests/results/reports/firefox/ -e firefox",
+    "test:dev": "title nightwatch& nightwatch -o tests/results/reports/dev/ -s fails",
+    "test:chrome": "title nightwatch& nightwatch -o tests/results/reports/chrome/ -e chrome -s fails",
+    "test:ie": "title nightwatch& nightwatch -o tests/results/reports/ie/ -e ie -s fails",
+    "test:firefox": "title nightwatch& nightwatch -o tests/results/reports/firefox/ -e firefox -s fails",
 
     "report:sanity": "nightwatch-html-reporter -d tests/results/reports/sanity -o report_sanity.html",
     "report:dev": "nightwatch-html-reporter -d tests/results/reports/dev -o report_dev.html",
