@@ -7,11 +7,10 @@ module.exports =
   "html tags are ignored": (browser) ->
     browser
       .setupCombo()
-      .click(ns + combo_input)
+      .click(ns+combo_input)
 
       .setValue(ns+combo_input, "underline")
       .assert.isEmptyList(ns)
-      # .assert.numberOfChildren(ns+"li", 1, "html tags are ignored in search, a")
 
       .setupCombo()
       .setValue(ns+combo_input, "<underline>")
