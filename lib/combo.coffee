@@ -612,4 +612,4 @@
 
     value
 #====================================================
-)(window.jQuery ||w, window)
+)(window.jQuery || window)
