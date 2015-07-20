@@ -618,4 +618,4 @@
 
     value
 #====================================================
-)(window.jQuery ||w, window)
+)(window.jQuery || require('jquery')(window), window)
