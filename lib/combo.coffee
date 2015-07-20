@@ -195,7 +195,7 @@
       return if not @itemEnabled(item) and
                 not options.forced
 
-      if @input.val() == @lastQuery # avoid redundant updates
+      if @itemTitle(item) == @lastQuery # avoid redundant updates
         @internalCollapse()
         return
 
