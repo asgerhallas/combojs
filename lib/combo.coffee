@@ -131,46 +131,36 @@
         .appendTo(@el)
         .hide()
 
-      @load(@source) if @source? and @source.length
+      @link(@source) if @source? and @source.length
+      @enable()
 
       @
 
-    load: (source) ->
-      @source = for item in source
-        fixedItem =
-          litra: evaluate @litraField, item
-          value: evaluate @valueField, item
-          display: evaluate @displayField, item
-          title: @stripMarkup(
-            if title = evaluate @titleField, item then title
-            else evaluate @displayField, item
-          )
-          enabled: evaluate @enabledField, item
-
-        for modifier in @modifiers
-          fixedItem[modifier.field] = evaluate modifier.field, item
-
-        for specification in @specifications
-          fixedItem[specification.field] = evaluate specification.field, item
-
-        fixedItem
-
-      @enable()
+    link: (source) ->
+      @source = source
       @ensureSelection()
       @lastQuery = @input.val()
 
-      @input.trigger 'loaded'
+      @input.trigger 'linked'
       @
 
+    itemValue: (item) => evaluate @valueField, item
+    itemLitra: (item) => evaluate @litraField, item
+    itemEnabled: (item) => evaluate @enabledField, item
+    itemDisplay: (item) => evaluate @displayField, item
+    itemTitle: (item) => @stripMarkup evaluate(@titleField, item) ? @itemDisplay(item)
+    itemModifier: (modifier) -> (item) => evaluate modifier.field, item
+    itemSpecification: (specification) -> (item) => evaluate specification.field, item
+
     setValue: (value) =>
-      for item in @source when item.value is value
+      for item in @source when @itemValue(item) is value
         @selectItem item, forced: yes
         return
       @input.val value
 
     getSelectedValue: =>
       item = @getSelectedItemAndIndex()?.item
-      if item? then item.value else null
+      if item? then @itemValue(item) else null
 
     getSelectedItem: =>
       @getSelectedItemAndIndex()?.item
@@ -179,7 +169,7 @@
       @getSelectedItemAndIndex()?.index
 
     getSelectedItemAndIndex: =>
-      return {item, index} for item, index in @source when item.title is @input.val()
+      return {item, index} for item, index in @source when @itemTitle(item) is @input.val()
 
     hasSelection: ->
       @getSelectedItemAndIndex()?
@@ -195,18 +185,25 @@
 
     selectLi: (li) =>
       comboId = $(li).data('combo-id')
-      return if comboId is 'emptylist-item'
-
-      @selectItem @source[$(li).data('combo-id')]
-      @refocus()
+      if comboId is 'emptylist-item'
+        @internalCollapse()
+      else
+        @selectItem @source[$(li).data('combo-id')]
+        @refocus()
 
     selectItem: (item, options = {}) =>
-      return if not item.enabled and not options.forced
-      @input.val item.title
+      return if not @itemEnabled(item) and
+                not options.forced
+
+      if @itemTitle(item) == @lastQuery # avoid redundant updates
+        @internalCollapse()
+        return
+
+      @input.val @itemTitle(item)
       @lastQuery = @input.val()
       @updateLastSelection()
       @internalCollapse()
-      _.delay (=> @input.trigger 'itemSelect', title: item.title), 10
+      _.delay (=> @input.trigger 'itemSelect', item), 10
 
     onListClick: (event) =>
       @selectLi event.currentTarget
@@ -261,13 +258,10 @@
             event.preventDefault()
             event.stopPropagation()
           when @key.TAB
-            if @activeLi and @selectOnTab
-              @selectLi @activeLi
-            if @source.length and @selectOnTab
-              # allow tab on empty list
+            if @selectOnTab
+              @selectLi @activeLi if @activeLi
               event.preventDefault()
               event.stopPropagation()
-
           when @key.ESCAPE
             @internalCollapse()
       else
@@ -384,7 +378,7 @@
       for modifier in @modifiers
         if firstChar == modifier.modifier
           filters.push
-            property: modifier.field
+            getter: @itemModifier(modifier)
             predicate: (value) -> value
           queryString = queryString.substr(1)
 
@@ -393,7 +387,7 @@
         specsInQuery = specFinder.exec(queryString)
         if specsInQuery
           filters.push
-            property: specification.field
+            getter: @itemSpecification(specification)
             predicate: (value) -> value is specsInQuery[1]
           queryString = queryString.replace(specFinder, "")
 
@@ -401,7 +395,7 @@
       if @litraField?? and queryString.match(/^[#,]\w[\w\\\.,]*(\s|$)/)
         first = queryStringSplit.shift()
         filters.push
-          property: 'litra'
+          getter: @itemLitra
           regex: new RegExp("^()(" + first.substr(1).replace(/,/g, "\\.") + ")", "i")
           predicate: (value) -> @regex.test value
 
@@ -414,22 +408,22 @@
             break
           when "inText"
             filters.push
-              property: 'display'
+              getter: @itemDisplay
               regex: new RegExp("()(" + currentWord + ")()" + dontSearchInsideTags, "i")
               predicate: (value) -> @regex.test value
           when "firstInText"
             filters.push
-              property: 'display'
+              getter: @itemDisplay
               regex: new RegExp("^()(" + currentWord + ")()" + dontSearchInsideTags, "i")
               predicate: (value) -> @regex.test value
           when "firstInWord"
             filters.push
-              property: 'display'
+              getter: @itemDisplay
               regex: new RegExp("(^|[^\\wæøåÆØÅ\\[\\]])(" + currentWord + ")()" + dontSearchInsideTags, "i")
               predicate: (value) -> @regex.test value
           when "wholeWord"
             filters.push
-              property: 'display'
+              getter: @itemDisplay
               regex: new RegExp("(^|[^\\wæøåÆØÅ\\[\\]])(" + currentWord + ")($|[^\\wæøåÆØÅ\\[\\]])", "i")
               predicate: (value) -> @regex.test value
           else
@@ -450,8 +444,8 @@
 
       htmls = []
       for item, index in items
-        continue if @onlyShowEnabled and not item.enabled
-        continue if not _.all filters, (filter) -> filter.predicate item[filter.property]
+        continue if @onlyShowEnabled and not @itemEnabled(item)
+        continue if not _.all filters, (filter) -> filter.predicate filter.getter(item)
         htmls.push @renderItem item, index, filters
 
       if htmls.length
@@ -460,22 +454,22 @@
         @list.html "<li class='disabled' data-combo-id='emptylist-item'>#{@emptyListText}</li>"
 
     renderItem: (item, index, filters) =>
-      if @litraField? and (litra = item.litra)?
-        text = "[#{litra}] #{@highlightValue(item, 'display', filters)}"
+      if @litraField? and (litra = @itemLitra(item))?
+        text = "[#{litra}] #{@highlightValue(item, filters)}"
       else
-        text = @highlightValue(item, 'display', filters)
+        text = @highlightValue(item, filters)
 
       classes = [
-        if @onlyShowEnabled or item.enabled then 'enabled' else 'disabled'
+        if @onlyShowEnabled or @itemEnabled(item) then 'enabled' else 'disabled'
       ]
 
       "<li data-combo-id=\"#{index}\" class=\"#{classes.join(' ')}\">#{text}</li>"
 
-    highlightValue: (item, property, filters) =>
-      value = item[property]
+    highlightValue: (item, filters) =>
+      value = @itemDisplay(item)
       return null if not value?
 
-      for filter in filters when filter.property == property and filter.regex?
+      for filter in filters when filter.getter == @itemDisplay and filter.regex?
         value = value.replace(filter.regex, "<b>$2</b>")
       value
 
@@ -558,7 +552,7 @@
       return if @isExpanded
       @el.addClass 'expanded'
       @isExpanded = true
-      @list.slideDown(60, options.callback)
+      @list.show(options.callback)
       @scrollIntoView()
 
     internalCollapse: =>
@@ -570,7 +564,7 @@
     collapse: (options = {}) =>
       @el.removeClass 'expanded'
       @isExpanded = false
-      @list.slideUp(60, options.callback)
+      @list.hide(options.callback)
 
     disable: =>
       @disabled = true
@@ -600,7 +594,7 @@
   # Define the plugin
   # https://gist.github.com/rjz/3610858
 
-  setters = ["load", "renderFullList"]
+  setters = ["link", "renderFullList"]
   $.fn.extend combo: (option, args...) ->
 
     value = @

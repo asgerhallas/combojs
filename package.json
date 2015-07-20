@@ -1,6 +1,6 @@
 {
   "name": "combojs",
-  "version": "v0.1.41",
+  "version": "v0.1.45",
   "description": "A combobox for intelligent, responsive search and filtering.",
   "author": "Asger Hallas",
   "contributors": [
@@ -41,15 +41,15 @@
     "watch": "npm run watch:lib& npm run watch:tests",
 
     "test:sanity": "title nightwatch& nightwatch -o tests/results/reports/sanity/ -g sanity",
-    "test:dev": "title nightwatch& nightwatch -o tests/results/reports/dev/",
-    "test:chrome": "title nightwatch& nightwatch -o tests/results/reports/chrome/ -e chrome",
-    "test:ie": "title nightwatch& nightwatch -o tests/results/reports/ie/ -e ie",
-    "test:firefox": "title nightwatch& nightwatch --config  tests/nightwatch.json -o tests/results/reports/firefox/ -e firefox",
+    "test:dev": "title nightwatch& nightwatch -o tests/results/reports/dev/ -s fails",
+    "test:chrome": "title nightwatch& nightwatch -o tests/results/reports/chrome/ -e chrome -s fails",
+    "test:ie": "title nightwatch& nightwatch -o tests/results/reports/ie/ -e ie -s fails",
+    "test:firefox": "title nightwatch& nightwatch -o tests/results/reports/firefox/ -e firefox -s fails",
 
     "report:sanity": "nightwatch-html-reporter -d tests/results/reports/sanity -o report_sanity.html",
     "report:dev": "nightwatch-html-reporter -d tests/results/reports/dev -o report_dev.html",
     "report:chrome": "nightwatch-html-reporter -d tests/results/reports/chrome -o report_chrome.html",
-    "report:ie": "nightwatch-html-reporter -d tests/results/reports/ie -o report_ie.html -g filtering",
+    "report:ie": "nightwatch-html-reporter -d tests/results/reports/ie -o report_ie.html",
     "report:firefox": "nightwatch-html-reporter -d tests/results/reports/firefox -o report_firefox.html",
     "report": "npm run report:chrome&& npm run report:ie&& npm run report:firefox",
 
