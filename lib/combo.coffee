@@ -181,7 +181,7 @@
       @input.val()
 
     isEmpty: =>
-      @input.val() is '' or @input.val() is null
+      @input.val() is null or @input.val().trim() is ''
 
     selectLi: (li) =>
       comboId = $(li).data('combo-id')
@@ -195,7 +195,7 @@
       return if not @itemEnabled(item) and
                 not options.forced
 
-      if @itemTitle(item) == @lastQuery # avoid redundant updates
+      if @itemTitle(item) == @lastQuery && @lastQuery == @input.val() # avoid redundant updates
         @internalCollapse()
         return
 
@@ -315,7 +315,7 @@
       return if @disabled or not @forceSelectionFromList or @hasSelection()
 
       if @lastSelection? and (not @isEmpty() or (@isEmpty() and not @allowEmpty))
-        @selectItem @lastSelection.item
+        @selectItem @lastSelection.item, { forced: yes }
       else
         if not @allowEmpty
           @selectItem @source[0] if @source.length
