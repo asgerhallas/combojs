@@ -18,16 +18,16 @@
     # sets the attribute tabindex
     tabIndex: null
 
-    # if input is nonempty and no exact matches exists,
-    # the input will be replaced by either the empty string or
-    # the currently selected item
-    #
-    # input must be empty or selected item
-    forceSelectionFromList: false
+    # selected item will default to first item in source instead of the empty string
+    # on blur, if value is blank, selected item reverts to last selected item
+    # throws if source is empty
+    forceNonEmpty: false
 
-    # input may never be empty
-    # unless list is empty?
-    allowEmpty: true
+    # onblur, when value does not match any item from list the
+    # selected item reverts to last selected which may be null
+    # the empty string is treated as a null value
+    # throw if setValue is called with a non-matching value
+    forceSelectionFromList: false
 
     # enable whether list can be closed
     keepListOpen: false
@@ -60,7 +60,7 @@
     litraField: null
 
     # value that decides if the item is enabled
-    enabledField: true
+    enabledField: () => yes
 
     # e.g. given { modifier: '!', field: 'isReallySpecial' }, combo will only show records with the isReallySpecial field set to true when query is prefixed with !
     modifiers: []
@@ -156,6 +156,7 @@
       for item in @source when @itemValue(item) is value
         @selectItem item, forced: yes
         return
+
       @input.val value
 
     getSelectedValue: =>
@@ -181,7 +182,7 @@
       @input.val()
 
     isEmpty: =>
-      @input.val() is null or @input.val() is ''
+      @input.val() is null or @input.val().trim() is ''
 
     selectLi: (li) =>
       comboId = $(li).data('combo-id')
@@ -312,16 +313,23 @@
       @input.trigger 'leave'
 
     ensureSelection: ->
-      return if @disabled or not @forceSelectionFromList or @hasSelection()
+      return if @disabled
+      return if @hasSelection()
 
-      if @lastSelection? and (not @isEmpty() or (@isEmpty() and not @allowEmpty))
-        @selectItem @lastSelection.item, { forced: yes }
-      else
-        if not @allowEmpty
-          @selectItem @source[0] if @source.length
-        else
-          @input.val ''
-          @lastSelection = null
+      if @isEmpty() and @forceNonEmpty
+        if @lastSelection?
+          return @selectItem @lastSelection.item
+        if @source.length
+          return @selectItem @source[0]
+        throw new Error("consistency error: forceNonEmpty
+                         require forced item selection but no items can be selected!
+                         (either list is empty or all items are disabled)")
+
+      if not @isEmpty() and @forceSelectionFromList
+        if @lastSelection?
+          return @selectItem @lastSelection.item
+        @input.val ''
+        @lastSelection = null
 
     updateLastSelection: =>
       return if not @forceSelectionFromList

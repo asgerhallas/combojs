@@ -1,15 +1,19 @@
 utils = require('../testutils')
 utils.plug_macros()
 
-module.exports.command = (ns, data=[], options={}) ->
+module.exports.command = (ns, data=[], options={}, shouldFail=false) ->
   prefix = ns.slice(0,1)
   suffix = ns.slice(1).trim()
 
   @assert.equal(prefix, "#", "namespace starts with #")
 
-  @.execute(newComboElement, [suffix, JSON.stringify(data), JSON.stringify(options)], done)
-   .waitForElementVisible(ns + combo_input, "Element<#{ns + combo_input}> is visible")
-   .waitForElementPresent(ns + combo_list, "Element<#{ns + combo_list}> is present")
+  done = (result) -> @assert.ok utils.checkResult(result, shouldFail)
+
+  client = @.execute(newComboElement, [suffix, JSON.stringify(data), JSON.stringify(options)], done)
+  if (not shouldFail)
+    client
+      .waitForElementVisible(ns + combo_input, "Element<#{ns + combo_input}> is visible")
+      .waitForElementPresent(ns + combo_list, "Element<#{ns + combo_list}> is present")
 
 #====================================================
 # SUBROUTINES
@@ -29,7 +33,5 @@ newComboElement = (ns, data, options) ->
     .combo('renderFullList')
     .appendTo(container)
 
-done = (result) ->
-  console.log result.value.localizedMessage unless result.status is 0
-  @assert.ok utils.checkResult(result)
+
 #====================================================

@@ -17,9 +17,14 @@ module.exports =
         module.exports[key] = e[key]
       e
 
-    checkResult : (result) ->
+    checkResult : (result, shouldFail=false) ->
+      clientMsg = result.value.localizedMessage || result.value.message || result.value || result
+
+      if (shouldFail)
+        return result.status isnt 0
+
       if result.status isnt 0
-        console.log (result.value.localizedMessage || result.value.message || result.value || result)
+        console.log clientMsg
       return result.status is 0
 
 

@@ -20,10 +20,10 @@
         console.log "recieved event", e.type
         list.push({ name: e.type, data: data })
 
-    window.render_combo_setup = (id, msg, data) ->
+    window.render_combo_setup = (id, msg, data, combo_options) ->
       list = events["##{id} "] = []
       el = render_container(id, msg)
-        .combo({placeholder: "##{id}"})
+        .combo(_.extend({placeholder: "##{id}"}, combo_options))
         .on('loaded', logEventListener(list))
         .on('itemSelect', logEventListener(list))
         .combo('link', data)
@@ -39,6 +39,14 @@
 
     # TEST DATA =====================================================
     i = 0
+
+    window.data_4 = [
+      { id: i++, text: "my special number is 0.621", true: yes },
+      { id: i++, text: "my special number is 0.623", true: yes },
+      { id: i++, text: "my special number is 0.625", true: yes },
+      { id: i++, text: "my special number is 0.627", true: yes }
+    ]
+
     window.data_1275 = [
       { id: i++, text: "my special number is 0.620", true: no },
       { id: i++, text: "my special number is 0.621", true: yes },
