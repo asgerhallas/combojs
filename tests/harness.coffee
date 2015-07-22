@@ -23,7 +23,7 @@
     window.render_combo_setup = (id, msg, data, combo_options) ->
       list = events["##{id} "] = []
       el = render_container(id, msg)
-        .combo(_.extend({placeholder: "##{id}"}, combo_options))
+        .combo(_.extend({placeholder: "##{id}", enabledField: (x) => x.enabled }, combo_options))
         .on('loaded', logEventListener(list))
         .on('itemSelect', logEventListener(list))
         .combo('link', data)
@@ -41,24 +41,24 @@
     i = 0
 
     window.data_4 = [
-      { id: i++, text: "my special number is 0.621", true: yes },
-      { id: i++, text: "my special number is 0.623", true: yes },
-      { id: i++, text: "my special number is 0.625", true: yes },
-      { id: i++, text: "my special number is 0.627", true: yes }
+      { id: "A", text: "foo", enabled: yes },
+      { id: "B", text: "bar", enabled: no },
+      { id: "C", text: "bas", enabled: yes },
+      { id: "D", text: "baz", enabled: no }
     ]
 
     window.data_1275 = [
-      { id: i++, text: "my special number is 0.620", true: no },
-      { id: i++, text: "my special number is 0.621", true: yes },
-      { id: i++, text: "my special number is 0.622", true: no },
-      { id: i++, text: "my special number is 0.623", true: yes },
-      { id: i++, text: "my special number is 0.624", true: no },
-      { id: i++, text: "my special number is 0.625", true: yes },
-      { id: i++, text: "my special number is 0.626", true: no },
-      { id: i++, text: "my special number is 0.627", true: yes }
+      { id: i++, text: "my special number is 0.620", enabled: no },
+      { id: i++, text: "my special number is 0.621", enabled: yes },
+      { id: i++, text: "my special number is 0.622", enabled: no },
+      { id: i++, text: "my special number is 0.623", enabled: yes },
+      { id: i++, text: "my special number is 0.624", enabled: no },
+      { id: i++, text: "my special number is 0.625", enabled: yes },
+      { id: i++, text: "my special number is 0.626", enabled: no },
+      { id: i++, text: "my special number is 0.627", enabled: yes }
     ]
-    window.data_1275.push(id: i++, text: i+":"+uuid(i), true: j%2 isnt 0) for j in [8..1265]
-    window.data_1275.push(id: i++, text: text, true: yes) for text in [
+    window.data_1275.push(id: i++, text: i+":"+uuid(i), enabled: j%2 isnt 0) for j in [8..1265]
+    window.data_1275.push(id: i++, text: text, enabled: yes) for text in [
         "Massiv væg mod uopvarmet rum, 12 cm tegl, 250 mm udvendig isolering.  (U: 0.14)",
         "Massiv ydervæg, 12 cm tegl, 250 mm udvendig isolering.  (U: 0.14)",
         "Massiv ydervæg, Bindingsværk, 100 mm.  (U: 0.34)",
@@ -89,6 +89,6 @@
                  very very very very very very very very
                  very very very very very very very very
                  long string"""
-        true: true
+        enabled: true
       } for i in [0...10000])
     # ===============================================================

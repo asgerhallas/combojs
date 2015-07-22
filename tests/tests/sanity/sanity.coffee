@@ -2,6 +2,8 @@ require('../../testutils.js').plug_macros()
 
 module.exports =
 
+  tags: ["sanity"]
+
   "Check global macros are available": (browser) ->
     browser.assert.ok(combo_button, null, "globals should be loaded")
     browser

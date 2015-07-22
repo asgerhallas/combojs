@@ -60,7 +60,7 @@
     litraField: null
 
     # value that decides if the item is enabled
-    enabledField: () => yes
+    enabledField: () -> yes
 
     # e.g. given { modifier: '!', field: 'isReallySpecial' }, combo will only show records with the isReallySpecial field set to true when query is prefixed with !
     modifiers: []
@@ -196,7 +196,7 @@
       return if not @itemEnabled(item) and
                 not options.forced
 
-      if @itemTitle(item) == @lastQuery && @lastQuery == @input.val()
+      if @itemTitle(item) == @lastQuery # avoid redundant updates
         @internalCollapse()
         return
 
