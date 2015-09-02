@@ -70,6 +70,9 @@
 
     placeholder: ""
 
+    # a new element will be shown in the source list. It contains the rawValue
+    showUnmatchedRawValue: false
+
     # ---------
     source: []
 
@@ -97,6 +100,9 @@
 
     constructor: (wrapper, options = {}) ->
       @[key] = value for own key, value of options when value?
+
+      if @forceSelectionFromList and @showUnmatchedRawValue
+        throw new Error('forceSelectionFromList and showUnmatchedRawValue is not cooperable')
 
       @el =
         $(wrapper)
@@ -133,7 +139,6 @@
 
       @link(@source) if @source? and @source.length
       @enable()
-
       @
 
     link: (source) ->
@@ -189,7 +194,7 @@
       if comboId is 'emptylist-item'
         @internalCollapse()
       else
-        @selectItem @source[$(li).data('combo-id')]
+        @selectItem @source[$(li).data('combo-id')] ? { id: "unmatched-raw-value", text: @getRawValue(), enabled: yes }
         @refocus()
 
     selectItem: (item, options = {}) =>
@@ -450,7 +455,13 @@
       # for performance use native html manipulation
       # be aware never to attach events or data to list elements!
 
-      htmls = []
+      htmls = [];
+
+      if @showUnmatchedRawValue
+        unmatchedRawValueElement = @getShowUnmatchedRawValueElement()
+        if(unmatchedRawValueElement.useable)
+          htmls.push(unmatchedRawValueElement.value)
+
       for item, index in items
         continue if @onlyShowEnabled and not @itemEnabled(item)
         continue if not _.all filters, (filter) -> filter.predicate filter.getter(item)
@@ -593,6 +604,14 @@
         item[fieldGetter]()
       else
         item[fieldGetter]
+
+    getShowUnmatchedRawValueElement: () =>
+      rawValue = @getRawValue()
+      if rawValue is "" or @hasSelection()
+        return {useable: false, value: ""}
+
+      return {useable: true, value: "<li class='enabled unmatched-raw-value last' data-combo-id='unmatched-raw-value'>#{rawValue}</li>"}
+
 
 
 #====================================================

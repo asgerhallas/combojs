@@ -51,7 +51,6 @@
       &:last-child
         margin-bottom 0px
 
-
 // STATE DEPENDENT STYLES
 button.combo-button
 
@@ -64,6 +63,12 @@ button.combo-button
   &:focus
     outline 0
 
-ul.combo-list li.disabled
-  color #afafaf
+ul.combo-list li
+  &.disabled
+    color #afafaf
 
+  &.unmatched-raw-value.last
+    border-bottom-style solid
+    border-width 1px
+    border-color grey
+    margin-bottom 0px
