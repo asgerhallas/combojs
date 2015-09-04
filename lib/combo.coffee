@@ -70,6 +70,8 @@
 
     placeholder: ""
 
+    emptyFieldValidation: false
+
     # ---------
     source: []
 
@@ -280,6 +282,13 @@
       return if @disabled
 
       @updateLastSelection()
+
+      if @emptyFieldValidation
+        if @getRawValue() is ""
+          if !@input.hasClass('empty')
+            @input.addClass('empty')
+        else
+          @input.removeClass('empty')
 
       return if @lastQuery is @input.val()
 
