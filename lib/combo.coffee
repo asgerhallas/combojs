@@ -284,11 +284,7 @@
       @updateLastSelection()
 
       if @emptyFieldValidation
-        if @getRawValue() is ""
-          if !@input.hasClass('empty')
-            @input.addClass('empty')
-        else
-          @input.removeClass('empty')
+        @input.toggleClass('empty', @getRawValue() is "")
 
       return if @lastQuery is @input.val()
 
