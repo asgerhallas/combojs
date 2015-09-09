@@ -197,7 +197,7 @@
       if comboId is 'emptylist-item'
         @internalCollapse()
       else
-        @selectItem @source[$(li).data('combo-id')] ? { id: "unmatched-raw-value", text: @getRawValue(), enabled: yes }
+        @selectItem @source[$(li).data('combo-id')] ? if @showUnmatchedRawValue then { id: "unmatched-raw-value", text: @getRawValue(), enabled: yes } else null
         @refocus()
 
     selectItem: (item, options = {}) =>
