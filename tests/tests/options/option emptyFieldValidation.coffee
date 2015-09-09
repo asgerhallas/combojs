@@ -21,7 +21,5 @@ module.exports =
     browser
       .setupCombo()
       .newComboElement(ns, data, {emptyFieldValidation: true})
-      #It is necessary to sent a key to trigger "keyup"
-      .setValue('#temp_combo > div > input', ["", browser.Keys.ENTER])
       .assert.cssClassPresent('#temp_combo > div > input', 'empty')
       .end()

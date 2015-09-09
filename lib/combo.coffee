@@ -283,9 +283,6 @@
 
       @updateLastSelection()
 
-      if @emptyFieldValidation
-        @input.toggleClass('empty', @getRawValue() is "")
-
       return if @lastQuery is @input.val()
 
       switch event.keyCode
@@ -454,6 +451,9 @@
     renderList: (items, filters) =>
       # for performance use native html manipulation
       # be aware never to attach events or data to list elements!
+
+      if @emptyFieldValidation
+        @input.toggleClass('empty', @getRawValue() is "")
 
       htmls = []
       for item, index in items
