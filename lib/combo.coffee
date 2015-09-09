@@ -149,13 +149,16 @@
       @input.trigger 'linked'
       @
 
-    itemValue: (item) => evaluate @valueField, item
-    itemLitra: (item) => evaluate @litraField, item
-    itemEnabled: (item) => evaluate @enabledField, item
-    itemDisplay: (item) => evaluate @displayField, item
-    itemTitle: (item) => @stripMarkup evaluate(@titleField, item) ? @itemDisplay(item)
-    itemModifier: (modifier) -> (item) => evaluate modifier.field, item
-    itemSpecification: (specification) -> (item) => evaluate specification.field, item
+    itemValue: (item) => if @isUnmatchedRawValue(item) then item.id else evaluate @valueField, item
+    itemLitra: (item) => if @isUnmatchedRawValue(item) then null else evaluate @litraField, item
+    itemEnabled: (item) => if @isUnmatchedRawValue(item) then item.enabled  else evaluate @enabledField, item
+    itemDisplay: (item) => if @isUnmatchedRawValue(item) then item.text else evaluate @displayField, item
+    itemTitle: (item) => if @isUnmatchedRawValue(item) then item.text else @stripMarkup evaluate(@titleField, item) ? @itemDisplay(item)
+    itemModifier: (modifier) -> (item) => if @isUnmatchedRawValue(item) then null else evaluate modifier.field, item
+    itemSpecification: (specification) -> (item) => if @isUnmatchedRawValue(item) then null else evaluate specification.field, item
+
+    isUnmatchedRawValue: (item) =>
+      item.id == "unmatched-raw-value"
 
     setValue: (value) =>
       for item in @source when @itemValue(item) is value
@@ -201,7 +204,7 @@
       return if not @itemEnabled(item) and
                 not options.forced
 
-      if @input.val() is @itemTitle(item) and @itemTitle(item) is @lastQuery # avoid redundant updates
+      if (@showUnmatchedRawValue and !@isUnmatchedRawValue(item)) and (@input.val() is @itemTitle(item) and @itemTitle(item) is @lastQuery) # avoid redundant updates
         @internalCollapse()
         return
 
