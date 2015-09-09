@@ -72,6 +72,8 @@
 
     # a new element will be shown in the source list. It contains the rawValue
     showUnmatchedRawValue: false
+    
+    emptyFieldValidation: false
 
     # ---------
     source: []
@@ -457,6 +459,9 @@
     renderList: (items, filters) =>
       # for performance use native html manipulation
       # be aware never to attach events or data to list elements!
+
+      if @emptyFieldValidation
+        @input.toggleClass('empty', @getRawValue() is "")
 
       htmls = [];
 
