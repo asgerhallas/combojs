@@ -21,8 +21,17 @@ module.exports =
     browser
       .setupCombo()
       .newComboElement(ns, data, {showUnmatchedRawValue: true})
-      .setValue('#temp_combo > div > input', "some text")
-      .assert.containsText('.unmatched-raw-value', "some text")
+      #.setValue with a sentence emulates key press to fast for the combo to follow
+      .click('#temp_combo > div > input')
+      .pause(20)
+      .keys(["t"])
+      .pause(20)
+      .keys(["e"])
+      .pause(20)
+      .keys(["x"])
+      .pause(20)
+      .keys(["t"])
+      .assert.containsText('.unmatched-raw-value', "text")
       .end()
 
   "Option showUnmatchedRawValue: selects existing items on match": (browser) ->

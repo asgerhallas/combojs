@@ -45,11 +45,11 @@ $(function () {
     render_combo_setup('empty-list', "Combojs with empty list", []);
     render_combo_setup('medium-list', "Combojs with half enabled list", data_1275);
     render_combo_setup('large-list', "Combojs with 10000 elements", data_10000);
-    render_combo_setup('large-list', "Combojs with 10000 elements and showUnmatchedRawValue", data_4, {showUnmatchedRawValue: true});
+    render_combo_setup('small-list', "Combojs with 4 elements and showUnmatchedRawValue", data_4, {showUnmatchedRawValue: true});
 
-    // RENDER_COMBO_SETUP('SMALL-LIST', "COMBOJS WITH SMALL LIST", DATA_4,
-    //     { ENABLEDFIELD: FUNCTION(X) { RETURN X.ENABLED }})
-    // $('#LARGE-LIST .COMBO-CONTAINER').COMBO('DISABLE');
+    // render_combo_setup('small-list', "combojs with small list", data_4,
+    //     { enabledfield: function(x) { return x.enabled }})
+    // $('#large-list .combo-container').combo('disable');
 
     return $('body').append(
         "<div id='features'><pre>" +

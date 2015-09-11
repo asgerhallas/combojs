@@ -70,9 +70,10 @@
 
     placeholder: ""
 
-    # a new element will be shown in the source list. It contains the rawValue
+    # a new element will be shown in the top of the source list
+    # the new element is a replica of the the element in the inputfield, unless it matches an allready existing element
     showUnmatchedRawValue: false
-    
+
     emptyFieldValidation: false
 
     # ---------
@@ -104,7 +105,7 @@
       @[key] = value for own key, value of options when value?
 
       if @forceSelectionFromList and @showUnmatchedRawValue
-        throw new Error('forceSelectionFromList and showUnmatchedRawValue is not cooperable')
+        throw new Error('invalid configuration, forceSelectionFromList and showUnmatchedRawValue cannot both be true')
 
       @el =
         $(wrapper)
@@ -151,16 +152,13 @@
       @input.trigger 'linked'
       @
 
-    itemValue: (item) => if @isUnmatchedRawValue(item) then item.id else evaluate @valueField, item
-    itemLitra: (item) => if @isUnmatchedRawValue(item) then null else evaluate @litraField, item
-    itemEnabled: (item) => if @isUnmatchedRawValue(item) then item.enabled  else evaluate @enabledField, item
-    itemDisplay: (item) => if @isUnmatchedRawValue(item) then item.text else evaluate @displayField, item
-    itemTitle: (item) => if @isUnmatchedRawValue(item) then item.text else @stripMarkup evaluate(@titleField, item) ? @itemDisplay(item)
-    itemModifier: (modifier) -> (item) => if @isUnmatchedRawValue(item) then null else evaluate modifier.field, item
-    itemSpecification: (specification) -> (item) => if @isUnmatchedRawValue(item) then null else evaluate specification.field, item
-
-    isUnmatchedRawValue: (item) =>
-      item.id == "unmatched-raw-value"
+    itemValue: (item) => if @showUnmatchedRawValue and item._isRawValueItem then null else evaluate @valueField, item
+    itemLitra: (item) => if @showUnmatchedRawValue and item._isRawValueItem then null else evaluate @litraField, item
+    itemEnabled: (item) => if @showUnmatchedRawValue and item._isRawValueItem then true else evaluate @enabledField, item
+    itemDisplay: (item) => if @showUnmatchedRawValue and item._isRawValueItem then item._rawValue else evaluate @displayField, item
+    itemTitle: (item) => if @showUnmatchedRawValue and item._isRawValueItem then item._rawValue else @stripMarkup evaluate(@titleField, item) ? @itemDisplay(item)
+    itemModifier: (modifier) -> (item) => if @showUnmatchedRawValue and item._isRawValueItem   then null else evaluate modifier.field, item
+    itemSpecification: (specification) -> (item) => if @showUnmatchedRawValue and item._isRawValueItem   then null else evaluate specification.field, item
 
     setValue: (value) =>
       for item in @source when @itemValue(item) is value
@@ -199,14 +197,14 @@
       if comboId is 'emptylist-item'
         @internalCollapse()
       else
-        @selectItem @source[$(li).data('combo-id')] ? if @showUnmatchedRawValue then { id: "unmatched-raw-value", text: @getRawValue(), enabled: yes } else null
+        @selectItem @source[$(li).data('combo-id')] ? if @showUnmatchedRawValue then { _isRawValueItem: true, _rawValue: @stripMarkup @getRawValue()} else null
         @refocus()
 
     selectItem: (item, options = {}) =>
       return if not @itemEnabled(item) and
                 not options.forced
 
-      if (@showUnmatchedRawValue and !@isUnmatchedRawValue(item)) and (@input.val() is @itemTitle(item) and @itemTitle(item) is @lastQuery) # avoid redundant updates
+      if (@showUnmatchedRawValue and !item._isRawValueItem) and (@input.val() is @itemTitle(item) and @itemTitle(item) is @lastQuery) # avoid redundant updates
         @internalCollapse()
         return
 
@@ -467,8 +465,8 @@
 
       if @showUnmatchedRawValue
         unmatchedRawValueElement = @getShowUnmatchedRawValueElement()
-        if(unmatchedRawValueElement.useable)
-          htmls.push(unmatchedRawValueElement.value)
+        if(unmatchedRawValueElement)
+          htmls.push(unmatchedRawValueElement)
 
       for item, index in items
         continue if @onlyShowEnabled and not @itemEnabled(item)
@@ -614,11 +612,11 @@
         item[fieldGetter]
 
     getShowUnmatchedRawValueElement: () =>
-      rawValue = @getRawValue()
+      rawValue = @stripMarkup @getRawValue()
       if rawValue is "" or @hasSelection()
-        return {useable: false, value: ""}
+        return null
 
-      return {useable: true, value: "<li class='enabled unmatched-raw-value last' data-combo-id='unmatched-raw-value'>#{rawValue}</li>"}
+      return  "<li class='unmatched-raw-value'>#{rawValue}</li>"
 
 
 
