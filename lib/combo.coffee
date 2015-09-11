@@ -197,14 +197,19 @@
       if comboId is 'emptylist-item'
         @internalCollapse()
       else
-        @selectItem @source[$(li).data('combo-id')] ? if @showUnmatchedRawValue then { __isRawValueItem: true, __rawValue: @stripMarkup @getRawValue()} else null
+        @selectItem @source[$(li).data('combo-id')] ?
+          if @showUnmatchedRawValue
+            { __isRawValueItem: true, __rawValue: @stripMarkup @getRawValue()}
+          else
+            null
         @refocus()
 
     selectItem: (item, options = {}) =>
       return if not @itemEnabled(item) and
                 not options.forced
 
-      if (@showUnmatchedRawValue and !item.__isRawValueItem) and (@input.val() is @itemTitle(item) and @itemTitle(item) is @lastQuery) # avoid redundant updates
+      if (@showUnmatchedRawValue and !item.__isRawValueItem) or
+          (@input.val() is @itemTitle(item) and @itemTitle(item) is @lastQuery) and !item.__isRawValueItem # avoid redundant updates
         @internalCollapse()
         return
 
@@ -465,7 +470,7 @@
 
       if @showUnmatchedRawValue
         rawValue = @stripMarkup @getRawValue()
-        if(!(rawValue is "" or @hasSelection()))
+        if rawValue isnt  "" and !@hasSelection()
           htmls.push("<li class='unmatched-raw-value'>#{rawValue}</li>")
 
       for item, index in items
