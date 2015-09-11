@@ -465,7 +465,7 @@
 
       if @showUnmatchedRawValue
         rawValue = @stripMarkup @getRawValue()
-        if(!rawValue is "" or !@hasSelection())
+        if(!(rawValue is "" or @hasSelection()))
           htmls.push("<li class='unmatched-raw-value'>#{rawValue}</li>")
 
       for item, index in items
