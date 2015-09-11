@@ -152,13 +152,13 @@
       @input.trigger 'linked'
       @
 
-    itemValue: (item) => if @showUnmatchedRawValue and item._isRawValueItem then null else evaluate @valueField, item
-    itemLitra: (item) => if @showUnmatchedRawValue and item._isRawValueItem then null else evaluate @litraField, item
-    itemEnabled: (item) => if @showUnmatchedRawValue and item._isRawValueItem then true else evaluate @enabledField, item
-    itemDisplay: (item) => if @showUnmatchedRawValue and item._isRawValueItem then item._rawValue else evaluate @displayField, item
-    itemTitle: (item) => if @showUnmatchedRawValue and item._isRawValueItem then item._rawValue else @stripMarkup evaluate(@titleField, item) ? @itemDisplay(item)
-    itemModifier: (modifier) -> (item) => if @showUnmatchedRawValue and item._isRawValueItem   then null else evaluate modifier.field, item
-    itemSpecification: (specification) -> (item) => if @showUnmatchedRawValue and item._isRawValueItem   then null else evaluate specification.field, item
+    itemValue: (item) => if item.__isRawValueItem then null else evaluate @valueField, item
+    itemLitra: (item) => if item.__isRawValueItem then null else evaluate @litraField, item
+    itemEnabled: (item) => if item.__isRawValueItem then true else evaluate @enabledField, item
+    itemDisplay: (item) => if item.__isRawValueItem then item.__rawValue else evaluate @displayField, item
+    itemTitle: (item) => if item.__isRawValueItem then item.__rawValue else @stripMarkup evaluate(@titleField, item) ? @itemDisplay(item)
+    itemModifier: (modifier) -> (item) => if item.__isRawValueItem then null else evaluate modifier.field, item
+    itemSpecification: (specification) -> (item) => if item.__isRawValueItem then null else evaluate specification.field, item
 
     setValue: (value) =>
       for item in @source when @itemValue(item) is value
@@ -197,14 +197,14 @@
       if comboId is 'emptylist-item'
         @internalCollapse()
       else
-        @selectItem @source[$(li).data('combo-id')] ? if @showUnmatchedRawValue then { _isRawValueItem: true, _rawValue: @stripMarkup @getRawValue()} else null
+        @selectItem @source[$(li).data('combo-id')] ? if @showUnmatchedRawValue then { __isRawValueItem: true, __rawValue: @stripMarkup @getRawValue()} else null
         @refocus()
 
     selectItem: (item, options = {}) =>
       return if not @itemEnabled(item) and
                 not options.forced
 
-      if (@showUnmatchedRawValue and !item._isRawValueItem) and (@input.val() is @itemTitle(item) and @itemTitle(item) is @lastQuery) # avoid redundant updates
+      if (@showUnmatchedRawValue and !item.__isRawValueItem) and (@input.val() is @itemTitle(item) and @itemTitle(item) is @lastQuery) # avoid redundant updates
         @internalCollapse()
         return
 
@@ -464,9 +464,9 @@
       htmls = [];
 
       if @showUnmatchedRawValue
-        unmatchedRawValueElement = @getShowUnmatchedRawValueElement()
-        if(unmatchedRawValueElement)
-          htmls.push(unmatchedRawValueElement)
+        rawValue = @stripMarkup @getRawValue()
+        if(!rawValue is "" or !@hasSelection())
+          htmls.push("<li class='unmatched-raw-value'>#{rawValue}</li>")
 
       for item, index in items
         continue if @onlyShowEnabled and not @itemEnabled(item)
@@ -610,15 +610,6 @@
         item[fieldGetter]()
       else
         item[fieldGetter]
-
-    getShowUnmatchedRawValueElement: () =>
-      rawValue = @stripMarkup @getRawValue()
-      if rawValue is "" or @hasSelection()
-        return null
-
-      return  "<li class='unmatched-raw-value'>#{rawValue}</li>"
-
-
 
 #====================================================
 # PLUGIN DEFINITION
