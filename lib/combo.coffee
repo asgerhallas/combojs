@@ -194,22 +194,26 @@
 
     selectLi: (li) =>
       comboId = $(li).data('combo-id')
+
       if comboId is 'emptylist-item'
         @internalCollapse()
+        return
+
+      if @source[comboId]
+        @selectItem @source[comboId]
+      else if @showUnmatchedRawValue
+        @selectItem  { __isRawValueItem: true, __rawValue: @stripMarkup @getRawValue() }
       else
-        @selectItem @source[$(li).data('combo-id')] ?
-          if @showUnmatchedRawValue
-            { __isRawValueItem: true, __rawValue: @stripMarkup @getRawValue()}
-          else
-            null
-        @refocus()
+        @selectItem null
+      @refocus()
 
     selectItem: (item, options = {}) =>
       return if not @itemEnabled(item) and
                 not options.forced
 
       if (@showUnmatchedRawValue and !item.__isRawValueItem) or
-          (@input.val() is @itemTitle(item) and @itemTitle(item) is @lastQuery) and !item.__isRawValueItem # avoid redundant updates
+         (@input.val() is @itemTitle(item) and @itemTitle(item) is @lastQuery) and
+         !item.__isRawValueItem # avoid redundant updates
         @internalCollapse()
         return
 
