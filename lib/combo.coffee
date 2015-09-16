@@ -122,7 +122,7 @@
           keydown: @onKeyDown
           keyup: @onKeyUp
           mouseup: @onMouseUp
-          # circumvent http://bugs.jquery.com/ticket/6705
+          # circumvent http://bugs.jquery.com/ticket/6705se
           focus: _.throttle @onFocus, 0
           blur: @onBlur
         .appendTo(@el)
@@ -168,6 +168,7 @@
         return
 
       @input.val value
+      @updateDynamicClassNames()
 
     getSelectedValue: =>
       item = @getSelectedItemAndIndex()?.item
@@ -218,6 +219,7 @@
         return
 
       @input.val @itemTitle(item)
+      @updateDynamicClassNames()
       @lastQuery = @input.val()
       @updateLastSelection()
       @internalCollapse()
@@ -348,6 +350,7 @@
         if @lastSelection?
           return @selectItem @lastSelection.item
         @input.val ''
+        @updateDynamicClassNames()
         @lastSelection = null
 
     updateLastSelection: =>
