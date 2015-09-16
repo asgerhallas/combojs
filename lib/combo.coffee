@@ -70,6 +70,10 @@
 
     placeholder: ""
 
+    # a new element will be shown in the top of the source list
+    # the new element is a replica of the the element in the inputfield, unless it matches an allready existing element
+    showUnmatchedRawValue: false
+
     emptyFieldValidation: false
 
     # ---------
@@ -99,6 +103,9 @@
 
     constructor: (wrapper, options = {}) ->
       @[key] = value for own key, value of options when value?
+
+      if @forceSelectionFromList and @showUnmatchedRawValue
+        throw new Error('invalid configuration, forceSelectionFromList and showUnmatchedRawValue cannot both be true')
 
       @el =
         $(wrapper)
@@ -135,7 +142,6 @@
 
       @link(@source) if @source? and @source.length
       @enable()
-
       @
 
     link: (source) ->
@@ -146,13 +152,13 @@
       @input.trigger 'linked'
       @
 
-    itemValue: (item) => evaluate @valueField, item
-    itemLitra: (item) => evaluate @litraField, item
-    itemEnabled: (item) => evaluate @enabledField, item
-    itemDisplay: (item) => evaluate @displayField, item
-    itemTitle: (item) => @stripMarkup evaluate(@titleField, item) ? @itemDisplay(item)
-    itemModifier: (modifier) -> (item) => evaluate modifier.field, item
-    itemSpecification: (specification) -> (item) => evaluate specification.field, item
+    itemValue: (item) => if item.__isRawValueItem then null else evaluate @valueField, item
+    itemLitra: (item) => if item.__isRawValueItem then null else evaluate @litraField, item
+    itemEnabled: (item) => if item.__isRawValueItem then true else evaluate @enabledField, item
+    itemDisplay: (item) => if item.__isRawValueItem then item.__rawValue else evaluate @displayField, item
+    itemTitle: (item) => if item.__isRawValueItem then item.__rawValue else @stripMarkup evaluate(@titleField, item) ? @itemDisplay(item)
+    itemModifier: (modifier) -> (item) => if item.__isRawValueItem then null else evaluate modifier.field, item
+    itemSpecification: (specification) -> (item) => if item.__isRawValueItem then null else evaluate specification.field, item
 
     setValue: (value) =>
       for item in @source when @itemValue(item) is value
@@ -188,17 +194,24 @@
 
     selectLi: (li) =>
       comboId = $(li).data('combo-id')
+
       if comboId is 'emptylist-item'
         @internalCollapse()
+        return
+
+      if @source[comboId]
+        @selectItem @source[comboId]
+      else if @showUnmatchedRawValue
+        @selectItem  { __isRawValueItem: true, __rawValue: @stripMarkup @getRawValue() }
       else
-        @selectItem @source[$(li).data('combo-id')]
-        @refocus()
+        @selectItem null
+      @refocus()
 
     selectItem: (item, options = {}) =>
       return if not @itemEnabled(item) and
                 not options.forced
 
-      if @input.val() is @itemTitle(item) and @itemTitle(item) is @lastQuery # avoid redundant updates
+      if !item.__isRawValueItem and (@input.val() is @itemTitle(item) and @itemTitle(item) is @lastQuery) # avoid redundant updates
         @internalCollapse()
         return
 
@@ -455,7 +468,13 @@
       if @emptyFieldValidation
         @input.toggleClass('empty', @getRawValue() is "")
 
-      htmls = []
+      htmls = [];
+
+      if @showUnmatchedRawValue
+        rawValue = @stripMarkup @getRawValue()
+        if rawValue isnt  "" and !@hasSelection()
+          htmls.push("<li class='unmatched-raw-value'>#{rawValue}</li>")
+
       for item, index in items
         continue if @onlyShowEnabled and not @itemEnabled(item)
         continue if not _.all filters, (filter) -> filter.predicate filter.getter(item)
@@ -598,7 +617,6 @@
         item[fieldGetter]()
       else
         item[fieldGetter]
-
 
 #====================================================
 # PLUGIN DEFINITION

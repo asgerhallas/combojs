@@ -63,3 +63,9 @@ button.combo-button:focus {
 ul.combo-list li.disabled {
   color: #afafaf;
 }
+ul.combo-list li.unmatched-raw-value {
+  border-bottom-style: solid;
+  border-width: 1px;
+  border-color: #808080;
+  margin-bottom: 0px;
+}

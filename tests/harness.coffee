@@ -91,4 +91,6 @@
                  long string"""
         enabled: true
       } for i in [0...10000])
+
+    window.data_5 = ["funny", "looking", "badger", "with", "caramel", "in", "some", "form", "of", "a", "color"]
     # ===============================================================
