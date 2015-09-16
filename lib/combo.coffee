@@ -211,7 +211,7 @@
       return if not @itemEnabled(item) and
                 not options.forced
 
-      if (@showUnmatchedRawValue and !item.__isRawValueItem) or
+      if (@showUnmatchedRawValue and ((item.__isRawValueItem?) and !item.__isRawValueItem)) or
          (@input.val() is @itemTitle(item) and @itemTitle(item) is @lastQuery) and
          !item.__isRawValueItem # avoid redundant updates
         @internalCollapse()
