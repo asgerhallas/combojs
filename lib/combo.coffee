@@ -74,7 +74,8 @@
     # the new element is a replica of the the element in the inputfield, unless it matches an allready existing element
     showUnmatchedRawValue: false
 
-    emptyFieldValidation: false
+    # show classname if not false or null
+    classNameOnEmpty: false
 
     # ---------
     source: []
@@ -142,6 +143,7 @@
 
       @link(@source) if @source? and @source.length
       @enable()
+      @updateDynamicClassNames()
       @
 
     link: (source) ->
@@ -293,6 +295,8 @@
 
     onKeyUp: (event) =>
       return if @disabled
+
+      @updateDynamicClassNames()
 
       @updateLastSelection()
 
@@ -465,9 +469,6 @@
       # for performance use native html manipulation
       # be aware never to attach events or data to list elements!
 
-      if @emptyFieldValidation
-        @input.toggleClass('empty', @getRawValue() is "")
-
       htmls = [];
 
       if @showUnmatchedRawValue
@@ -617,6 +618,10 @@
         item[fieldGetter]()
       else
         item[fieldGetter]
+
+    updateDynamicClassNames: () ->
+      if @classNameOnEmpty
+        @input.toggleClass @classNameOnEmpty, not @getRawValue()
 
 #====================================================
 # PLUGIN DEFINITION
