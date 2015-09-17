@@ -74,7 +74,8 @@
     # the new element is a replica of the the element in the inputfield, unless it matches an allready existing element
     showUnmatchedRawValue: false
 
-    emptyFieldValidation: false
+    # show classname if not false or null
+    classNameOnEmpty: false
 
     # ---------
     source: []
@@ -121,7 +122,7 @@
           keydown: @onKeyDown
           keyup: @onKeyUp
           mouseup: @onMouseUp
-          # circumvent http://bugs.jquery.com/ticket/6705
+          # circumvent http://bugs.jquery.com/ticket/6705se
           focus: _.throttle @onFocus, 0
           blur: @onBlur
         .appendTo(@el)
@@ -142,6 +143,7 @@
 
       @link(@source) if @source? and @source.length
       @enable()
+      @updateDynamicClassNames()
       @
 
     link: (source) ->
@@ -166,6 +168,7 @@
         return
 
       @input.val value
+      @updateDynamicClassNames()
 
     getSelectedValue: =>
       item = @getSelectedItemAndIndex()?.item
@@ -216,6 +219,7 @@
         return
 
       @input.val @itemTitle(item)
+      @updateDynamicClassNames()
       @lastQuery = @input.val()
       @updateLastSelection()
       @internalCollapse()
@@ -294,6 +298,8 @@
     onKeyUp: (event) =>
       return if @disabled
 
+      @updateDynamicClassNames()
+
       @updateLastSelection()
 
       return if @lastQuery is @input.val()
@@ -344,6 +350,7 @@
         if @lastSelection?
           return @selectItem @lastSelection.item
         @input.val ''
+        @updateDynamicClassNames()
         @lastSelection = null
 
     updateLastSelection: =>
@@ -464,9 +471,6 @@
     renderList: (items, filters) =>
       # for performance use native html manipulation
       # be aware never to attach events or data to list elements!
-
-      if @emptyFieldValidation
-        @input.toggleClass('empty', @getRawValue() is "")
 
       htmls = [];
 
@@ -617,6 +621,10 @@
         item[fieldGetter]()
       else
         item[fieldGetter]
+
+    updateDynamicClassNames: () ->
+      if @classNameOnEmpty
+        @input.toggleClass @classNameOnEmpty, not @getRawValue()
 
 #====================================================
 # PLUGIN DEFINITION
