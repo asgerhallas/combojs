@@ -214,10 +214,6 @@
       return if not @itemEnabled(item) and
                 not options.forced
 
-      if !item.__isRawValueItem and (@input.val() is @itemTitle(item) and @itemTitle(item) is @lastQuery) # avoid redundant updates
-        @internalCollapse()
-        return
-
       @input.val @itemTitle(item)
       @updateDynamicClassNames()
       @lastQuery = @input.val()
