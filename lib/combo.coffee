@@ -170,6 +170,24 @@
       @input.val value
       @updateDynamicClassNames()
 
+    selectItem: (item, options = {}) =>
+      return if not @itemEnabled(item) and
+                not options.forced
+
+      # avoid circular updates in react
+      # (model => setValue => trigger.itemSelect => model.change => setValue =>)
+      if !item.__isRawValueItem and @input.val() is @itemTitle(item)
+        @internalCollapse()
+        return
+
+      @input.val @itemTitle(item)
+      @updateDynamicClassNames()
+      @lastQuery = @input.val()
+      @updateLastSelection()
+      @internalCollapse()
+      _.delay (=> @input.trigger 'itemSelect', item), 10
+
+
     getSelectedValue: =>
       item = @getSelectedItemAndIndex()?.item
       if item? then @itemValue(item) else null
@@ -209,21 +227,6 @@
       else
         @selectItem null
       @refocus()
-
-    selectItem: (item, options = {}) =>
-      return if not @itemEnabled(item) and
-                not options.forced
-
-      if !item.__isRawValueItem and (@input.val() is @itemTitle(item) and @itemTitle(item) is @lastQuery) # avoid redundant updates
-        @internalCollapse()
-        return
-
-      @input.val @itemTitle(item)
-      @updateDynamicClassNames()
-      @lastQuery = @input.val()
-      @updateLastSelection()
-      @internalCollapse()
-      _.delay (=> @input.trigger 'itemSelect', item), 10
 
     onListClick: (event) =>
       @selectLi event.currentTarget
