@@ -149,20 +149,13 @@
       @updateDynamicClassNames()
       @
 
-    link: (source) ->
+    link: (source, secondarySource = []) ->
       @source = source
+      @secondarySource = secondarySource
       @ensureSelection()
       @lastQuery = @input.val()
 
       @input.trigger 'linked'
-      @
-      
-     linkSecondarySource: (source) ->
-      @secondarySource = source
-      @ensureSelection()
-      @lastQuery = @input.val()
-
-      @input.trigger 'secondary-source-linked'
       @
 
     itemValue: (item) => if item.__isRawValueItem then null else evaluate @valueField, item
@@ -174,9 +167,8 @@
     itemSpecification: (specification) -> (item) => if item.__isRawValueItem then null else evaluate specification.field, item
 
     setValue: (value) =>
-      for item in @source when @itemValue(item) is value
-        @selectItem item, forced: yes
-        return
+      item _.find(@source, x => @itemValue(item) is value) ? _.find(@secondary, x => @itemValue(item) is value)
+      @selectItem item, forced: yes if item?
 
       @input.val value
       @updateDynamicClassNames()
@@ -192,7 +184,7 @@
       @getSelectedItemAndIndex()?.index
 
     getSelectedItemAndIndex: =>
-      return {item, index} for item, index in @source.concat(@secondarySource) when @itemTitle(item) is @input.val()
+      return {item, index} for item, index in @source when @itemTitle(item) is @input.val() ? {item, index} for item, index in @secondarySource when @itemTitle(item) is @input.val()
 
     hasSelection: ->
       @getSelectedItemAndIndex()?
@@ -212,11 +204,11 @@
       if comboId is 'emptylist-item'
         @internalCollapse()
         return
-        
-      itemsArray = @source.concat(@secondarySource)
       
-      if itemsArray[comboId]
-        @selectItem itemsArray[comboId]
+      if @source[comboId]
+        @selectItem @source[comboId]
+      else if @secondarySource[comboId]
+        @selectItem @secondarySource[comboId]
       else if @showUnmatchedRawValue
         @selectItem  { __isRawValueItem: true, __rawValue: @stripMarkup @getRawValue() }
       else
@@ -355,6 +347,9 @@
           return @selectItem @lastSelection.item
         if @source.length
           return @selectItem @source[0]
+        if @secondarySource.length
+          return @selectItem @secondarySource[0]
+          
         throw new Error("consistency error: forceNonEmpty
                          require forced item selection but no items can be selected!
                          (either list is empty or all items are disabled)")
