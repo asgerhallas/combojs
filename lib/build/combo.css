@@ -51,6 +51,9 @@
 .combo-container ul.combo-list li:last-child {
   margin-bottom: 0px;
 }
+.combo-container ul.combo-list li.secondary-source.first {
+  border-top: 1px solid #000;
+}
 button.combo-button:active:not([disabled]) {
   background-position: 0 -20px;
 }

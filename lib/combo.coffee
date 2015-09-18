@@ -79,6 +79,9 @@
 
     # ---------
     source: []
+    
+    # secondary source to show in the top of the list
+    secondarySource: []
 
     disabled: true
     activeLi: null
@@ -153,6 +156,14 @@
 
       @input.trigger 'linked'
       @
+      
+     linkSecondarySource: (source) ->
+      @secondarySource = source
+      @ensureSelection()
+      @lastQuery = @input.val()
+
+      @input.trigger 'secondary-source-linked'
+      @
 
     itemValue: (item) => if item.__isRawValueItem then null else evaluate @valueField, item
     itemLitra: (item) => if item.__isRawValueItem then null else evaluate @litraField, item
@@ -181,7 +192,7 @@
       @getSelectedItemAndIndex()?.index
 
     getSelectedItemAndIndex: =>
-      return {item, index} for item, index in @source when @itemTitle(item) is @input.val()
+      return {item, index} for item, index in @source.concat(@secondarySource) when @itemTitle(item) is @input.val()
 
     hasSelection: ->
       @getSelectedItemAndIndex()?
@@ -201,9 +212,11 @@
       if comboId is 'emptylist-item'
         @internalCollapse()
         return
-
-      if @source[comboId]
-        @selectItem @source[comboId]
+        
+      itemsArray = @source.concat(@secondarySource)
+      
+      if itemsArray[comboId]
+        @selectItem itemsArray[comboId]
       else if @showUnmatchedRawValue
         @selectItem  { __isRawValueItem: true, __rawValue: @stripMarkup @getRawValue() }
       else
@@ -463,12 +476,12 @@
 
     renderFilteredList: =>
       filters = if @input.val() is '' then [] else @buildFilters @input.val()
-      @renderList @source, filters
+      @renderList @source, filters, @secondarySource
 
     renderFullList: =>
-      @renderList @source, []
+      @renderList @source, [], @secondarySource
 
-    renderList: (items, filters) =>
+    renderList: (items, filters, secondaryItems = []) =>
       # for performance use native html manipulation
       # be aware never to attach events or data to list elements!
 
@@ -478,24 +491,31 @@
         rawValue = @stripMarkup @getRawValue()
         if rawValue isnt  "" and !@hasSelection()
           htmls.push("<li class='unmatched-raw-value'>#{rawValue}</li>")
-
+      
+      htmls = _.union(htmls, @renderItemList(items, filters))
+      htmls = _.union(htmls, @renderItemList(secondaryItems, filters, 'secondary-source', items.length))   
+      
+      if htmls.length
+        @list.html htmls.join('')
+        # append classname "first" to the first secondary-source, it is style related
+        $('li.secondary-source').first().addClass('first')
+      else
+        @list.html "<li class='disabled' data-combo-id='emptylist-item'>#{@emptyListText}</li>"
+        
+    renderItemList: (items, filters, className = '', itemOffset = 0) =>
       for item, index in items
         continue if @onlyShowEnabled and not @itemEnabled(item)
         continue if not _.all filters, (filter) -> filter.predicate filter.getter(item)
-        htmls.push @renderItem item, index, filters
+        @renderItem item, index + itemOffset, filters, className
 
-      if htmls.length
-        @list.html htmls.join('')
-      else
-        @list.html "<li class='disabled' data-combo-id='emptylist-item'>#{@emptyListText}</li>"
-
-    renderItem: (item, index, filters) =>
+    renderItem: (item, index, filters, className) =>
       if @litraField? and (litra = @itemLitra(item))?
         text = "[#{litra}] #{@highlightValue(item, filters)}"
       else
         text = @highlightValue(item, filters)
 
       classes = [
+        className,
         if @onlyShowEnabled or @itemEnabled(item) then 'enabled' else 'disabled'
       ]
 
