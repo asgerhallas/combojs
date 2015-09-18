@@ -174,9 +174,9 @@
       return if not @itemEnabled(item) and
                 not options.forced
 
-      # avoid circular updates in react
-      # (model => setValue => trigger.itemSelect => model.change => setValue =>)
       if !item.__isRawValueItem and @input.val() is @itemTitle(item)
+      # avoids circular updates in react
+      # (model => setValue => trigger.itemSelect => model.change => setValue =>)
         @internalCollapse()
         return
 
