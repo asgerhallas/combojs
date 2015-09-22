@@ -80,7 +80,7 @@
     # ---------
     source: []
     
-    # secondary source to show in the top of the list
+    # secondary source to show in the bottom of the combo-list
     secondarySource: []
 
     disabled: true
@@ -143,8 +143,8 @@
         .bind(mousedown: @onListMouseDown)
         .appendTo(@el)
         .hide()
-
-      @link(@source) if @source? and @source.length
+        
+      @link(@source, @secondarySource) if @source? and @source.length or @secondarySource? and @secondarySource.length
       @enable()
       @updateDynamicClassNames()
       @
@@ -228,7 +228,7 @@
       return if not @itemEnabled(item) and
                 not options.forced
 
-      if !item.__isRawValueItem and (@input.val() is @itemTitle(item) and @itemTitle(item) is @lastQuery) # avoid redundant updates
+      if !item.__isRawValueItem and (@input.val() is @itemTitle(item)) # avoid redundant updates
         @internalCollapse()
         return
 
@@ -495,14 +495,14 @@
         rawValue = @stripMarkup @getRawValue()
         if rawValue isnt  "" and !@hasSelection()
           htmls.push("<li class='unmatched-raw-value'>#{rawValue}</li>")
-      
+
       Array.prototype.push.apply(htmls, @renderItemList(items, filters))
       Array.prototype.push.apply(htmls, @renderItemList(secondaryItems, filters, 'secondary-source', items.length))   
       
       if htmls.length
         @list.html htmls.join('')
         # append classname "first" to the first secondary-source, it is style related
-        $('li.secondary-source').first().addClass('first')
+        @list.find('.secondary-source').first().addClass('first')
       else
         @list.html "<li class='disabled' data-combo-id='emptylist-item'>#{@emptyListText}</li>"
         

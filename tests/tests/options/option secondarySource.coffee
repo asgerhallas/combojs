@@ -20,8 +20,8 @@ module.exports =
     browser
       .setupCombo()
       .newComboElement(ns, data, {secondarySource: [{text: 'foo'}]})
-      .assert.cssClassPresent('#temp_combo > div > ul > li.secondary-source.enabled', 'secondary-source')
-      .assert.innerHTML('#temp_combo > div > ul > li.secondary-source.enabled', "foo")
+      .assert.cssClassPresent('#temp_combo > div > ul > li.secondary-source', 'secondary-source')
+      .assert.innerHTML('#temp_combo > div > ul > li.secondary-source', "foo")
       .end()
       
    "Option secondarySource: null": (browser) ->
