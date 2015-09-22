@@ -167,8 +167,13 @@
     itemSpecification: (specification) -> (item) => if item.__isRawValueItem then null else evaluate specification.field, item
 
     setValue: (value) =>
-      item _.find(@source, x => @itemValue(item) is value) ? _.find(@secondary, x => @itemValue(item) is value)
-      @selectItem item, forced: yes if item?
+      for item in @source when @itemValue(item) is value
+        @selectItem item, forced: yes
+        return
+        
+      for item in @secondarySource when @itemValue(item) is value
+        @selectItem item, forced: yes
+        return
 
       @input.val value
       @updateDynamicClassNames()
@@ -183,8 +188,12 @@
     getSelectedIndex: =>
       @getSelectedItemAndIndex()?.index
 
-    getSelectedItemAndIndex: =>
-      return {item, index} for item, index in @source when @itemTitle(item) is @input.val() ? {item, index} for item, index in @secondarySource when @itemTitle(item) is @input.val()
+    getSelectedItemAndIndex: => 
+      for item, index in @source when @itemTitle(item) is @input.val()
+        return {item, index}
+        
+      for item, index in @secondarySource when @itemTitle(item) is @input.val()
+        return {item, index: index + @source.length}
 
     hasSelection: ->
       @getSelectedItemAndIndex()?
@@ -204,11 +213,11 @@
       if comboId is 'emptylist-item'
         @internalCollapse()
         return
-      
+               
       if @source[comboId]
         @selectItem @source[comboId]
-      else if @secondarySource[comboId]
-        @selectItem @secondarySource[comboId]
+      else if @secondarySource[comboId - @source.length]
+        @selectItem @secondarySource[comboId - @source.length]
       else if @showUnmatchedRawValue
         @selectItem  { __isRawValueItem: true, __rawValue: @stripMarkup @getRawValue() }
       else
@@ -487,8 +496,8 @@
         if rawValue isnt  "" and !@hasSelection()
           htmls.push("<li class='unmatched-raw-value'>#{rawValue}</li>")
       
-      htmls = _.union(htmls, @renderItemList(items, filters))
-      htmls = _.union(htmls, @renderItemList(secondaryItems, filters, 'secondary-source', items.length))   
+      Array.prototype.push.apply(htmls, @renderItemList(items, filters))
+      Array.prototype.push.apply(htmls, @renderItemList(secondaryItems, filters, 'secondary-source', items.length))   
       
       if htmls.length
         @list.html htmls.join('')
