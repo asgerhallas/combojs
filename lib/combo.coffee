@@ -76,6 +76,8 @@
 
     # show classname if not false or null
     classNameOnEmpty: false
+    
+    label: ""
 
     # ---------
     source: []
@@ -120,7 +122,7 @@
         "<input type='text' class='combo-input' autocomplete='off' disabled='disabled'
           spellcheck='#{@spellcheck}' placeholder='#{@placeholder}'
           #{if @tabIndex? then "tabindex='#{@tabIndex}'" else ""}
-          />")
+          />" + @getLabel())
         .bind
           keydown: @onKeyDown
           keyup: @onKeyUp
@@ -161,8 +163,15 @@
     itemValue: (item) => if item.__isRawValueItem then null else evaluate @valueField, item
     itemLitra: (item) => if item.__isRawValueItem then null else evaluate @litraField, item
     itemEnabled: (item) => if item.__isRawValueItem then true else evaluate @enabledField, item
-    itemDisplay: (item) => if item.__isRawValueItem then item.__rawValue else evaluate @displayField, item
-    itemTitle: (item) => if item.__isRawValueItem then item.__rawValue else @stripMarkup evaluate(@titleField, item) ? @itemDisplay(item)
+    
+    itemDisplay: (item, bare=false) => 
+      title = if item.__isRawValueItem then item.__rawValue else evaluate @displayField, item
+      if bare then title else title + @getLabel()
+    
+    itemTitle: (item) => 
+      title = if item.__isRawValueItem then item.__rawValue else @stripMarkup evaluate(@titleField, item) ? @itemDisplay(item, true)
+      title + @getLabel()
+      
     itemModifier: (modifier) -> (item) => if item.__isRawValueItem then null else evaluate modifier.field, item
     itemSpecification: (specification) -> (item) => if item.__isRawValueItem then null else evaluate specification.field, item
 
@@ -249,8 +258,8 @@
       if !item.__isRawValueItem and @input.val() is @itemTitle(item) # avoid redundant updates
         @internalCollapse()
         return
-
-      @input.val @itemTitle(item)
+       
+      @input.val @stripLabel(@itemTitle(item))
       @updateClassNames()
       @lastQuery = @input.val()
       @updateLastSelection()
@@ -512,7 +521,7 @@
       if @showUnmatchedRawValue
         rawValue = @stripMarkup @getRawValue()
         if rawValue isnt  "" and !@hasSelection()
-          htmls.push("<li class='unmatched-raw-value'>#{rawValue}</li>")
+          htmls.push("<li class='unmatched-raw-value'>#{rawValue + @getLabel()}</li>")
    
       htmls.push(@renderItems(items, filters)...)
       htmls.push(@renderItems(secondaryItems, filters, 'secondary-source', items.length)...)   
@@ -667,6 +676,12 @@
     updateClassNames: () ->
       if @classNameOnEmpty
         @input.toggleClass @classNameOnEmpty, not @getRawValue()
+        
+    getLabel: () ->
+      if @label != "" then "<span class='label'>#{@label}</span>" else ""
+      
+    stripLabel: (text = "") ->
+     text.replace(@getLabel(), "")        
 
 #====================================================
 # PLUGIN DEFINITION
