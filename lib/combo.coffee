@@ -79,6 +79,9 @@
 
     # ---------
     source: []
+    
+    # secondary source to show in the bottom of the combo-list
+    secondarySource: []
 
     disabled: true
     activeLi: null
@@ -140,14 +143,15 @@
         .bind(mousedown: @onListMouseDown)
         .appendTo(@el)
         .hide()
-
-      @link(@source) if @source? and @source.length
+        
+      @link(@source, @secondarySource) if !_.isEmpty(@source) or !_.isEmpty(@secondarySource)
       @enable()
-      @updateDynamicClassNames()
+      @updateClassNames()
       @
 
-    link: (source) ->
+    link: (source, secondarySource = []) ->
       @source = source
+      @secondarySource = secondarySource
       @ensureSelection()
       @lastQuery = @input.val()
 
@@ -166,9 +170,13 @@
       for item in @source when @itemValue(item) is value
         @selectItem item, forced: yes
         return
+        
+      for item in @secondarySource when @itemValue(item) is value
+        @selectItem item, forced: yes
+        return
 
       @input.val value
-      @updateDynamicClassNames()
+      @updateClassNames()
 
     selectItem: (item, options = {}) =>
       return if not @itemEnabled(item) and
@@ -181,7 +189,7 @@
         return
 
       @input.val @itemTitle(item)
-      @updateDynamicClassNames()
+      @updateClassNames()
       @lastQuery = @input.val()
       @updateLastSelection()
       @internalCollapse()
@@ -198,8 +206,12 @@
     getSelectedIndex: =>
       @getSelectedItemAndIndex()?.index
 
-    getSelectedItemAndIndex: =>
-      return {item, index} for item, index in @source when @itemTitle(item) is @input.val()
+    getSelectedItemAndIndex: => 
+      for item, index in @source when @itemTitle(item) is @input.val()
+        return {item, index}
+        
+      for item, index in @secondarySource when @itemTitle(item) is @input.val()
+        return {item, index: index + @source.length}
 
     hasSelection: ->
       @getSelectedItemAndIndex()?
@@ -219,14 +231,31 @@
       if comboId is 'emptylist-item'
         @internalCollapse()
         return
-
+               
       if @source[comboId]
         @selectItem @source[comboId]
+      else if @secondarySource[comboId - @source.length]
+        @selectItem @secondarySource[comboId - @source.length]
       else if @showUnmatchedRawValue
         @selectItem  { __isRawValueItem: true, __rawValue: @stripMarkup @getRawValue() }
       else
         @selectItem null
       @refocus()
+
+    selectItem: (item, options = {}) =>
+      return if not @itemEnabled(item) and
+                not options.forced
+
+      if !item.__isRawValueItem and @input.val() is @itemTitle(item) # avoid redundant updates
+        @internalCollapse()
+        return
+
+      @input.val @itemTitle(item)
+      @updateClassNames()
+      @lastQuery = @input.val()
+      @updateLastSelection()
+      @internalCollapse()
+      _.delay (=> @input.trigger 'itemSelect', item), 10
 
     onListClick: (event) =>
       @selectLi event.currentTarget
@@ -301,7 +330,7 @@
     onKeyUp: (event) =>
       return if @disabled
 
-      @updateDynamicClassNames()
+      @updateClassNames()
 
       @updateLastSelection()
 
@@ -345,6 +374,9 @@
           return @selectItem @lastSelection.item
         if @source.length
           return @selectItem @source[0]
+        if @secondarySource.length
+          return @selectItem @secondarySource[0]
+          
         throw new Error("consistency error: forceNonEmpty
                          require forced item selection but no items can be selected!
                          (either list is empty or all items are disabled)")
@@ -353,7 +385,7 @@
         if @lastSelection?
           return @selectItem @lastSelection.item
         @input.val ''
-        @updateDynamicClassNames()
+        @updateClassNames()
         @lastSelection = null
 
     updateLastSelection: =>
@@ -466,12 +498,12 @@
 
     renderFilteredList: =>
       filters = if @input.val() is '' then [] else @buildFilters @input.val()
-      @renderList @source, filters
+      @renderList @source, @secondarySource, filters
 
     renderFullList: =>
-      @renderList @source, []
+      @renderList @source, @secondarySource 
 
-    renderList: (items, filters) =>
+    renderList: (items, secondaryItems = [], filters = []) =>
       # for performance use native html manipulation
       # be aware never to attach events or data to list elements!
 
@@ -481,24 +513,31 @@
         rawValue = @stripMarkup @getRawValue()
         if rawValue isnt  "" and !@hasSelection()
           htmls.push("<li class='unmatched-raw-value'>#{rawValue}</li>")
-
+   
+      htmls.push(@renderItems(items, filters)...)
+      htmls.push(@renderItems(secondaryItems, filters, 'secondary-source', items.length)...)   
+      
+      if htmls.length
+        @list.html htmls.join('')
+        # append classname "first" to the first secondary-source, it is style related
+        @list.find('.secondary-source').first().addClass('first')
+      else
+        @list.html "<li class='disabled' data-combo-id='emptylist-item'>#{@emptyListText}</li>"
+        
+    renderItems: (items, filters, className = '', itemOffset = 0) =>
       for item, index in items
         continue if @onlyShowEnabled and not @itemEnabled(item)
         continue if not _.all filters, (filter) -> filter.predicate filter.getter(item)
-        htmls.push @renderItem item, index, filters
+        @renderItem item, index + itemOffset, filters, className
 
-      if htmls.length
-        @list.html htmls.join('')
-      else
-        @list.html "<li class='disabled' data-combo-id='emptylist-item'>#{@emptyListText}</li>"
-
-    renderItem: (item, index, filters) =>
+    renderItem: (item, index, filters, className) =>
       if @litraField? and (litra = @itemLitra(item))?
         text = "[#{litra}] #{@highlightValue(item, filters)}"
       else
         text = @highlightValue(item, filters)
 
       classes = [
+        className,
         if @onlyShowEnabled or @itemEnabled(item) then 'enabled' else 'disabled'
       ]
 
@@ -625,7 +664,7 @@
       else
         item[fieldGetter]
 
-    updateDynamicClassNames: () ->
+    updateClassNames: () ->
       if @classNameOnEmpty
         @input.toggleClass @classNameOnEmpty, not @getRawValue()
 

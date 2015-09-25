@@ -26,7 +26,7 @@
         .combo(_.extend({placeholder: "##{id}", enabledField: (x) => x.enabled }, combo_options))
         .on('loaded', logEventListener(list))
         .on('itemSelect', logEventListener(list))
-        .combo('link', data)
+        .combo('link', data, combo_options?.secondarySource)
         .combo('renderFullList')
         .find('input')
 
