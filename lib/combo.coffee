@@ -178,6 +178,24 @@
       @input.val value
       @updateDynamicClassNames()
 
+    selectItem: (item, options = {}) =>
+      return if not @itemEnabled(item) and
+                not options.forced
+
+      if !item.__isRawValueItem and @input.val() is @itemTitle(item)
+        # avoids circular updates in react
+        # (model => setValue => trigger.itemSelect => model.change => setValue =>)
+        @internalCollapse()
+        return
+
+      @input.val @itemTitle(item)
+      @updateDynamicClassNames()
+      @lastQuery = @input.val()
+      @updateLastSelection()
+      @internalCollapse()
+      _.delay (=> @input.trigger 'itemSelect', item), 10
+
+
     getSelectedValue: =>
       item = @getSelectedItemAndIndex()?.item
       if item? then @itemValue(item) else null
