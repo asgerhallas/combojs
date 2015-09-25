@@ -29,7 +29,7 @@ newComboElement = (ns, data, options) ->
 
   $("<div class='combo_wrapper'></div>")
     .combo(options)
-    .combo('link', data, options.secondarySource)
+    .combo('link', data, options?.secondarySource)
     .combo('renderFullList')
     .appendTo(container)
 

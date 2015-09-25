@@ -144,9 +144,9 @@
         .appendTo(@el)
         .hide()
         
-      @link(@source, @secondarySource) if @source? and @source.length or @secondarySource? and @secondarySource.length
+      @link(@source, @secondarySource) if !_.isEmpty(@source) or !_.isEmpty(@secondarySource)
       @enable()
-      @updateDynamicClassNames()
+      @updateClassNames()
       @
 
     link: (source, secondarySource = []) ->
@@ -176,7 +176,7 @@
         return
 
       @input.val value
-      @updateDynamicClassNames()
+      @updateClassNames()
 
     selectItem: (item, options = {}) =>
       return if not @itemEnabled(item) and
@@ -189,7 +189,7 @@
         return
 
       @input.val @itemTitle(item)
-      @updateDynamicClassNames()
+      @updateClassNames()
       @lastQuery = @input.val()
       @updateLastSelection()
       @internalCollapse()
@@ -246,12 +246,12 @@
       return if not @itemEnabled(item) and
                 not options.forced
 
-      if !item.__isRawValueItem and (@input.val() is @itemTitle(item)) # avoid redundant updates
+      if !item.__isRawValueItem and @input.val() is @itemTitle(item) # avoid redundant updates
         @internalCollapse()
         return
 
       @input.val @itemTitle(item)
-      @updateDynamicClassNames()
+      @updateClassNames()
       @lastQuery = @input.val()
       @updateLastSelection()
       @internalCollapse()
@@ -330,7 +330,7 @@
     onKeyUp: (event) =>
       return if @disabled
 
-      @updateDynamicClassNames()
+      @updateClassNames()
 
       @updateLastSelection()
 
@@ -385,7 +385,7 @@
         if @lastSelection?
           return @selectItem @lastSelection.item
         @input.val ''
-        @updateDynamicClassNames()
+        @updateClassNames()
         @lastSelection = null
 
     updateLastSelection: =>
@@ -498,12 +498,12 @@
 
     renderFilteredList: =>
       filters = if @input.val() is '' then [] else @buildFilters @input.val()
-      @renderList @source, filters, @secondarySource
+      @renderList @source, @secondarySource, filters
 
     renderFullList: =>
-      @renderList @source, [], @secondarySource
+      @renderList @source, @secondarySource 
 
-    renderList: (items, filters, secondaryItems = []) =>
+    renderList: (items, secondaryItems = [], filters = []) =>
       # for performance use native html manipulation
       # be aware never to attach events or data to list elements!
 
@@ -513,9 +513,9 @@
         rawValue = @stripMarkup @getRawValue()
         if rawValue isnt  "" and !@hasSelection()
           htmls.push("<li class='unmatched-raw-value'>#{rawValue}</li>")
-
-      Array.prototype.push.apply(htmls, @renderItemList(items, filters))
-      Array.prototype.push.apply(htmls, @renderItemList(secondaryItems, filters, 'secondary-source', items.length))   
+   
+      htmls.push(@renderItems(items, filters)...)
+      htmls.push(@renderItems(secondaryItems, filters, 'secondary-source', items.length)...)   
       
       if htmls.length
         @list.html htmls.join('')
@@ -524,7 +524,7 @@
       else
         @list.html "<li class='disabled' data-combo-id='emptylist-item'>#{@emptyListText}</li>"
         
-    renderItemList: (items, filters, className = '', itemOffset = 0) =>
+    renderItems: (items, filters, className = '', itemOffset = 0) =>
       for item, index in items
         continue if @onlyShowEnabled and not @itemEnabled(item)
         continue if not _.all filters, (filter) -> filter.predicate filter.getter(item)
@@ -664,7 +664,7 @@
       else
         item[fieldGetter]
 
-    updateDynamicClassNames: () ->
+    updateClassNames: () ->
       if @classNameOnEmpty
         @input.toggleClass @classNameOnEmpty, not @getRawValue()
 
