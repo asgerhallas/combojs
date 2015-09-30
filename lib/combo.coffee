@@ -77,7 +77,7 @@
     # show classname if not false or null
     classNameOnEmpty: false
     
-    label: ""
+    label: null
 
     # ---------
     source: []
@@ -88,6 +88,7 @@
     disabled: true
     activeLi: null
     isExpanded: false
+    _inputLabel: null
 
     key:
       DOWN: 40
@@ -122,7 +123,7 @@
         "<input type='text' class='combo-input' autocomplete='off' disabled='disabled'
           spellcheck='#{@spellcheck}' placeholder='#{@placeholder}'
           #{if @tabIndex? then "tabindex='#{@tabIndex}'" else ""}
-          />" + @getLabel())
+          />")
         .bind
           keydown: @onKeyDown
           keyup: @onKeyUp
@@ -163,15 +164,8 @@
     itemValue: (item) => if item.__isRawValueItem then null else evaluate @valueField, item
     itemLitra: (item) => if item.__isRawValueItem then null else evaluate @litraField, item
     itemEnabled: (item) => if item.__isRawValueItem then true else evaluate @enabledField, item
-    
-    itemDisplay: (item, bare=false) => 
-      title = if item.__isRawValueItem then item.__rawValue else evaluate @displayField, item
-      if bare then title else title + @getLabel()
-    
-    itemTitle: (item) => 
-      title = if item.__isRawValueItem then item.__rawValue else @stripMarkup evaluate(@titleField, item) ? @itemDisplay(item, true)
-      title + @getLabel()
-      
+    itemDisplay: (item) => if item.__isRawValueItem then item.__rawValue else evaluate @displayField, item
+    itemTitle: (item) => if item.__isRawValueItem then item.__rawValue else @stripMarkup evaluate(@titleField, item) ? @itemDisplay(item)  
     itemModifier: (modifier) -> (item) => if item.__isRawValueItem then null else evaluate modifier.field, item
     itemSpecification: (specification) -> (item) => if item.__isRawValueItem then null else evaluate specification.field, item
 
@@ -196,12 +190,13 @@
         # (model => setValue => trigger.itemSelect => model.change => setValue =>)
         @internalCollapse()
         return
-
+      
       @input.val @itemTitle(item)
       @updateClassNames()
       @lastQuery = @input.val()
       @updateLastSelection()
       @internalCollapse()
+      # @toggleInputLabel(item)      
       _.delay (=> @input.trigger 'itemSelect', item), 10
 
 
@@ -240,7 +235,7 @@
       if comboId is 'emptylist-item'
         @internalCollapse()
         return
-               
+
       if @source[comboId]
         @selectItem @source[comboId]
       else if @secondarySource[comboId - @source.length]
@@ -250,21 +245,6 @@
       else
         @selectItem null
       @refocus()
-
-    selectItem: (item, options = {}) =>
-      return if not @itemEnabled(item) and
-                not options.forced
-
-      if !item.__isRawValueItem and @input.val() is @itemTitle(item) # avoid redundant updates
-        @internalCollapse()
-        return
-       
-      @input.val @stripLabel(@itemTitle(item))
-      @updateClassNames()
-      @lastQuery = @input.val()
-      @updateLastSelection()
-      @internalCollapse()
-      _.delay (=> @input.trigger 'itemSelect', item), 10
 
     onListClick: (event) =>
       @selectLi event.currentTarget
@@ -550,7 +530,7 @@
         if @onlyShowEnabled or @itemEnabled(item) then 'enabled' else 'disabled'
       ]
 
-      "<li data-combo-id=\"#{index}\" class=\"#{classes.join(' ')}\">#{text}</li>"
+      "<li data-combo-id=\"#{index}\" class=\"#{classes.join(' ')}\">#{text}#{@getLabel(item)}</li>"
 
     highlightValue: (item, filters) =>
       value = @itemDisplay(item)
@@ -641,6 +621,7 @@
       @isExpanded = true
       @list.show(options.callback)
       @scrollIntoView()
+      @toggleInputLabel()
 
     internalCollapse: =>
       if @keepListOpen
@@ -652,6 +633,7 @@
       @el.removeClass 'expanded'
       @isExpanded = false
       @list.hide(options.callback)
+      @toggleInputLabel()
 
     disable: =>
       @disabled = true
@@ -677,11 +659,18 @@
       if @classNameOnEmpty
         @input.toggleClass @classNameOnEmpty, not @getRawValue()
         
-    getLabel: () ->
-      if @label != "" then "<span class='label'>#{@label}</span>" else ""
-      
-    stripLabel: (text = "") ->
-     text.replace(@getLabel(), "")        
+    getLabel: (item, inputfield = false) ->
+      label = @label?(item)
+      if label? then "<span class='#{label.className}'>#{label.text}</span>" else ""
+    
+    toggleInputLabel: () ->
+      if @isExpanded
+        if @_inputLabel? 
+          @_inputLabel.remove() 
+          @_inputLabel = null
+      else
+        if @_inputLabel? then null else @_inputLabel = $(@getLabel(@getSelectedItem())).insertAfter(@input)
+          
 
 #====================================================
 # PLUGIN DEFINITION
