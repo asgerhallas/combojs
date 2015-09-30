@@ -215,8 +215,6 @@
         
       for item, index in @secondarySource when @itemTitle(item) is @input.val()
         return {item, index: index + @source.length}
-        
-      if @showUnmatchedRawValue then {item: { __isRawValueItem: true, __rawValue: @stripMarkup @getRawValue() }, index: null} else null
 
     hasSelection: ->
       @getSelectedItemAndIndex()?
@@ -502,8 +500,8 @@
 
       if @showUnmatchedRawValue
         rawValue = @stripMarkup @getRawValue()
-        if rawValue isnt  "" and @getSelectedItemAndIndex().item.__isRawValueItem
-          htmls.push("<li class='unmatched-raw-value'>#{rawValue + @getLabel(null, true)}</li>")
+        if rawValue isnt  "" and !@hasSelection()
+          htmls.push("<li class='unmatched-raw-value'>#{rawValue + @getLabel()}</li>")
    
       htmls.push(@renderItems(items, filters)...)
       htmls.push(@renderItems(secondaryItems, filters, 'secondary-source', items.length)...)   
@@ -661,8 +659,8 @@
       if @classNameOnEmpty
         @input.toggleClass @classNameOnEmpty, not @getRawValue()
                 
-    getLabel: (item, isUnmatchedRawValue = false) ->
-      label = @label?(item, isUnmatchedRawValue)
+    getLabel: (item) ->
+      label = @label?(item,  @getRawValue())
       if label? then "<span class='#{label.className}'>#{label.text}</span>" else ""
     
     toggleInputLabel: () ->
@@ -671,7 +669,7 @@
           @_inputLabel.remove() 
           @_inputLabel = null
       else
-        if @_inputLabel? then null else @_inputLabel = $(@getLabel(@getSelectedItem(), @getSelectedItem()?.__isRawValueItem)).insertAfter(@input)
+        if @_inputLabel? then null else @_inputLabel = $(@getLabel(@getSelectedItem())).insertAfter(@input)
           
 
 #====================================================
