@@ -195,8 +195,7 @@
       @updateClassNames()
       @lastQuery = @input.val()
       @updateLastSelection()
-      @internalCollapse()
-      # @toggleInputLabel(item)      
+      @internalCollapse()    
       _.delay (=> @input.trigger 'itemSelect', item), 10
 
 
@@ -216,6 +215,8 @@
         
       for item, index in @secondarySource when @itemTitle(item) is @input.val()
         return {item, index: index + @source.length}
+        
+      if @showUnmatchedRawValue then {item: { __isRawValueItem: true, __rawValue: @stripMarkup @getRawValue() }, index: null} else null
 
     hasSelection: ->
       @getSelectedItemAndIndex()?
@@ -320,6 +321,7 @@
       return if @disabled
 
       @updateClassNames()
+      @toggleInputLabel()
 
       @updateLastSelection()
 
@@ -500,8 +502,8 @@
 
       if @showUnmatchedRawValue
         rawValue = @stripMarkup @getRawValue()
-        if rawValue isnt  "" and !@hasSelection()
-          htmls.push("<li class='unmatched-raw-value'>#{rawValue + @getLabel()}</li>")
+        if rawValue isnt  "" and @getSelectedItemAndIndex().item.__isRawValueItem
+          htmls.push("<li class='unmatched-raw-value'>#{rawValue + @getLabel(null, true)}</li>")
    
       htmls.push(@renderItems(items, filters)...)
       htmls.push(@renderItems(secondaryItems, filters, 'secondary-source', items.length)...)   
@@ -530,7 +532,7 @@
         if @onlyShowEnabled or @itemEnabled(item) then 'enabled' else 'disabled'
       ]
 
-      "<li data-combo-id=\"#{index}\" class=\"#{classes.join(' ')}\">#{text}#{@getLabel(item)}</li>"
+      "<li data-combo-id=\"#{index}\" class=\"#{classes.join(' ')}\">#{text + @getLabel(item)}</li>"
 
     highlightValue: (item, filters) =>
       value = @itemDisplay(item)
@@ -658,18 +660,18 @@
     updateClassNames: () ->
       if @classNameOnEmpty
         @input.toggleClass @classNameOnEmpty, not @getRawValue()
-        
-    getLabel: (item, inputfield = false) ->
-      label = @label?(item)
+                
+    getLabel: (item, isUnmatchedRawValue = false) ->
+      label = @label?(item, isUnmatchedRawValue)
       if label? then "<span class='#{label.className}'>#{label.text}</span>" else ""
     
     toggleInputLabel: () ->
-      if @isExpanded
+      if @isExpanded or @getRawValue() == ""
         if @_inputLabel? 
           @_inputLabel.remove() 
           @_inputLabel = null
       else
-        if @_inputLabel? then null else @_inputLabel = $(@getLabel(@getSelectedItem())).insertAfter(@input)
+        if @_inputLabel? then null else @_inputLabel = $(@getLabel(@getSelectedItem(), @getSelectedItem()?.__isRawValueItem)).insertAfter(@input)
           
 
 #====================================================
