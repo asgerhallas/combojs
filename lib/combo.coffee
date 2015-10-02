@@ -77,6 +77,8 @@
     # show classname if not false or null
     classNameOnEmpty: false
     
+    # receives a func to specify which element that receives the label 
+    # and the func should return {text: "", className: ""} or null
     label: null
 
     # ---------
@@ -169,7 +171,7 @@
     itemModifier: (modifier) -> (item) => if item.__isRawValueItem then null else evaluate modifier.field, item
     itemSpecification: (specification) -> (item) => if item.__isRawValueItem then null else evaluate specification.field, item
 
-    setValue: (value) =>
+    setValue: (value) =>   
       for item in @source when @itemValue(item) is value
         @selectItem item, forced: yes
         return
@@ -524,10 +526,11 @@
         text = "[#{litra}] #{@highlightValue(item, filters)}"
       else
         text = @highlightValue(item, filters)
-
+      
       classes = [
         className,
-        if @onlyShowEnabled or @itemEnabled(item) then 'enabled' else 'disabled'
+        if @onlyShowEnabled or @itemEnabled(item) then 'enabled' else 'disabled',
+        if label = @label?(item,  @getRawValue()) then label.className else ""
       ]
 
       "<li data-combo-id=\"#{index}\" class=\"#{classes.join(' ')}\">#{text + @getLabel(item)}</li>"
