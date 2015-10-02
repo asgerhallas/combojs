@@ -668,8 +668,10 @@
         if @_inputLabel? 
           @_inputLabel.remove() 
           @_inputLabel = null
-      else
-        if @_inputLabel? then null else @_inputLabel = $(@getLabel(@getSelectedItem())).insertAfter(@input)
+          @el.removeClass('input-label-added')
+      else if @_inputLabel == null and @getLabel(@getSelectedItem()) != ""
+        @_inputLabel = $(@getLabel(@getSelectedItem())).insertAfter(@input) 
+        @el.addClass('input-label-added')
           
 
 #====================================================
