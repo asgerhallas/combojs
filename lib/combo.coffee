@@ -171,7 +171,9 @@
     itemModifier: (modifier) -> (item) => if item.__isRawValueItem then null else evaluate modifier.field, item
     itemSpecification: (specification) -> (item) => if item.__isRawValueItem then null else evaluate specification.field, item
 
-    setValue: (value) =>   
+    setValue: (value) => 
+      if @input.val() is value then return
+
       for item in @source when @itemValue(item) is value
         @selectItem item, forced: yes
         return
