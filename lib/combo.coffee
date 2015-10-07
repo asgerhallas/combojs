@@ -674,7 +674,7 @@
           @inputLabel.remove() 
           @inputLabel = null
           @el.removeClass('has-label')
-      else if @inputLabel == null and @createLabel(@getSelectedItem()) != ""
+      else if @inputLabel == null and !@isExpanded and @createLabel(@getSelectedItem()) != ""
         @inputLabel = $(@createLabel(@getSelectedItem())).insertAfter(@input) 
         @el.addClass('has-label')
           
