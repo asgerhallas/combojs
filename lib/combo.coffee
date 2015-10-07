@@ -90,7 +90,7 @@
     disabled: true
     activeLi: null
     isExpanded: false
-    _inputLabel: null
+    inputLabel: null
 
     key:
       DOWN: 40
@@ -670,13 +670,13 @@
       if label? then "<span class='#{label.className}'>#{label.text}</span>" else ""
     
     updateLabel: () ->
-      if @_inputLabel? and (@isExpanded or @getRawValue() == "" or @createLabel(@getSelectedItem()) == "")
-          @_inputLabel.remove() 
-          @_inputLabel = null
-          @el.removeClass('input-label-added')
-      else if @_inputLabel == null and @createLabel(@getSelectedItem()) != ""
-        @_inputLabel = $(@createLabel(@getSelectedItem())).insertAfter(@input) 
-        @el.addClass('input-label-added')
+      if @inputLabel? and (@isExpanded or @getRawValue() == "" or @createLabel(@getSelectedItem()) == "")
+          @inputLabel.remove() 
+          @inputLabel = null
+          @el.removeClass('has-label')
+      else if @inputLabel == null and @createLabel(@getSelectedItem()) != ""
+        @inputLabel = $(@createLabel(@getSelectedItem())).insertAfter(@input) 
+        @el.addClass('has-label')
           
 
 #====================================================
