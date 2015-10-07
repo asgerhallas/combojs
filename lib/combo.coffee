@@ -172,6 +172,7 @@
     itemSpecification: (specification) -> (item) => if item.__isRawValueItem then null else evaluate specification.field, item
 
     setValue: (value) => 
+      @updateLabel()
       if @input.val() is value then return
 
       for item in @source when @itemValue(item) is value
@@ -323,7 +324,7 @@
       return if @disabled
 
       @updateClassNames()
-      @toggleInputLabel()
+      @updateLabel()
 
       @updateLastSelection()
 
@@ -505,7 +506,7 @@
       if @showUnmatchedRawValue
         rawValue = @stripMarkup @getRawValue()
         if rawValue isnt  "" and !@hasSelection()
-          htmls.push("<li class='unmatched-raw-value'>#{rawValue + @getLabel()}</li>")
+          htmls.push("<li class='unmatched-raw-value'>#{rawValue + @createLabel()}</li>")
    
       htmls.push(@renderItems(items, filters)...)
       htmls.push(@renderItems(secondaryItems, filters, 'secondary-source', items.length)...)   
@@ -535,7 +536,7 @@
         if label = @label?(item,  @getRawValue()) then label.className else ""
       ]
 
-      "<li data-combo-id=\"#{index}\" class=\"#{classes.join(' ')}\">#{text + @getLabel(item)}</li>"
+      "<li data-combo-id=\"#{index}\" class=\"#{classes.join(' ')}\">#{text + @createLabel(item)}</li>"
 
     highlightValue: (item, filters) =>
       value = @itemDisplay(item)
@@ -626,7 +627,7 @@
       @isExpanded = true
       @list.show(options.callback)
       @scrollIntoView()
-      @toggleInputLabel()
+      @updateLabel()
 
     internalCollapse: =>
       if @keepListOpen
@@ -638,7 +639,7 @@
       @el.removeClass 'expanded'
       @isExpanded = false
       @list.hide(options.callback)
-      @toggleInputLabel()
+      @updateLabel()
 
     disable: =>
       @disabled = true
@@ -664,18 +665,17 @@
       if @classNameOnEmpty
         @input.toggleClass @classNameOnEmpty, not @getRawValue()
                 
-    getLabel: (item) ->
+    createLabel: (item) ->
       label = @label?(item,  @getRawValue())
       if label? then "<span class='#{label.className}'>#{label.text}</span>" else ""
     
-    toggleInputLabel: () ->
-      if @isExpanded or @getRawValue() == ""
-        if @_inputLabel? 
+    updateLabel: () ->
+      if @_inputLabel? and (@isExpanded or @getRawValue() == "" or @createLabel(@getSelectedItem()) == "")
           @_inputLabel.remove() 
           @_inputLabel = null
           @el.removeClass('input-label-added')
-      else if @_inputLabel == null and @getLabel(@getSelectedItem()) != ""
-        @_inputLabel = $(@getLabel(@getSelectedItem())).insertAfter(@input) 
+      else if @_inputLabel == null and @createLabel(@getSelectedItem()) != ""
+        @_inputLabel = $(@createLabel(@getSelectedItem())).insertAfter(@input) 
         @el.addClass('input-label-added')
           
 
