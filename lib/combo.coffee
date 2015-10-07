@@ -78,7 +78,7 @@
     classNameOnEmpty: false
     
     # receives a func to specify which element that receives the label 
-    # and the func should return {text: "", className: ""} or null
+    # ({rawValue: string, item: T}) => { text: string, className: string } or null
     label: null
 
     # ---------
@@ -533,7 +533,7 @@
       classes = [
         className,
         if @onlyShowEnabled or @itemEnabled(item) then 'enabled' else 'disabled',
-        if label = @label?(item,  @getRawValue()) then label.className else ""
+        @label?(item,  @getRawValue())?.className
       ]
 
       "<li data-combo-id=\"#{index}\" class=\"#{classes.join(' ')}\">#{text + @createLabel(item)}</li>"

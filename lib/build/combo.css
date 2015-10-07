@@ -63,9 +63,6 @@ button.combo-button:disabled {
 button.combo-button:focus {
   outline: 0;
 }
-ul.combo-list li {
-  overflow: hidden;
-}
 ul.combo-list li.disabled {
   color: #afafaf;
 }
@@ -74,7 +71,4 @@ ul.combo-list li.unmatched-raw-value {
   border-width: 1px;
   border-color: #808080;
   margin-bottom: 0px;
-}
-.label {
-  float: right;
 }
