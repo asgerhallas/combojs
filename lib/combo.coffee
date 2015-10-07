@@ -506,7 +506,7 @@
       if @showUnmatchedRawValue
         rawValue = @stripMarkup @getRawValue()
         if rawValue isnt  "" and !@hasSelection()
-          htmls.push("<li class='unmatched-raw-value'>#{rawValue + @createLabel()}</li>")
+          htmls.push("<li class='unmatched-raw-value #{@label?(null,  rawValue)?.className}'>#{rawValue + @createLabel()}</li>")
    
       htmls.push(@renderItems(items, filters)...)
       htmls.push(@renderItems(secondaryItems, filters, 'secondary-source', items.length)...)   
