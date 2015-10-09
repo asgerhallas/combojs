@@ -1,28 +1,28 @@
 require('../../testutils.js').plug_macros()
 
-data = [{ id: "", text: "foo", enabled: yes }]
+data = [{ id: "give-me-a-label", text: "foo"}]
 ns = "#temp_combo "
 
-module.exports =
-  tags: ["SetValueUpdateLabel"]
-  
-  "Inputlabel updates when selectedItem changes even if text dont change.coffee": (browser) ->   
+module.exports = 
+  "Inputlabel updates when selectedItem changes even if text dont change": (browser) ->   
     browser
       .setupCombo()
       .newComboElement(ns, data)
       .execute(
-        () ->
-          combo = $("#temp_combo .combo_wrapper").data('combo')
-          combo.label = (item) => if item?.id == "" then {text: "Bob Reggae", className: "admin-jensen"} else null
+        (ns) ->
+          combo = $(ns + ".combo_wrapper").data('combo')
+          combo.label = (item) => if item?.id == "give-me-a-label" then {text: "Bob Reggae", className: "admin-jensen"} else null
+        [ns]
       )
       .openComboList(ns)
       .click(ns+first_item)
-      .waitForElementPresent(".combo_wrapper > .admin-jensen")
+      .waitForElementPresent(".combo_wrapper > span.admin-jensen")
       .execute(
-        () ->
-          combo = $("#temp_combo .combo_wrapper").data('combo')
-          combo.link([{ id: "someId", text: "foo", enabled: yes }])
+        (ns) ->
+          combo = $(ns + ".combo_wrapper").data('combo')
+          combo.link([{ id: "someId", text: "foo"}])
           combo.setValue("foo")
+        [ns]
       )
-      .waitForElementNotPresent(".combo_wrapper > .admin-jensen") 
+      .waitForElementNotPresent(".combo_wrapper > span.admin-jensen") 
     .end()

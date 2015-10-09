@@ -77,8 +77,8 @@
     # show classname if not false or null
     classNameOnEmpty: false
     
-    # receives a func to specify which element that receives the label 
-    # ({rawValue: string, item: T}) => { text: string, className: string } or null
+    # use to specify which items are rendered with which labels
+    # ({ rawValue: string, item: T}) => { text: string, className: string} | null
     label: null
 
     # ---------
@@ -172,7 +172,7 @@
     itemSpecification: (specification) -> (item) => if item.__isRawValueItem then null else evaluate specification.field, item
 
     setValue: (value) => 
-      @updateLabel()
+      @updateInputLabel()
       if @input.val() is value then return
 
       for item in @source when @itemValue(item) is value
@@ -324,7 +324,7 @@
       return if @disabled
 
       @updateClassNames()
-      @updateLabel()
+      @updateInputLabel()
 
       @updateLastSelection()
 
@@ -506,7 +506,7 @@
       if @showUnmatchedRawValue
         rawValue = @stripMarkup @getRawValue()
         if rawValue isnt  "" and !@hasSelection()
-          htmls.push("<li class='unmatched-raw-value #{@label?(null,  rawValue)?.className}'>#{rawValue + @createLabel()}</li>")
+          htmls.push("<li class='unmatched-raw-value #{if @label?(null,  @getRawValue())? then "has-label" else ""}'>#{rawValue} #{@createLabel()}</li>")
    
       htmls.push(@renderItems(items, filters)...)
       htmls.push(@renderItems(secondaryItems, filters, 'secondary-source', items.length)...)   
@@ -533,10 +533,10 @@
       classes = [
         className,
         if @onlyShowEnabled or @itemEnabled(item) then 'enabled' else 'disabled',
-        @label?(item,  @getRawValue())?.className
+        if @label?(item,  @getRawValue())? then "has-label" else ""
       ]
 
-      "<li data-combo-id=\"#{index}\" class=\"#{classes.join(' ')}\">#{text + @createLabel(item)}</li>"
+      "<li data-combo-id=\"#{index}\" class=\"#{classes.join(' ')}\">#{text} #{@createLabel(item)}</li>"
 
     highlightValue: (item, filters) =>
       value = @itemDisplay(item)
@@ -627,7 +627,7 @@
       @isExpanded = true
       @list.show(options.callback)
       @scrollIntoView()
-      @updateLabel()
+      @updateInputLabel()
 
     internalCollapse: =>
       if @keepListOpen
@@ -639,7 +639,7 @@
       @el.removeClass 'expanded'
       @isExpanded = false
       @list.hide(options.callback)
-      @updateLabel()
+      @updateInputLabel()
 
     disable: =>
       @disabled = true
@@ -669,13 +669,14 @@
       label = @label?(item,  @getRawValue())
       if label? then "<span class='#{label.className}'>#{label.text}</span>" else ""
     
-    updateLabel: () ->
-      if @inputLabel? and (@isExpanded or @getRawValue() == "" or @createLabel(@getSelectedItem()) == "")
+    updateInputLabel: () ->
+      label = @createLabel(@getSelectedItem())
+      if @inputLabel? and (@isExpanded or label == "")
           @inputLabel.remove() 
           @inputLabel = null
           @el.removeClass('has-label')
-      else if @inputLabel == null and !@isExpanded and @createLabel(@getSelectedItem()) != ""
-        @inputLabel = $(@createLabel(@getSelectedItem())).insertAfter(@input) 
+      else if @inputLabel == null and !@isExpanded and label != ""
+        @inputLabel = $(label).insertAfter(@input) 
         @el.addClass('has-label')
           
 
