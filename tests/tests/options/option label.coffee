@@ -9,15 +9,15 @@ module.exports =
       .setupCombo()
       .newComboElement(ns, data)
       .execute(
-        (ns) =>
-          combo = $(ns + ".combo_wrapper").data('combo')
+        (container) =>
+          combo = $(container).data('combo')
           combo.label = () => return {text: "Bob Reggae", className: "foo"}
-        [ns]
+        [ns + combo_container]
       )
       .openComboList(ns)
-      .assert.containsText('span.foo', "Bob Reggae")
+      .assert.containsText(first_list_label + '.foo', "Bob Reggae")
       .click(ns+third_item)
-      .assert.containsText('.combo_wrapper > span.foo', "Bob Reggae")
+      .assert.containsText(input_label + '.foo', "Bob Reggae")
       .end()
       
   "Option label: Can show different variety of labels": (browser) ->
@@ -30,27 +30,27 @@ module.exports =
       .setupCombo()
       .newComboElement(ns, testData)
       .execute(
-        (ns) =>
-          combo = $(ns + ".combo_wrapper").data('combo')
+        (container) =>
+          combo = $(container).data('combo')
           combo.label = (item) => 
             if item?.text is "one" then return {text: "one-label", className: "one"}
             else if item?.text is "two" then return {text: "two-label", className: "two"}
             else if item?.text is "three" then return {text: "three-label", className: "three"}
             null
-        [ns]
+        [ns + combo_container]
       )
       # Selecting each element in the list to check if they exist 
       # and renders with the correct text
       .openComboList(ns)
       .click(ns+first_item)
-      .waitForElementPresent('.combo_wrapper > span.one')
-      .assert.containsText('.combo_wrapper > span.one', "one-label")
+      .waitForElementPresent(input_label + '.one')
+      .assert.containsText(input_label + '.one', "one-label")
       .openComboList(ns)
       .click(ns+second_item)
-      .waitForElementPresent('.combo_wrapper > span.two')
-      .assert.containsText('.combo_wrapper > span.two', "two-label")
+      .waitForElementPresent(input_label + '.two')
+      .assert.containsText(input_label + '.two', "two-label")
       .openComboList(ns)
       .click(ns+third_item)
-      .waitForElementPresent('.combo_wrapper > span.three')
-      .assert.containsText('.combo_wrapper > span.three', "three-label")
+      .waitForElementPresent(input_label + '.three')
+      .assert.containsText(input_label + '.three', "three-label")
       .end()

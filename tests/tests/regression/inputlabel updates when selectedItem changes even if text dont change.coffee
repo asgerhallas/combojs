@@ -9,20 +9,20 @@ module.exports =
       .setupCombo()
       .newComboElement(ns, data)
       .execute(
-        (ns) ->
-          combo = $(ns + ".combo_wrapper").data('combo')
+        (container) ->
+          combo = $(container).data('combo')
           combo.label = (item) => if item?.id == "give-me-a-label" then {text: "Bob Reggae", className: "admin-jensen"} else null
-        [ns]
+        [ns + combo_container]
       )
       .openComboList(ns)
       .click(ns+first_item)
-      .waitForElementPresent(".combo_wrapper > span.admin-jensen")
+      .waitForElementPresent(input_label + ".admin-jensen")
       .execute(
-        (ns) ->
-          combo = $(ns + ".combo_wrapper").data('combo')
+        (container) ->
+          combo = $(container).data('combo')
           combo.link([{ id: "someId", text: "foo"}])
           combo.setValue("foo")
-        [ns]
+        [ns + combo_container]
       )
-      .waitForElementNotPresent(".combo_wrapper > span.admin-jensen") 
+      .waitForElementNotPresent(input_label + ".admin-jensen") 
     .end()
