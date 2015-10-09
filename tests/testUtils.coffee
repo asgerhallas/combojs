@@ -47,6 +47,12 @@ module.exports =
       global.enabled_item = "li:nth-child(2) "
       global.empty_list = "ul.combo-list " # todo: redundant
       global.somewhere_else = "h3 "
+      
+      global.input_label =  global.combo_container + "input+span"
+      global.first_list_label =  global.combo_container + 
+            global.combo_list + 
+            global.first_item + 
+            "span"  
 
       global.ns_empty = "#empty-list "
       global.ns_1275 = "#medium-list "
