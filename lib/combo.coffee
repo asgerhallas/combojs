@@ -76,14 +76,14 @@
 
     # show classname if not false or null
     classNameOnEmpty: false
-    
+
     # use to specify which items are rendered with which labels
     # ({ rawValue: string, item: T}) => { text: string, className: string} | null
     label: null
 
     # ---------
     source: []
-    
+
     # secondary source to show in the bottom of the combo-list
     secondarySource: []
 
@@ -148,7 +148,7 @@
         .bind(mousedown: @onListMouseDown)
         .appendTo(@el)
         .hide()
-        
+
       @link(@source, @secondarySource) if !_.isEmpty(@source) or !_.isEmpty(@secondarySource)
       @enable()
       @updateClassNames()
@@ -167,18 +167,18 @@
     itemLitra: (item) => if item.__isRawValueItem then null else evaluate @litraField, item
     itemEnabled: (item) => if item.__isRawValueItem then true else evaluate @enabledField, item
     itemDisplay: (item) => if item.__isRawValueItem then item.__rawValue else evaluate @displayField, item
-    itemTitle: (item) => if item.__isRawValueItem then item.__rawValue else @stripMarkup evaluate(@titleField, item) ? @itemDisplay(item)  
+    itemTitle: (item) => if item.__isRawValueItem then item.__rawValue else @stripMarkup evaluate(@titleField, item) ? @itemDisplay(item)
     itemModifier: (modifier) -> (item) => if item.__isRawValueItem then null else evaluate modifier.field, item
     itemSpecification: (specification) -> (item) => if item.__isRawValueItem then null else evaluate specification.field, item
 
-    setValue: (value) => 
+    setValue: (value) =>
       @updateInputLabel()
       if @input.val() is value then return
 
       for item in @source when @itemValue(item) is value
         @selectItem item, forced: yes
         return
-        
+
       for item in @secondarySource when @itemValue(item) is value
         @selectItem item, forced: yes
         return
@@ -195,12 +195,12 @@
         # (model => setValue => trigger.itemSelect => model.change => setValue =>)
         @internalCollapse()
         return
-      
+
       @input.val @itemTitle(item)
       @updateClassNames()
       @lastQuery = @input.val()
       @updateLastSelection()
-      @internalCollapse()    
+      @internalCollapse()
       _.delay (=> @input.trigger 'itemSelect', item), 10
 
 
@@ -214,10 +214,10 @@
     getSelectedIndex: =>
       @getSelectedItemAndIndex()?.index
 
-    getSelectedItemAndIndex: => 
+    getSelectedItemAndIndex: =>
       for item, index in @source when @itemTitle(item) is @input.val()
         return {item, index}
-        
+
       for item, index in @secondarySource when @itemTitle(item) is @input.val()
         return {item, index: index + @source.length}
 
@@ -240,9 +240,9 @@
         @internalCollapse()
         return
 
-      if @source[comboId]
+      if @source[comboId]?
         @selectItem @source[comboId]
-      else if @secondarySource[comboId - @source.length]
+      else if @secondarySource[comboId - @source.length]?
         @selectItem @secondarySource[comboId - @source.length]
       else if @showUnmatchedRawValue
         @selectItem  { __isRawValueItem: true, __rawValue: @stripMarkup @getRawValue() }
@@ -370,7 +370,7 @@
           return @selectItem @source[0]
         if @secondarySource.length
           return @selectItem @secondarySource[0]
-          
+
         throw new Error("consistency error: forceNonEmpty
                          require forced item selection but no items can be selected!
                          (either list is empty or all items are disabled)")
@@ -495,7 +495,7 @@
       @renderList @source, @secondarySource, filters
 
     renderFullList: =>
-      @renderList @source, @secondarySource 
+      @renderList @source, @secondarySource
 
     renderList: (items, secondaryItems = [], filters = []) =>
       # for performance use native html manipulation
@@ -507,17 +507,17 @@
         rawValue = @stripMarkup @getRawValue()
         if rawValue isnt  "" and !@hasSelection()
           htmls.push("<li class='unmatched-raw-value #{if @label?(null,  @getRawValue())? then "has-label" else ""}'>#{rawValue} #{@createLabel()}</li>")
-   
+
       htmls.push(@renderItems(items, filters)...)
-      htmls.push(@renderItems(secondaryItems, filters, 'secondary-source', items.length)...)   
-      
+      htmls.push(@renderItems(secondaryItems, filters, 'secondary-source', items.length)...)
+
       if htmls.length
         @list.html htmls.join('')
         # append classname "first" to the first secondary-source, it is style related
         @list.find('.secondary-source').first().addClass('first')
       else
         @list.html "<li class='disabled' data-combo-id='emptylist-item'>#{@emptyListText}</li>"
-        
+
     renderItems: (items, filters, className = '', itemOffset = 0) =>
       for item, index in items
         continue if @onlyShowEnabled and not @itemEnabled(item)
@@ -529,7 +529,7 @@
         text = "[#{litra}] #{@highlightValue(item, filters)}"
       else
         text = @highlightValue(item, filters)
-      
+
       classes = [
         className,
         if @onlyShowEnabled or @itemEnabled(item) then 'enabled' else 'disabled',
@@ -664,21 +664,21 @@
     updateClassNames: () ->
       if @classNameOnEmpty
         @input.toggleClass @classNameOnEmpty, not @getRawValue()
-                
+
     createLabel: (item) ->
       label = @label?(item,  @getRawValue())
       if label? then "<span class='#{label.className}'>#{label.text}</span>" else ""
-    
+
     updateInputLabel: () ->
       label = @createLabel(@getSelectedItem())
       if @inputLabel? and (@isExpanded or label == "")
-          @inputLabel.remove() 
+          @inputLabel.remove()
           @inputLabel = null
           @el.removeClass('has-label')
       else if @inputLabel == null and !@isExpanded and label != ""
-        @inputLabel = $(label).insertAfter(@input) 
+        @inputLabel = $(label).insertAfter(@input)
         @el.addClass('has-label')
-          
+
 
 #====================================================
 # PLUGIN DEFINITION
