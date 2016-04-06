@@ -506,7 +506,10 @@
       if @showUnmatchedRawValue
         rawValue = @stripMarkup @getRawValue()
         if rawValue isnt  "" and !@hasSelection()
-          htmls.push("<li class='unmatched-raw-value #{if @label?(null,  @getRawValue())? then "has-label" else ""}'>#{rawValue} #{@createLabel()}</li>")
+          if @label?(null,  @getRawValue())?
+            htmls.push("<li class='unmatched-raw-value #{"has-label"}'>#{rawValue} #{@createLabel()}</li>")
+          else 
+            htmls.push("<li class='unmatched-raw-value'>#{rawValue}</li>")
    
       htmls.push(@renderItems(items, filters)...)
       htmls.push(@renderItems(secondaryItems, filters, 'secondary-source', items.length)...)   
@@ -536,7 +539,11 @@
         if @label?(item,  @getRawValue())? then "has-label" else ""
       ]
 
-      "<li data-combo-id=\"#{index}\" class=\"#{classes.join(' ')}\">#{text} #{@createLabel(item)}</li>"
+      if @createLabel(item) != ""
+        "<li data-combo-id=\"#{index}\" class=\"#{classes.join(' ')}\">#{text} #{@createLabel(item)}</li>"
+      else 
+        "<li data-combo-id=\"#{index}\" class=\"#{classes.join(' ')}\">#{text}</li>"
+
 
     highlightValue: (item, filters) =>
       value = @itemDisplay(item)
