@@ -6,6 +6,7 @@ module.exports.command = (ns, data=[], options={}, shouldFail=false) ->
   suffix = ns.slice(1).trim()
 
   @assert.equal(prefix, "#", "namespace starts with #")
+  @assert.equal(ns[ns.length-1], " ", "namespace should end with whitespace char")
 
   done = (result) -> @assert.ok utils.checkResult(result, shouldFail)
 
@@ -21,6 +22,14 @@ module.exports.command = (ns, data=[], options={}, shouldFail=false) ->
 newComboElement = (ns, data, options) ->
   data = JSON.parse(data)
   options = JSON.parse(options)
+  
+  # functions are not stringified by JSON.stringify
+  # must pass the function as a string instead
+  if (options.displayField.startsWith("function") || options.displayField.startsWith("("))
+    options.displayField = eval(options.displayField)
+
+  if (options.titleField.startsWith("function") ||options.titleField.startsWith("("))
+    options.titleField = eval(options.titleField)
 
   container = $("<div id='#{ns}'>")
         .append("<h3>Temp container: #{ns}</h3>")
