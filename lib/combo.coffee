@@ -297,8 +297,6 @@
             @moveNext()
             event.preventDefault()
           when @key.ENTER, @key.NUMPAD_ENTER
-            # Opera still allows the keypress to occur which causes forms to submit
-            @input.one 'keypress', (keypress) => keypress.preventDefault()
             @selectLi @activeLi if @activeLi
             event.preventDefault()
             event.stopPropagation()
