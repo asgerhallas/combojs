@@ -19,16 +19,16 @@ module.exports.command = (ns, data=[], options={}, shouldFail=false) ->
 #====================================================
 # SUBROUTINES
 #====================================================
-newComboElement = (ns, data, options) ->
+newComboElement = (ns, data, options={}) ->
   data = JSON.parse(data)
   options = JSON.parse(options)
   
   # functions are not stringified by JSON.stringify
   # must pass the function as a string instead
-  if (options.displayField.startsWith("function") || options.displayField.startsWith("("))
+  if (options.displayField?.startsWith("function") || options.displayField?.startsWith("("))
     options.displayField = eval(options.displayField)
 
-  if (options.titleField.startsWith("function") ||options.titleField.startsWith("("))
+  if (options.titleField?.startsWith("function") ||options.titleField?.startsWith("("))
     options.titleField = eval(options.titleField)
 
   container = $("<div id='#{ns}'>")
