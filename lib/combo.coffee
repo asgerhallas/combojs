@@ -81,13 +81,20 @@
     # ({ rawValue: string, item: T}) => { text: string, className: string} | null
     label: null
 
+    # determines whether to disable or enable the combo after construction
+    # it has no effect after construction
+    # @disable() should be used after construction
+    disabled: false
+
     # ---------
     source: []
 
     # secondary source to show in the bottom of the combo-list
     secondarySource: []
 
-    disabled: true
+    # private
+    __disabled: true
+
     activeLi: null
     isExpanded: false
     inputLabel: null
@@ -150,7 +157,8 @@
         .hide()
 
       @link(@source, @secondarySource) if !_.isEmpty(@source) or !_.isEmpty(@secondarySource)
-      @enable()
+
+      if @disabled then @disable() else @enable()
       @updateClassNames()
       @
 
@@ -265,7 +273,7 @@
         @refocus()
 
     onButtonClick: (event) =>
-      return if @disabled
+      return if @__disabled
 
       # if it's open and is not empty, close it
       if @isExpanded and $('li', @list).length
@@ -276,7 +284,7 @@
       @focus()
 
     onKeyDown: (event) =>
-      return if @disabled
+      return if @__disabled
 
       if @isExpanded
         switch event.keyCode
@@ -319,7 +327,7 @@
             @input.select()
 
     onKeyUp: (event) =>
-      return if @disabled
+      return if @__disabled
 
       @updateClassNames()
       @updateInputLabel()
@@ -336,12 +344,12 @@
       @searchAndExpand()
 
     onMouseUp: =>
-      return if @disabled
+      return if @__disabled
       @updateLastSelection()
 
     onFocus: (event, data) =>
       clearTimeout @closing
-      return if @disabled
+      return if @__disabled
 
       if not data?.forcedFocus
         @input.trigger 'enter'
@@ -349,7 +357,7 @@
         _.defer => @input.select()
 
     onBlur: (event) =>
-      if @disabled or @blurIsSuppressed
+      if @__disabled or @blurIsSuppressed
         @blurIsSuppressed = false
         return
 
@@ -358,9 +366,8 @@
       @input.trigger 'leave'
 
     ensureSelection: ->
-      return if @disabled
       return if @hasSelection()
-
+      
       if @isEmpty() and @forceNonEmpty
         if @lastSelection?
           return @selectItem @lastSelection.item
@@ -626,7 +633,7 @@
         @list.scrollTop scroll
 
     expand: (options = {}) =>
-      return if @disabled
+      return if @__disabled
       return if @isExpanded
       @el.addClass 'expanded'
       @isExpanded = true
@@ -647,12 +654,12 @@
       @updateInputLabel()
 
     disable: =>
-      @disabled = true
+      @__disabled = true
       @input.attr disabled: true
       @button.attr disabled: true
 
     enable: =>
-      @disabled = false
+      @__disabled = false
       @input.attr disabled: false
       @button.attr disabled: false
 
