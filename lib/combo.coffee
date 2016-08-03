@@ -87,7 +87,9 @@
     # secondary source to show in the bottom of the combo-list
     secondarySource: []
 
-    disabled: true
+    # private
+    disabled: false
+
     activeLi: null
     isExpanded: false
     inputLabel: null
@@ -150,7 +152,8 @@
         .hide()
 
       @link(@source, @secondarySource) if !_.isEmpty(@source) or !_.isEmpty(@secondarySource)
-      @enable()
+
+      if not @disabled then @enable()
       @updateClassNames()
       @
 
@@ -358,9 +361,8 @@
       @input.trigger 'leave'
 
     ensureSelection: ->
-      return if @disabled
       return if @hasSelection()
-
+      
       if @isEmpty() and @forceNonEmpty
         if @lastSelection?
           return @selectItem @lastSelection.item
