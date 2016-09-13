@@ -413,7 +413,7 @@
         $(li).addClass('selected')
 
     stripMarkup: (text) ->
-      text?.replace(/<br[^>]*>/g, " | ").replace(/<(?:.|\s)*?>/g, '').replace(/[\n\r]/g, '')
+      text?.replace(/<br[^>]*>/g, " | ").replace(/<.*?>/g, '').replace(/[\n\r]/g, '')
 
     searchAndExpand: (options = {}) =>
       @lastQuery = @input.val()
