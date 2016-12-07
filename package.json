@@ -26,7 +26,7 @@
     "clean:lib": "del .\\lib\\build /Q /S",
     "clean": "npm run clean:results&& npm run clean:tests&& npm run clean:lib",
 
-    "compile:stylus:lib": "stylus -o lib/build lib/combo.styl",
+    "compile:stylus:lib": "stylus -U -o lib/build lib/combo.styl",
     "compile:coffee:lib": "coffee -o lib/build -c lib/",
     "compile:coffee:tests": "coffee -o tests/build -c tests/",
     "compile:lib": "npm run compile:stylus:lib& npm run compile:coffee:lib",
