@@ -10,14 +10,15 @@
 
   "selenium": {
     "start_process": true,
-    "server_path": "./tests/drivers/sel-serv.jar",
+    "server_path": "./tests/drivers/selenium-server-standalone-2.47.1.jar",
     "log_path": "./tests/results/logs/",
     "host": "127.0.0.1",
     "port": 4444,
     "cli_args": {
       "webdriver.chrome.driver": "./tests/drivers/chromedriver.exe",
       "webdriver.ie.driver": "./tests/drivers/IEDriverServer32.exe",
-      "webdriver.firefox.profile": ""
+      "webdriver.firefox.profile": "",
+      "phantomjs.binary.path": "./tests/drivers/phantomjs.exe"
     }
   },
 
@@ -43,6 +44,14 @@
         "chromeOptions": {
           "args": ["--window-size=1200,1200", "--window-position=0,-9900", "--test-type"]
         }
+      }
+    },
+
+    "phantomjs": {
+      "desiredCapabilities": {
+        "browserName" : "phantomjs",
+        "javascriptEnabled" : true,
+        "acceptSslCerts" : true
       }
     },
 
